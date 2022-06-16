@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:orders/utils/theme.dart';
 
 class ResurantWdgt extends StatelessWidget {
   const ResurantWdgt({
