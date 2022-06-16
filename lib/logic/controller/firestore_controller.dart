@@ -6,9 +6,9 @@ import 'package:orders/model/resturant_model.dart';
 class FirestoreController extends GetxController {
   final FirebaseFirestore firestoreIns = FirebaseFirestore.instance;
 
-  String restaurantCollectin = "Resturants";
-  String categoriesCollectin = "Categories";
-  String foodsCollectin = "Foods";
+  // String restaurantCollectin = 'Resturants';
+  // String categoriesCollectin = "Categories";
+  // String foodsCollectin = "Foods";
 // String restaurantCollectin ="Restorants";
 // String restaurantCollectin ="Restorants";
 // String restaurantCollectin ="Restorants";
@@ -16,11 +16,15 @@ class FirestoreController extends GetxController {
   static String fResturantOwner = 'restOwner';
   static String fResturantPass = 'restPass';
   static String fResturantLoc = 'resLoc';
-  static String fResturantDetails = 'restLoc';
+  static String fResturantDetails = 'restDetail';
   static String fResturantImg = 'restImg';
 
-  addResturant(ResturantModel resturantModel) {
-    firestoreIns.collection(restaurantCollectin).add({
+  final restaurantCol = FirebaseFirestore.instance.collection('restaurants');
+  final categoryCol = FirebaseFirestore.instance.collection('categories');
+  final foodCol = FirebaseFirestore.instance.collection('foods');
+
+  Future<void> addResturant(ResturantModel resturantModel) async {
+    await restaurantCol.add({
       fResturantName: resturantModel.rname,
       fResturantOwner: resturantModel.rowner,
       fResturantPass: resturantModel.rpass,
@@ -30,24 +34,21 @@ class FirestoreController extends GetxController {
     });
   }
 
-  Future<List<ResturantModel>> loadResturants() async {
-    var snapshot = await firestoreIns.collection(restaurantCollectin).get();
-    List<ResturantModel> loadedrestaurants = [];
-    for (var doc in snapshot.docs) {
-      var data = doc.data();
-      loadedrestaurants.add(ResturantModel(
-          rname: data[fResturantName],
-          rowner: data[fResturantOwner],
-          rpass: data[fResturantPass],
-          rloc: data[fResturantLoc],
-          rdetial: data[fResturantDetails],
-          rID: doc.id));
-    }
-    return loadedrestaurants;
+  Future<void> removeResturant(DocumentSnapshot doc) async {
+    await restaurantCol.doc(doc.id).delete();
   }
 
-  removeResturant() {}
-  updateResturant() {}
+  Future<void> updateResturant( DocumentSnapshot doc,ResturantModel resturantModel) async {
+    await restaurantCol.doc(doc.id).update({
+      fResturantName: resturantModel.rname,
+      fResturantOwner: resturantModel.rowner,
+      fResturantPass: resturantModel.rpass,
+      fResturantDetails: resturantModel.rdetial,
+      fResturantLoc: resturantModel.rloc,
+      fResturantImg: resturantModel.rimg,
+    });
+  }
+
   addCategory() {}
   removeCategory() {}
   updateCategory() {}
@@ -57,8 +58,4 @@ class FirestoreController extends GetxController {
   addOrder() {}
   updateOrder() {}
   removeOrder() {}
-  clearCtrl() {}
-
-
-  
 }

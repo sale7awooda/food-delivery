@@ -17,7 +17,7 @@ class ResturantsList extends StatefulWidget {
 class _ResturantsListState extends State<ResturantsList> {
   final fstoreCtrl = Get.find<FirestoreController>();
 
-  List<ResturantModel> _loaddedResturants = [];
+  final List<ResturantModel> _loaddedResturants = [];
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -35,10 +35,8 @@ class _ResturantsListState extends State<ResturantsList> {
   @override
   void initState() {
     super.initState();
-    getResturants();
+    
   }
 
-  void getResturants() async {
-    _loaddedResturants = await fstoreCtrl.loadResturants();
-  }
+ 
 }

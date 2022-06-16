@@ -34,6 +34,7 @@ class _UserScreenState extends State<UserScreen> {
         ),
         body: IndexedStack(
             index: controller.selectedIndex.value,
+            // ignore: invalid_use_of_protected_member
             children: controller.adminScreens.value),
         //screens[selectedIndex],
         bottomNavigationBar: BottomNavigationBar(

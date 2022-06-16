@@ -7,6 +7,7 @@ class TextFormWdgt extends StatelessWidget {
 
   final Widget lable;
   final Function? validator;
+  final String? hint;
   
   
 
@@ -14,7 +15,8 @@ class TextFormWdgt extends StatelessWidget {
     Key? key,
     required this.controller,
     required this.lable,
-     this.validator,
+    this.validator,
+    this.hint,
   }) : super(key: key);
       
   @override
@@ -37,6 +39,7 @@ class TextFormWdgt extends StatelessWidget {
           labelStyle: const TextStyle(
               fontSize: 18, fontWeight: FontWeight.bold, color: mainColor),
           filled: true,
+          hintText: hint,
 
           hintStyle: const TextStyle(
               color: mainColor, fontWeight: FontWeight.bold, fontSize: 18),

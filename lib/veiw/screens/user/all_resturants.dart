@@ -27,7 +27,7 @@ class AllResturantsScreen extends StatefulWidget {
 class _AllResturantsScreenState extends State<AllResturantsScreen> {
   final fstoreCtrl = Get.find<FirestoreController>();
 
-  List<ResturantModel> _loaddedResturants = [];
+  final List<ResturantModel> _loaddedResturants = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +39,7 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
           actions: [
             IconButton(
                 onPressed: () {
-                  setState(() {
-                    getResturants();
-                  });
+                  
                 },
                 icon: const Icon(Icons.refresh))
           ],
@@ -72,11 +70,8 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
   @override
   void initState() {
     super.initState();
-    getResturants();
+    
   }
 
-  void getResturants() async {
-    
-    _loaddedResturants = await fstoreCtrl.loadResturants();
-  }
+ 
 }
