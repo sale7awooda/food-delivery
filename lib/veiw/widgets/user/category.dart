@@ -20,7 +20,8 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {Get.toNamed(Routes.categorydetails);},
+      onTap: () {Get.toNamed(Routes.categorydetails);
+      },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ClipRRect(

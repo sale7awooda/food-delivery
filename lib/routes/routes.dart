@@ -8,6 +8,7 @@ import 'package:orders/veiw/screens/auth/sign_up.dart';
 import 'package:orders/veiw/screens/user/all_resturants.dart';
 import 'package:orders/veiw/screens/user/category_details_screen.dart';
 import 'package:orders/veiw/screens/user/food_details.dart';
+import 'package:orders/veiw/screens/user/home.dart';
 import 'package:orders/veiw/screens/user/most_ordered.dart';
 import 'package:orders/veiw/screens/user/user_screen.dart';
 import '../veiw/screens/user/resturant.dart';
@@ -41,6 +42,10 @@ class AppRoutes {
     GetPage(
         name: Routes.userScreen,
         page: () => const UserScreen(),
+        bindings: [AuthBinding(), AppBinding(), FirestoreBinding()]),
+        GetPage(
+        name: Routes.homeScreen,
+        page: () => const HomeScreen(),
         bindings: [AuthBinding(), AppBinding(), FirestoreBinding()]),
     GetPage(
         name: Routes.allResturants,
@@ -88,6 +93,8 @@ class Routes {
   static const signUpScreen = '/signUpScreen';
   static const forgotpassScreen = '/forgotPasswordScreen';
   static const userScreen = '/userScreen';
+  static const homeScreen = '/homeScreen';
+
   static const adminScreen = '/adminScreen';
   static const resturantScreen = '/resturantScreen';
   static const allResturants = '/allResturants';

@@ -1,12 +1,22 @@
-class Category {
-  final String? catName, carImage, catID;
 
-  Category(this.catName, this.carImage, this.catID);
+class CategoryModel {
+String? cname;
+
+String? cCode;
+
+String? cdetial;
+String? cimg;
+String? cID;
+
+  CategoryModel({
+    required this.cname,
+    required this.cCode,
+    required this.cdetial,
+    this.cimg,
+    this.cID
+  });
+
+
+
+  
 }
-
-final categories = [
-  Category("pizza", "images/groceries.png", "catID"),
-  Category("pizza", "images/groceries.png", "catID"),
-  Category("pizza", "images/groceries.png", "catID"),
-  Category("pizza", "images/groceries.png", "catID"),
-];

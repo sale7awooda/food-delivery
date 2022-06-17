@@ -123,19 +123,11 @@ class _ManageResturantsState extends State<ManageResturants> {
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: Container(
-                                            color: lightGreyclr,
-                                            child: Center(
-                                                child: ResurantWdgt(
-                                              title: resturantSnapshot[
-                                                  fResturantName],
-                                              subtitle: resturantSnapshot[
-                                                  fResturantDetails],
-                                            )),
-                                          ),
+                                        child: ResurantWdgt(
+                                          title: resturantSnapshot[
+                                          fResturantName],
+                                          subtitle: resturantSnapshot[
+                                          fResturantDetails],
                                         ),
                                       ),
                                     );
@@ -157,216 +149,349 @@ class _ManageResturantsState extends State<ManageResturants> {
 
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Expanded(
+                    //     flex: 1,
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(15),
+                    //           child: IconButton(
+                    //               onPressed: () {
+                    //                 //clear();
+                    //                 if (_formKey.currentState!.validate()) {
+                    //                   _formKey.currentState!.save();
+                    //                   fstoreCtrl.addResturant(
+                    //                     ResturantModel(
+                    //                       rname: rnameCtrl.value.text,
+                    //                       rowner: rOwnerCtrl.value.text,
+                    //                       rpass: rPassCtrl.value.text,
+                    //                       rloc: rLocationCtrl.value.text,
+                    //                       rdetial: rDetailsCtrl.value.text,
+                    //                       // rimg:"images/groceries.png"
+                    //                     ),
+                    //                   );
+                    //                   Get.snackbar("تنبية", "تم الحفظ بنجاااح",
+                    //                       maxWidth: 400,
+                    //                       snackPosition: SnackPosition.BOTTOM,
+                    //                       isDismissible: true,
+                    //                       duration: const Duration(seconds: 3));
+                    //                   //clearCtrl();
+                    //                 }
+                    //               },
+                    //               icon: const Icon(
+                    //                 Icons.add,
+                    //                 size: 35,
+                    //                 color: mainColor,
+                    //               )),
+                    //         ),
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(15.0),
+                    //           child: IconButton(
+                    //               onPressed: () {
+                    //                 Get.snackbar("حفظ",
+                    //                     "أنت على وشك حذف ملف , هل ترغب بالاستمرار",
+                    //                     snackPosition: SnackPosition.BOTTOM,
+                    //                     isDismissible: true,
+                    //                     maxWidth: 400,
+                    //                     duration: const Duration(seconds: 5),
+                    //                     mainButton: TextButton(
+                    //                         onPressed: () {
+                    //                           fstoreCtrl.removeResturant(rID!);
+                    //                           clear();
+                    //                         },
+                    //                         child: const Text("نعم")));
+                    //               },
+                    //               icon: const Icon(Icons.remove,
+                    //                   size: 35, color: mainColor)),
+                    //         ),
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(15.0),
+                    //           child: IconButton(
+                    //               onPressed: () {
+                    //                  if (_formKey.currentState!.validate()) {
+                    //                   _formKey.currentState!.save();
+                    //                 fstoreCtrl.updateResturant(
+                    //                     rID!,
+                    //                     ResturantModel(
+                    //                       rname: rnameCtrl.value.text,
+                    //                       rowner: rOwnerCtrl.value.text,
+                    //                       rpass: rPassCtrl.value.text,
+                    //                       rloc: rLocationCtrl.value.text,
+                    //                       rdetial: rDetailsCtrl.value.text,
+                    //                       // rimg:"images/groceries.png"
+                    //                     ),);
+                    //                     Get.snackbar("تعديل", "تم التعديل بنجاااح",
+                    //                       maxWidth: 400,
+                    //                       snackPosition: SnackPosition.BOTTOM,
+                    //                       isDismissible: true,
+                    //                       duration: const Duration(seconds: 3)); }
+                    //               },
+                    //               icon: const Icon(Icons.update,
+                    //                   size: 35, color: mainColor)),
+                    //         ),
+                    //       ],
+                    //     )),
                     Expanded(
-                        flex: 1,
+                        // flex: 6,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: IconButton(
-                                  onPressed: () {
-                                    //clear();
-                                    if (_formKey.currentState!.validate()) {
-                                      _formKey.currentState!.save();
-                                      fstoreCtrl.addResturant(
-                                        ResturantModel(
-                                          rname: rnameCtrl.value.text,
-                                          rowner: rOwnerCtrl.value.text,
-                                          rpass: rPassCtrl.value.text,
-                                          rloc: rLocationCtrl.value.text,
-                                          rdetial: rDetailsCtrl.value.text,
-                                          // rimg:"images/groceries.png"
-                                        ),
-                                      );
-                                      Get.snackbar("تنبية", "تم الحفظ بنجاااح",
-                                          maxWidth: 400,
-                                          snackPosition: SnackPosition.BOTTOM,
-                                          isDismissible: true,
-                                          duration: const Duration(seconds: 3));
-                                      //clearCtrl();
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    size: 35,
-                                    color: mainColor,
-                                  )),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: IconButton(
-                                  onPressed: () {
-                                    Get.snackbar("حفظ",
-                                        "أنت على وشك حذف ملف , هل ترغب بالاستمرار",
-                                        snackPosition: SnackPosition.BOTTOM,
-                                        isDismissible: true,
-                                        maxWidth: 400,
-                                        duration: const Duration(seconds: 5),
-                                        mainButton: TextButton(
-                                            onPressed: () {
-                                              fstoreCtrl.removeResturant(rID!);
-                                              clear();
-                                            },
-                                            child: const Text("نعم")));
-                                  },
-                                  icon: const Icon(Icons.remove,
-                                      size: 35, color: mainColor)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: IconButton(
-                                  onPressed: () {
-                                     if (_formKey.currentState!.validate()) {
-                                      _formKey.currentState!.save();
-                                    fstoreCtrl.updateResturant(
-                                        rID!,
-                                        ResturantModel(
-                                          rname: rnameCtrl.value.text,
-                                          rowner: rOwnerCtrl.value.text,
-                                          rpass: rPassCtrl.value.text,
-                                          rloc: rLocationCtrl.value.text,
-                                          rdetial: rDetailsCtrl.value.text,
-                                          // rimg:"images/groceries.png"
-                                        ),);
-                                        Get.snackbar("تعديل", "تم التعديل بنجاااح",
-                                          maxWidth: 400,
-                                          snackPosition: SnackPosition.BOTTOM,
-                                          isDismissible: true,
-                                          duration: const Duration(seconds: 3)); }
-                                  },
-                                  icon: const Icon(Icons.update,
-                                      size: 35, color: mainColor)),
-                            ),
-                          ],
-                        )),
-                    Expanded(
-                        flex: 6,
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 10),
-                            const TextUtils(
-                                text: "بيانات المطعم",
-                                fontsize: 30,
-                                fontweight: FontWeight.bold,
-                                color: mainColor,
-                                underLine: TextDecoration.none),
-                            const Divider(),
-                            const SizedBox(height: 20),
-                            Expanded(
-                              child: ListView(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                controller: ScrollController(),
-                                // crossAxisAlignment: CrossAxisAlignment.center,
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Form(
-                                      key: _formKey,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 30),
-                                        child: Center(
-                                          child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        const TextUtils(
+                            text: "بيانات المطعم",
+                            fontsize: 30,
+                            fontweight: FontWeight.bold,
+                            color: mainColor,
+                            underLine: TextDecoration.none),
+                        const Divider(),
+                        const SizedBox(height: 20),
+                        Expanded(
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            controller: ScrollController(),
+                            // crossAxisAlignment: CrossAxisAlignment.center,
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Form(
+                                  key: _formKey,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
                                             children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  IconButton(
-                                                      onPressed: () {},
-                                                      icon: const Icon(
-                                                        Icons.image_outlined,
-                                                        size: 20,
-                                                      )),
-                                                  SizedBox(
-                                                    width: 100,
-                                                    height: 100,
-                                                    child: Image.asset(
-                                                        "images/groceries.png"),
-                                                  ),
-                                                ],
+                                              IconButton(
+                                                  onPressed: () {},
+                                                  icon: const Icon(
+                                                    Icons.image_outlined,
+                                                    size: 20,
+                                                  )),
+                                              SizedBox(
+                                                width: 100,
+                                                height: 100,
+                                                child: Image.asset(
+                                                    "images/groceries.png"),
                                               ),
-                                              TextFormWdgt(
-                                                controller: rnameCtrl,
-                                                lable: const Text(
-                                                    "Resturant Name "),
-                                                validator: (value) {
-                                                  if (value
-                                                      .toString()
-                                                      .isEmpty) {
-                                                    return "الحقل لايجب ان يكون فارغ";
-                                                  } else {
-                                                    return null;
-                                                  }
-                                                },
-                                              ),
-                                              TextFormWdgt(
-                                                  controller: rOwnerCtrl,
-                                                  lable: const Text(
-                                                      "Resturant Owner "),
-                                                  validator: (value) {
-                                                    if (value
-                                                        .toString()
-                                                        .isEmpty) {
-                                                      return "الحقل لايجب ان يكون فارغ";
-                                                    } else {
-                                                      return null;
-                                                    }
-                                                  }),
-                                              TextFormWdgt(
-                                                  controller: rPassCtrl,
-                                                  lable: const Text(
-                                                      " Owner Password "),
-                                                  validator: (value) {
-                                                    if (value
-                                                        .toString()
-                                                        .isEmpty) {
-                                                      return "الحقل لايجب ان يكون فارغ";
-                                                    } else {
-                                                      return null;
-                                                    }
-                                                  }),
-                                              TextFormWdgt(
-                                                  controller: rDetailsCtrl,
-                                                  lable: const Text(
-                                                      " Resturant Details "),
-                                                  validator: (value) {
-                                                    if (value
-                                                        .toString()
-                                                        .isEmpty) {
-                                                      return "الحقل لايجب ان يكون فارغ";
-                                                    } else {
-                                                      return null;
-                                                    }
-                                                  }),
-                                              TextFormWdgt(
-                                                  controller: rLocationCtrl,
-                                                  lable: const Text(
-                                                      " Resturant Location "),
-                                                  validator: (value) {
-                                                    if (value
-                                                        .toString()
-                                                        .isEmpty) {
-                                                      return "الحقل لايجب ان يكون فارغ";
-                                                    } else {
-                                                      return null;
-                                                    }
-                                                  }),
                                             ],
                                           ),
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            )
-                          ],
-                        ))
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 10),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    //clear();
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      _formKey.currentState!
+                                                          .save();
+                                                      fstoreCtrl.addResturant(
+                                                        ResturantModel(
+                                                          rname: rnameCtrl
+                                                              .value.text,
+                                                          rowner: rOwnerCtrl
+                                                              .value.text,
+                                                          rpass: rPassCtrl
+                                                              .value.text,
+                                                          rloc: rLocationCtrl
+                                                              .value.text,
+                                                          rdetial: rDetailsCtrl
+                                                              .value.text,
+                                                          // rimg:"images/groceries.png"
+                                                        ),
+                                                      );
+                                                      Get.snackbar("تنبية",
+                                                          "تم الحفظ بنجاااح",
+                                                          maxWidth: 400,
+                                                          snackPosition:
+                                                              SnackPosition
+                                                                  .BOTTOM,
+                                                          isDismissible: true,
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 3));
+                                                      //clearCtrl();
+                                                    }
+                                                  },
+                                                  child: const TextUtils(
+                                                      text: "إضافة",
+                                                      fontsize: 20,
+                                                      fontweight:
+                                                          FontWeight.bold,
+                                                      color: mainColor,
+                                                      underLine:
+                                                          TextDecoration.none),
+                                                  // Icon(
+                                                  //   Icons.add,
+                                                  //   size: 35,
+                                                  //   color: mainColor,
+                                                  // )
+                                                  // ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Get.snackbar("حذف",
+                                                        "أنت على وشك حذف ملف , هل ترغب بالاستمرار",
+                                                        snackPosition:
+                                                            SnackPosition
+                                                                .BOTTOM,
+                                                        isDismissible: true,
+                                                        maxWidth: 400,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 5),
+                                                        mainButton: TextButton(
+                                                            onPressed: () {
+                                                              fstoreCtrl
+                                                                  .removeResturant(
+                                                                      rID!);
+                                                              clear();
+                                                            },
+                                                            child: const Text(
+                                                                "نعم")));
+                                                  },
+                                                  child: const TextUtils(
+                                                      text: "حذف",
+                                                      fontsize: 20,
+                                                      fontweight:
+                                                          FontWeight.bold,
+                                                      color: mainColor,
+                                                      underLine:
+                                                          TextDecoration.none),
+                                                  // Icon(
+                                                  //     Icons.remove,
+                                                  //     size: 35,
+                                                  //     color: mainColor)
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      _formKey.currentState!
+                                                          .save();
+                                                      fstoreCtrl
+                                                          .updateResturant(
+                                                        rID!,
+                                                        ResturantModel(
+                                                          rname: rnameCtrl
+                                                              .value.text,
+                                                          rowner: rOwnerCtrl
+                                                              .value.text,
+                                                          rpass: rPassCtrl
+                                                              .value.text,
+                                                          rloc: rLocationCtrl
+                                                              .value.text,
+                                                          rdetial: rDetailsCtrl
+                                                              .value.text,
+                                                          // rimg:"images/groceries.png"
+                                                        ),
+                                                      );
+                                                      Get.snackbar("تعديل",
+                                                          "تم التعديل بنجاااح",
+                                                          maxWidth: 400,
+                                                          snackPosition:
+                                                              SnackPosition
+                                                                  .BOTTOM,
+                                                          isDismissible: true,
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 3));
+                                                    }
+                                                  },
+                                                  child: const TextUtils(
+                                                      text: "تعديل",
+                                                      fontsize: 20,
+                                                      fontweight:
+                                                          FontWeight.bold,
+                                                      color: mainColor,
+                                                      underLine:
+                                                          TextDecoration.none),
+                                                  // Icon(
+                                                  //     Icons.update,
+                                                  //     size: 35,
+                                                  //     color: mainColor)
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          TextFormWdgt(
+                                            controller: rnameCtrl,
+                                            lable:
+                                                const Text("Resturant Name "),
+                                            validator: (value) {
+                                              if (value.toString().isEmpty) {
+                                                return "الحقل لايجب ان يكون فارغ";
+                                              } else {
+                                                return null;
+                                              }
+                                            },
+                                          ),
+                                          TextFormWdgt(
+                                              controller: rOwnerCtrl,
+                                              lable: const Text(
+                                                  "Resturant Owner "),
+                                              validator: (value) {
+                                                if (value.toString().isEmpty) {
+                                                  return "الحقل لايجب ان يكون فارغ";
+                                                } else {
+                                                  return null;
+                                                }
+                                              }),
+                                          TextFormWdgt(
+                                              controller: rPassCtrl,
+                                              lable: const Text(
+                                                  " Owner Password "),
+                                              validator: (value) {
+                                                if (value.toString().isEmpty) {
+                                                  return "الحقل لايجب ان يكون فارغ";
+                                                } else {
+                                                  return null;
+                                                }
+                                              }),
+                                          TextFormWdgt(
+                                              controller: rDetailsCtrl,
+                                              lable: const Text(
+                                                  " Resturant Details "),
+                                              validator: (value) {
+                                                if (value.toString().isEmpty) {
+                                                  return "الحقل لايجب ان يكون فارغ";
+                                                } else {
+                                                  return null;
+                                                }
+                                              }),
+                                          TextFormWdgt(
+                                              controller: rLocationCtrl,
+                                              lable: const Text(
+                                                  " Resturant Location "),
+                                              validator: (value) {
+                                                if (value.toString().isEmpty) {
+                                                  return "الحقل لايجب ان يكون فارغ";
+                                                } else {
+                                                  return null;
+                                                }
+                                              }),
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                          ),
+                        )
+                      ],
+                    ))
                   ]))
         ]);
   }

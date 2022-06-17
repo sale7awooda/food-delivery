@@ -87,52 +87,52 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
           ),
           items: [
+            // SideMenuItem(
+            //   priority: 0,
+            //   title: 'بيانات النظام',
+            //   onTap: () {
+            //     page.jumpToPage(0);
+            //   },
+            //   icon: const Icon(Icons.home),
+            //   badgeContent: const Text(
+            //     '3',
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            // ),
             SideMenuItem(
               priority: 0,
-              title: 'بيانات النظام',
-              onTap: () {
-                page.jumpToPage(0);
-              },
-              icon: const Icon(Icons.home),
-              badgeContent: const Text(
-                '3',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            SideMenuItem(
-              priority: 1,
               title: 'المطاعم',
               onTap: () {
-                page.jumpToPage(1);
+                page.jumpToPage(0);
               },
               icon: const Icon(Icons.restaurant),
             ),
             SideMenuItem(
-              priority: 2,
+              priority: 1,
               title: 'الاصناف',
               onTap: () {
-                page.jumpToPage(2);
+                page.jumpToPage(1);
               },
               icon: const Icon(Icons.category),
             ),
             SideMenuItem(
-              priority: 3,
+              priority: 2,
               title: 'الطلبات',
               onTap: () {
-                page.jumpToPage(3);
+                page.jumpToPage(2);
               },
               icon: const Icon(Icons.inventory_rounded),
             ),
             SideMenuItem(
-              priority: 4,
+              priority: 3,
               title: 'الاطعمة',
               onTap: () {
-                page.jumpToPage(4);
+                page.jumpToPage(3);
               },
               icon: const Icon(Icons.dinner_dining),
             ),
             SideMenuItem(
-              priority: 6,
+              priority: 4,
               title: 'خروج',
               onTap: () async {},
               icon: const Icon(Icons.exit_to_app),
@@ -143,15 +143,15 @@ class _AdminScreenState extends State<AdminScreen> {
           child: PageView(scrollDirection: Axis.vertical,physics: const NeverScrollableScrollPhysics(),
             controller: page,
             children: [
-              Container(
-                color: Colors.white,
-                child: const Center(
-                  child: Text(
-                    'Dashboard',
-                    style: TextStyle(fontSize: 35),
-                  ),
-                ),
-              ),
+              // Container(
+              //   color: Colors.white,
+              //   child: const Center(
+              //     child: Text(
+              //       'Dashboard',
+              //       style: TextStyle(fontSize: 35),
+              //     ),
+              //   ),
+              // ),
               Container(
                   color: Colors.white,
                   child: const ManageResturants()),

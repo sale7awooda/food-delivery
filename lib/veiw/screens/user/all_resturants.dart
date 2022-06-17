@@ -1,12 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
-import 'package:orders/model/resturant_model.dart';
 
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/widgets/user/resturant_wdgt.dart';
-
-import 'package:orders/veiw/widgets/user/search_box.dart';
 
 
 class AllResturantsScreen extends StatefulWidget {
@@ -26,8 +24,11 @@ class AllResturantsScreen extends StatefulWidget {
 
 class _AllResturantsScreenState extends State<AllResturantsScreen> {
   final fstoreCtrl = Get.find<FirestoreController>();
+  final scrollctrl = ScrollController();
+  static String fResturantName = 'restName';
+  static String fResturantDetails = 'restDetail';
 
-  final List<ResturantModel> _loaddedResturants = [];
+  //final List<ResturantModel> _loaddedResturants = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,32 +38,69 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
           title: const Text(" FOOD DELIVERY"),
           centerTitle: true,
           actions: [
-            IconButton(
-                onPressed: () {
-                  
-                },
-                icon: const Icon(Icons.refresh))
+            IconButton(onPressed: () {}, icon: const Icon(Icons.search))
           ],
         ),
         body: Column(
-          children:  [
+          children: [
             const SizedBox(height: 20),
-            const SearchBox(),
-            const SizedBox(height: 20),
-            Expanded(child: 
-            
-            ListView.builder(
-      scrollDirection: Axis.vertical,
-      itemCount: _loaddedResturants.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ResurantWdgt(
-          title: _loaddedResturants[index].rname!,
-          subtitle: _loaddedResturants[index].rdetial!,
-        );
-      },
-    )
-            
-            ),
+            // const SearchBox(),
+            // const SizedBox(height: 20),
+            Expanded(
+                child: StreamBuilder(
+                    stream: fstoreCtrl.restaurantCol.snapshots(),
+                    //initialData: initialData,
+                    builder:
+                        (BuildContext context, AsyncSnapshot streamSnapshot) {
+                      if (streamSnapshot.hasData) {
+                        return !streamSnapshot.hasData
+                            ? const Center(child: CircularProgressIndicator())
+                            : ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                controller: scrollctrl,
+                                itemCount: streamSnapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  final DocumentSnapshot resturantSnapshot =
+                                      streamSnapshot.data!.docs[index];
+                                  return InkWell(
+                                    hoverColor: Colors.lightBlue[200],
+                                    onTap: () {},
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ResurantWdgt(
+                                        title:
+                                            resturantSnapshot[fResturantName],
+                                        subtitle: resturantSnapshot[
+                                            fResturantDetails],
+                                      ),
+                                    ),
+
+                                    // ResurantWdgt(
+                                    //   title: categorySnapshot[
+                                    //   fCategoryName],
+                                    //   subtitle: categorySnapshot[
+                                    //   fCategoryDetails],
+                                    // ),
+                                  );
+                                });
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    })
+
+                //         ListView.builder(
+                //   scrollDirection: Axis.vertical,
+                //   itemCount: _loaddedResturants.length,
+                //   itemBuilder: (BuildContext context, int index) {
+                //     return ResurantWdgt(
+                //       title: _loaddedResturants[index].rname!,
+                //       subtitle: _loaddedResturants[index].rdetial!,
+                //     );
+                //   },
+                // )
+
+                ),
           ],
         ));
   }
@@ -70,8 +108,5 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
   @override
   void initState() {
     super.initState();
-    
   }
-
- 
 }
