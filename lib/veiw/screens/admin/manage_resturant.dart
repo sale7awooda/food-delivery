@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fire_storage;
+import 'package:image_network/image_network.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/model/resturant_model.dart';
 // import 'package:orders/logic/controller/firestore_controller.dart';
@@ -31,14 +35,17 @@ class _ManageResturantsState extends State<ManageResturants> {
   String email = '';
   String loc = '';
   String detail = '';
-  String img = 'images/groceries.png';
+  String imgName = 'images/groceries.png';
   DocumentSnapshot? rID;
   static String fResturantName = 'restName';
   static String fResturantOwner = 'restOwner';
   static String fResturantPass = 'restPass';
   static String fResturantLoc = 'resLoc';
   static String fResturantDetails = 'restDetail';
-  static String fResturantImg = 'restImg';
+  static String imgREF = 'resturants';
+  //static String fResturantImg = 'restImg';
+
+  static String? fResturantID;
 
   final rnameCtrl = TextEditingController();
   final rOwnerCtrl = TextEditingController();
@@ -103,31 +110,34 @@ class _ManageResturantsState extends State<ManageResturants> {
                                   itemBuilder: (context, index) {
                                     final DocumentSnapshot resturantSnapshot =
                                         streamSnapshot.data!.docs[index];
-                                    return InkWell(
-                                      hoverColor: Colors.lightBlue[200],
-                                      onTap: () {
-                                        setState(() {
-                                          rID = resturantSnapshot;
-                                        });
+                                    return Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: InkWell(
+                                        hoverColor: Colors.lightBlue[200],
+                                        onTap: () {
+                                          setState(() {
+                                            rID = resturantSnapshot;
+                                            fResturantID = streamSnapshot
+                                                .data!.docs[index].id;
+                                            // print(fResturantID);
+                                          });
 
-                                        rnameCtrl.text =
-                                            resturantSnapshot[fResturantName];
-                                        rOwnerCtrl.text =
-                                            resturantSnapshot[fResturantOwner];
-                                        rPassCtrl.text =
-                                            resturantSnapshot[fResturantPass];
-                                        rDetailsCtrl.text = resturantSnapshot[
-                                            fResturantDetails];
-                                        rLocationCtrl.text =
-                                            resturantSnapshot[fResturantLoc];
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                          rnameCtrl.text =
+                                              resturantSnapshot[fResturantName];
+                                          rOwnerCtrl.text = resturantSnapshot[
+                                              fResturantOwner];
+                                          rPassCtrl.text =
+                                              resturantSnapshot[fResturantPass];
+                                          rDetailsCtrl.text = resturantSnapshot[
+                                              fResturantDetails];
+                                          rLocationCtrl.text =
+                                              resturantSnapshot[fResturantLoc];
+                                        },
                                         child: ResurantWdgt(
-                                          title: resturantSnapshot[
-                                          fResturantName],
+                                          title:
+                                              resturantSnapshot[fResturantName],
                                           subtitle: resturantSnapshot[
-                                          fResturantDetails],
+                                              fResturantDetails],
                                         ),
                                       ),
                                     );
@@ -261,29 +271,141 @@ class _ManageResturantsState extends State<ManageResturants> {
                                         horizontal: 10),
                                     child: Center(
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.image_outlined,
-                                                    size: 20,
-                                                  )),
-                                              SizedBox(
-                                                width: 100,
-                                                height: 100,
-                                                child: Image.asset(
-                                                    "images/groceries.png"),
-                                              ),
-                                            ],
+                                          Container(
+                                            padding: const EdgeInsets.all(5),
+                                            // color: Colors.black,
+                                            height: 110,
+
+                                            child: FutureBuilder(
+                                              future:
+                                                  fstoreCtrl.listImgs(imgREF),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<
+                                                          fire_storage
+                                                              .ListResult>
+                                                      snapshot) {
+                                                if (snapshot.connectionState ==
+                                                        ConnectionState.done &&
+                                                    snapshot.hasData) {
+                                                  return ListView.builder(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      itemCount: snapshot
+                                                          .data!.items.length,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        final imgName = snapshot
+                                                            .data!
+                                                            .items[index]
+                                                            .name;
+
+                                                        return Stack(
+                                                         
+                                                          children: [
+                                                            FutureBuilder(
+                                                              future: fstoreCtrl
+                                                                  .dwnlodURL(
+                                                                      imgName
+                                                                      ,imgREF),
+                                                              builder: (BuildContext
+                                                                      context,
+                                                                  AsyncSnapshot<
+                                                                          String>
+                                                                      snapshot) {
+                                                                if (snapshot.connectionState ==
+                                                                        ConnectionState
+                                                                            .done &&
+                                                                    snapshot
+                                                                        .hasData) {
+                                                                  return Container( margin: EdgeInsets.all(5),
+                                                                      height: 100,
+                                                                      width: 100,
+                                                                      color: lightGreyclr,
+                                                                      child: InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          
+                                                                              rImageCtrl.text = snapshot.data!;
+                                                                              print(rImageCtrl.value);
+                                                                          setState(() {
+                                                                            rImageCtrl.text = snapshot.data!;
+                                                                          });
+                                                                          
+                                                                        },
+                                                                        child:
+                                                                            ImageNetwork(
+                                                                          image:
+                                                                              snapshot.data!,
+                                                                          height:
+                                                                              100,
+                                                                          width:
+                                                                              100,
+                                                                          fitAndroidIos:
+                                                                              BoxFit.cover,
+                                                                          fitWeb:
+                                                                              BoxFitWeb.cover,
+                                                                        ),
+                                                                      )
+                                                                    
+                                                                      );
+                                                                }
+                                                                if (snapshot.connectionState ==
+                                                                        ConnectionState
+                                                                            .waiting ||
+                                                                    !snapshot
+                                                                        .hasData) {
+                                                                  return const CircularProgressIndicator();
+                                                                }
+                                                                return Container(
+                                                                  color: redClr,
+                                                                );
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      });
+                                                }
+                                                if (snapshot.connectionState ==
+                                                        ConnectionState
+                                                            .waiting ||
+                                                    !snapshot.hasData) {
+                                                  return const CircularProgressIndicator();
+                                                }
+                                                return Container(
+                                                  color: redClr,
+                                                );
+                                              },
+                                            ),
                                           ),
+                                          IconButton(
+                                              onPressed: () async {
+                                                final fpicker = await FilePicker
+                                                    .platform
+                                                    .pickFiles(
+                                                        allowMultiple: false,
+                                                        type: FileType.custom,
+                                                        allowedExtensions: [
+                                                      'jpg, png'
+                                                    ]);
+
+                                                if (fpicker == null) {
+                                                  Get.snackbar("Error",
+                                                      "No Image Was Selected !!!");
+                                                }
+                                                if (fpicker != null) {
+                                                  fstoreCtrl.uploadImage(
+                                                      fpicker.files.first,
+                                                      imgREF).then((value) => fstoreCtrl.dwnlodURL(imgName,imgREF));
+                                                }
+                                              },
+                                              icon: const Icon(
+                                                Icons.image_outlined,
+                                                size: 20,
+                                              )),Text(rImageCtrl.text),
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 10),
@@ -300,18 +422,18 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                           .save();
                                                       fstoreCtrl.addResturant(
                                                         ResturantModel(
-                                                          rname: rnameCtrl
-                                                              .value.text,
-                                                          rowner: rOwnerCtrl
-                                                              .value.text,
-                                                          rpass: rPassCtrl
-                                                              .value.text,
-                                                          rloc: rLocationCtrl
-                                                              .value.text,
-                                                          rdetial: rDetailsCtrl
-                                                              .value.text,
-                                                          // rimg:"images/groceries.png"
-                                                        ),
+                                                            rname: rnameCtrl
+                                                                .value.text,
+                                                            rowner: rOwnerCtrl
+                                                                .value.text,
+                                                            rpass: rPassCtrl
+                                                                .value.text,
+                                                            rloc: rLocationCtrl
+                                                                .value.text,
+                                                            rdetial:
+                                                                rDetailsCtrl
+                                                                    .value.text,
+                                                            rimgURL: rImageCtrl.text),
                                                       );
                                                       Get.snackbar("تنبية",
                                                           "تم الحفظ بنجاااح",
@@ -334,12 +456,6 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                       color: mainColor,
                                                       underLine:
                                                           TextDecoration.none),
-                                                  // Icon(
-                                                  //   Icons.add,
-                                                  //   size: 35,
-                                                  //   color: mainColor,
-                                                  // )
-                                                  // ),
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
@@ -371,10 +487,6 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                       color: mainColor,
                                                       underLine:
                                                           TextDecoration.none),
-                                                  // Icon(
-                                                  //     Icons.remove,
-                                                  //     size: 35,
-                                                  //     color: mainColor)
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
@@ -419,10 +531,6 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                       color: mainColor,
                                                       underLine:
                                                           TextDecoration.none),
-                                                  // Icon(
-                                                  //     Icons.update,
-                                                  //     size: 35,
-                                                  //     color: mainColor)
                                                 ),
                                               ],
                                             ),

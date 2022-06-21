@@ -1,3 +1,7 @@
+import 'dart:html';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fire_storage;
 import 'package:get/get.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,13 +11,9 @@ import 'package:orders/model/resturant_model.dart';
 
 class FirestoreController extends GetxController {
   final FirebaseFirestore firestoreIns = FirebaseFirestore.instance;
+  final fire_storage.FirebaseStorage firestorageIns =
+      fire_storage.FirebaseStorage.instance;
 
-  // String restaurantCollectin = 'Resturants';
-  // String categoriesCollectin = "Categories";
-  // String foodsCollectin = "Foods";
-// String restaurantCollectin ="Restorants";
-// String restaurantCollectin ="Restorants";
-// String restaurantCollectin ="Restorants";
   static String fResturantName = 'restName';
   static String fResturantOwner = 'restOwner';
   static String fResturantPass = 'restPass';
@@ -36,6 +36,7 @@ class FirestoreController extends GetxController {
   static String ffoodPrice = 'foodPrice';
   static String ffoodTime = 'foodTime';
   static String ffoodStatus = 'foodStatus';
+  String itemIMG = '';
 
   final restaurantCol = FirebaseFirestore.instance.collection('restaurants');
   final categoryCol = FirebaseFirestore.instance.collection('categories');
@@ -48,7 +49,7 @@ class FirestoreController extends GetxController {
       fResturantPass: resturantModel.rpass,
       fResturantDetails: resturantModel.rdetial,
       fResturantLoc: resturantModel.rloc,
-      fResturantImg: resturantModel.rimg,
+      fResturantImg: resturantModel.rimgURL,
     });
   }
 
@@ -56,22 +57,19 @@ class FirestoreController extends GetxController {
     await categoryCol.add({
       fCategoryName: categoryModel.cname,
       fCategoryDetails: categoryModel.cdetial,
-      fCategoryCode: categoryModel.cCode,
-      fCategoryImg: categoryModel.cimg,
+      // fCategoryCode: categoryModel.cCode,
+      fCategoryImg: categoryModel.cimgURL,
     });
   }
-
 
   Future<void> addFood(FoodModel foodModel) async {
     await foodCol.add({
       ffoodName: foodModel.foodName,
       ffoodDetails: foodModel.foodDetails,
-      ffoodImg: foodModel.foodImage,
+      ffoodImg: foodModel.foodImageURL,
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
-      
       ffoodPrice: foodModel.foodPrice,
-      ffoodTime: foodModel.foodTime,
       ffoodStatus: foodModel.foodStatus,
     });
   }
@@ -83,6 +81,7 @@ class FirestoreController extends GetxController {
   Future<void> removeCategory(DocumentSnapshot doc) async {
     await categoryCol.doc(doc.id).delete();
   }
+
   Future<void> removeFood(DocumentSnapshot doc) async {
     await foodCol.doc(doc.id).delete();
   }
@@ -95,7 +94,7 @@ class FirestoreController extends GetxController {
       fResturantPass: resturantModel.rpass,
       fResturantDetails: resturantModel.rdetial,
       fResturantLoc: resturantModel.rloc,
-      fResturantImg: resturantModel.rimg,
+      fResturantImg: resturantModel.rimgURL,
     });
   }
 
@@ -104,28 +103,73 @@ class FirestoreController extends GetxController {
     await categoryCol.doc(doc.id).update({
       fCategoryName: categoryModel.cname,
       fCategoryDetails: categoryModel.cdetial,
-      fCategoryCode: categoryModel.cCode,
-      fCategoryImg: categoryModel.cimg,
+      // fCategoryCode: categoryModel.cCode,
+      fCategoryImg: categoryModel.cimgURL,
     });
   }
-  Future<void> updateFood(
-      DocumentSnapshot doc, FoodModel foodModel) async {
+
+  Future<void> updateFood(DocumentSnapshot doc, FoodModel foodModel) async {
     await foodCol.doc(doc.id).update({
       ffoodName: foodModel.foodName,
       ffoodDetails: foodModel.foodDetails,
-      ffoodImg: foodModel.foodImage,
+      ffoodImg: foodModel.foodImageURL,
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
-      
       ffoodPrice: foodModel.foodPrice,
-      ffoodTime: foodModel.foodTime,
       ffoodStatus: foodModel.foodStatus,
     });
   }
 
-  
-  
   addOrder() {}
   updateOrder() {}
   removeOrder() {}
+
+  Future<List<DocumentSnapshot>> getResturants() {
+    return restaurantCol.get().then(
+      (snaps) {
+        return snaps.docs;
+      },
+    );
+  }
+
+  Future<List<DocumentSnapshot>> getCategories() {
+    return categoryCol.get().then(
+      (snaps) {
+        return snaps.docs;
+      },
+    );
+  }
+
+  Future<String> uploadImage(PlatformFile file,String imgREF) async {
+    try {
+      fire_storage.TaskSnapshot upload =
+          await fire_storage.FirebaseStorage.instance.ref('$imgREF/${file.name}').putData(
+                file.bytes!,
+                fire_storage.SettableMetadata(
+                    contentType: 'image/${file.extension}'),
+              );
+
+      String itemurl = await upload.ref.getDownloadURL();
+      
+
+      return itemurl;
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+
+      return '';
+    }
+  }
+
+  final fstorageINS = fire_storage.FirebaseStorage.instance;
+  Future<fire_storage.ListResult> listImgs(String imgREF) async {
+    fire_storage.ListResult results = await fstorageINS.ref(imgREF).listAll();
+    results.items.forEach((fire_storage.Reference ref) {
+      print(ref);
+    });
+    return results;
+  }
+  Future<String> dwnlodURL (String imageName ,String imgREF) async{
+    String dwnlodURL = await  fstorageINS.ref('$imgREF/$imageName').getDownloadURL() ;
+    return dwnlodURL;
+  }
 }

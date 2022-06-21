@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:orders/utils/theme.dart';
 
 class ResurantWdgt extends StatelessWidget {
-   ResurantWdgt({
+  ResurantWdgt({
     Key? key,
     required this.title,
     required this.subtitle,
@@ -22,28 +22,22 @@ class ResurantWdgt extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Container(
         constraints: const BoxConstraints(
-          maxHeight: 150,
+          //maxHeight: 150,
         ),
-        color: 
-
-         Colors.primaries[_random.nextInt(Colors.primaries.length)]
-                [_random.nextInt(9) * 100],
-
-
-
+        color: Colors.primaries[_random.nextInt(Colors.primaries.length)]
+            [_random.nextInt(9) * 100],
 
         //Colors.black.withOpacity(.7),
-        child: Stack(alignment: Alignment.center, children: [
+        child: Stack(alignment: Alignment.center,//fit: StackFit.loose,
+         children: [
           Positioned(
               left: 0,
               child: Image.asset(
                 "images/groceries.png",
-                fit: BoxFit.contain,
+                fit: BoxFit.scaleDown,
                 height: 100,
-              )
-              
-              ),
-          ListTile(
+              )),
+          ListTile(contentPadding: const EdgeInsets.all(20),
             // tileColor: mainColor,
             // trailing: Image.asset(imgUrl!),
             title: Text(title!,
@@ -52,36 +46,11 @@ class ResurantWdgt extends StatelessWidget {
                     color: mainColor, fontWeight: FontWeight.bold)),
             subtitle: Text(subtitle!,
                 // textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white)),
+                style: const TextStyle(color: mainColor)),
           ),
         ]),
       ),
     );
 
-    // Stack(
-    //   children: [
-    //     Container(
-    //       //color: Colors.black45,
-    //       constraints: const BoxConstraints(
-    //         maxHeight: 100,
-    //       ),
-    //       child: Image.asset(
-    //         "images/groceries.png",
-    //         fit: BoxFit.contain,
-    //       ),
-    //     ),
-    //     ListTile(
-    //       // tileColor: mainColor,
-    //       // trailing: Image.asset(imgUrl!),
-    //       title: Text(title!,
-    //           //textAlign: TextAlign.center,
-    //           style: const TextStyle(
-    //               color: Colors.white, fontWeight: FontWeight.bold)),
-    //       subtitle: Text(subtitle!,
-    //           // textAlign: TextAlign.center,
-    //           style: const TextStyle(color: Colors.white)),
-    //     ),
-    //   ],
-    // );
   }
 }

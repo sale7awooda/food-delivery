@@ -36,7 +36,7 @@ class WelcomeScreen extends StatelessWidget {
                         //color: Colors.black.withOpacity(.3),
                         borderRadius: BorderRadius.circular(5)),
                     child:  Center(
-                      child: Responsive.isDesktop(context)? null:const Text(
+                      child: !Responsive.isDesktop(context)? null:const Text(
                         "مرحبا",
                         style: TextStyle(
                             fontSize: 30,

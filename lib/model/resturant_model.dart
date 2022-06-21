@@ -5,7 +5,7 @@ String? rowner;
 String? rpass;
 String? rloc;
 String? rdetial;
-String? rimg;
+String? rimgURL;
 String? rID;
 
   ResturantModel({
@@ -14,7 +14,7 @@ String? rID;
     required this.rpass,
     required this.rloc,
     required this.rdetial,
-     this.rimg,
+     this.rimgURL,
      this.rID
   });
 
@@ -27,7 +27,7 @@ String? rID;
       'rpass': rpass,
       'rloc': rloc,
       'rdetial': rdetial,
-      'rimg': rimg!,
+      'rimg': rimgURL!,
     };
   }
 }

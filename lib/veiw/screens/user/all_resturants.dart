@@ -62,25 +62,25 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
                                 itemBuilder: (context, index) {
                                   final DocumentSnapshot resturantSnapshot =
                                       streamSnapshot.data!.docs[index];
-                                  return InkWell(
-                                    hoverColor: Colors.lightBlue[200],
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                  return Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: InkWell(
+                                      hoverColor: Colors.lightBlue[200],
+                                      onTap: () {},
                                       child: ResurantWdgt(
                                         title:
                                             resturantSnapshot[fResturantName],
                                         subtitle: resturantSnapshot[
                                             fResturantDetails],
                                       ),
-                                    ),
 
-                                    // ResurantWdgt(
-                                    //   title: categorySnapshot[
-                                    //   fCategoryName],
-                                    //   subtitle: categorySnapshot[
-                                    //   fCategoryDetails],
-                                    // ),
+                                      // ResurantWdgt(
+                                      //   title: categorySnapshot[
+                                      //   fCategoryName],
+                                      //   subtitle: categorySnapshot[
+                                      //   fCategoryDetails],
+                                      // ),
+                                    ),
                                   );
                                 });
                       }

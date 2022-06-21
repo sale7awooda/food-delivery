@@ -29,19 +29,24 @@ environment:
 dependencies:
   cloud_firestore: ^3.1.17
   cupertino_icons: ^1.0.2
-  easy_dashboard: ^0.0.2
   easy_sidemenu: ^0.3.1
+  file_picker: ^4.6.1
+  firebase: ^9.0.3
   firebase_auth: ^3.3.0
   firebase_core: ^1.10.2
+  firebase_storage: ^10.2.18
   flutter:
     sdk: flutter
-  flutter_form_builder: ^7.3.0
+  flutter_form_builder: ^7.3.1
   form_builder_validators: ^8.1.1
   get: ^4.5.1
   get_storage: ^2.0.3
   google_fonts: ^2.1.0
   google_sign_in: ^5.2.1
   http: ^0.13.4
+  image_network: ^2.5.1
+  path: ^1.8.1
+
 # side_navigation: ^1.0.2
 dev_dependencies:
   flutter_lints: ^2.0.0

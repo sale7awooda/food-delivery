@@ -29,20 +29,21 @@ class _ManageCategoriesState extends State<ManageCategories> {
   DocumentSnapshot? cID;
   static String fCategoryName = 'catName';
   static String fCategoryDetails = 'catDetail';
-  static String fCategoryImg = 'catImg';
+  //static String fCategoryImg = 'catImg';
 
-  static String fCategoryCode = 'catCode';
+  // ignore: unused_field
+  static String? fCategoryID ;
 
   final cnameCtrl = TextEditingController();
 
-  final cCodeCtrl = TextEditingController();
+  final cIDCtrl = TextEditingController();
   final cImageCtrl = TextEditingController();
   final cDetailsCtrl = TextEditingController();
   //String _rname,_rowner,rpass,rloc,rdetal;
   clear() {
     cnameCtrl.clear();
     cDetailsCtrl.clear();
-    cCodeCtrl.clear();
+    cIDCtrl.clear();
     cImageCtrl.clear();
   }
 
@@ -93,23 +94,25 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                   itemBuilder: (context, index) {
                                     final DocumentSnapshot categorySnapshot =
                                         streamSnapshot.data!.docs[index];
-                                    return InkWell(
-                                      hoverColor: Colors.lightBlue[200],
-                                      onTap: () {
-                                        setState(() {
-                                          cID = categorySnapshot;
-                                        });
 
-                                        cnameCtrl.text =
-                                            categorySnapshot[fCategoryName];
+                                    return Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: InkWell(
+                                        hoverColor: Colors.lightBlue[200],
+                                        onTap: () {
+                                          setState(() {
+                                            cID = categorySnapshot;
+                                            fCategoryID = streamSnapshot
+                                                .data!.docs[index].id;
+                                            //print(fCategoryID);
+                                          });
 
-                                        cDetailsCtrl.text =
-                                            categorySnapshot[fCategoryDetails];
-                                        cCodeCtrl.text =
-                                            categorySnapshot[fCategoryCode];
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                          cnameCtrl.text =
+                                              categorySnapshot[fCategoryName];
+
+                                          cDetailsCtrl.text = categorySnapshot[
+                                              fCategoryDetails];
+                                        },
                                         child: ResurantWdgt(
                                           title:
                                               categorySnapshot[fCategoryName],
@@ -205,12 +208,10 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                         CategoryModel(
                                                             cname: cnameCtrl
                                                                 .value.text,
-                                                            cCode: cCodeCtrl
-                                                                .value.text,
                                                             cdetial:
                                                                 cDetailsCtrl
                                                                     .value.text,
-                                                            cimg: cimg
+                                                            cimgURL: cimg
                                                             // rimg:"images/groceries.png"
                                                             ),
                                                       );
@@ -235,17 +236,11 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                       color: mainColor,
                                                       underLine:
                                                           TextDecoration.none),
-                                                  // Icon(
-                                                  //   Icons.add,
-                                                  //   size: 35,
-                                                  //   color: mainColor,
-                                                  // )
-                                                  // ),
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
                                                     Get.snackbar("حذف",
-                                                        "أنت على وشك حذف ملف , هل ترغب بالاستمرار",
+                                                        "أنت على وشك حذف ملف مهم للنظام , هل ترغب بالاستمرار",
                                                         snackPosition:
                                                             SnackPosition
                                                                 .BOTTOM,
@@ -288,12 +283,13 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                         CategoryModel(
                                                             cname: cnameCtrl
                                                                 .value.text,
-                                                            cCode: cCodeCtrl
-                                                                .value.text,
+                                                            // cCode: cCodeCtrl
+                                                            // .value.text,
+                                                            cId: cID.toString(),
                                                             cdetial:
                                                                 cDetailsCtrl
                                                                     .value.text,
-                                                            cimg: cimg
+                                                            cimgURL: cimg
                                                             // rimg:"images/groceries.png"
                                                             ),
                                                       );
@@ -336,17 +332,17 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                               }
                                             },
                                           ),
-                                          TextFormWdgt(
-                                              controller: cCodeCtrl,
-                                              lable: const Text(" رمز الصنف "),
-                                              hint: "عباره عن رقم فريد",
-                                              validator: (value) {
-                                                if (value.toString().isEmpty) {
-                                                  return "الحقل لايجب ان يكون فارغ";
-                                                } else {
-                                                  return null;
-                                                }
-                                              }),
+                                          // TextFormWdgt(
+                                          //     controller: cCodeCtrl,
+                                          //     lable: const Text(" رمز الصنف "),
+                                          //     hint: "عباره عن رقم فريد",
+                                          //     validator: (value) {
+                                          //       if (value.toString().isEmpty) {
+                                          //         return "الحقل لايجب ان يكون فارغ";
+                                          //       } else {
+                                          //         return null;
+                                          //       }
+                                          //     }),
                                           TextFormWdgt(
                                               controller: cDetailsCtrl,
                                               lable:

@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:orders/logic/controller/firestore_controller.dart';
-import 'package:orders/model/food_model.dart';
-
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/admin/text_form_wdgt.dart';
 import 'package:orders/veiw/widgets/user/resturant_wdgt.dart';
-
 import 'package:orders/veiw/widgets/user/text_utils.dart';
+import 'package:path/path.dart';
 
 class ManageFoods extends StatefulWidget {
   const ManageFoods({
@@ -20,26 +20,28 @@ class ManageFoods extends StatefulWidget {
 }
 
 class _ManageFoodsState extends State<ManageFoods> {
-   final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final scrollctrl = ScrollController();
   final fstoreCtrl = Get.find<FirestoreController>();
 
   String name = '';
   String detail = '';
   String fimg = 'images/groceries.png';
-  bool fstatus=true;
+  bool fstatus = true;
   DocumentSnapshot? fID;
+  List<DocumentSnapshot> resturantsList = <DocumentSnapshot>[];
+  List<DocumentSnapshot> categoriesList = <DocumentSnapshot>[];
+
   static String ffoodName = 'foodName';
   static String ffoodDetails = 'foodDetails';
-  static String ffoodImg = 'foodImgUrl';
+  //static String ffoodImgURL = 'foodImgUrl';
   static String ffoodCategID = 'foodCategortID';
   static String ffoodResturantID = 'foodResturantID';
+  // ignore: unused_field
   static String ffoodID = 'foodID';
   static String ffoodPrice = 'foodPrice';
   static String ffoodTime = 'foodTime';
   static String ffoodStatus = 'foodStatus';
-
-  static String fCategoryCode = 'catCode';
 
   final fnameCtrl = TextEditingController();
   final fCatIdCtrl = TextEditingController();
@@ -58,7 +60,6 @@ class _ManageFoodsState extends State<ManageFoods> {
     fPriceCtrl.clear();
     fRestIdCtrl.clear();
     fTimeCtrl.clear();
-    
   }
 
   @override
@@ -108,37 +109,40 @@ class _ManageFoodsState extends State<ManageFoods> {
                                   itemBuilder: (context, index) {
                                     final DocumentSnapshot foodSnapshot =
                                         streamSnapshot.data!.docs[index];
-                                    return InkWell(
-                                      hoverColor: Colors.lightBlue[200],
-                                      onTap: () {
-                                        setState(() {
-                                          fID = foodSnapshot;
-                                        });
+                                    return Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: InkWell(
+                                        hoverColor: Colors.lightBlue[200],
+                                        onTap: () {
+                                          setState(() {
+                                            fID = foodSnapshot;
+                                            ffoodID = streamSnapshot
+                                                .data!.docs[index].id;
+                                          });
 
-                                        fnameCtrl.text =
-                                            foodSnapshot[ffoodName];
+                                          fnameCtrl.text =
+                                              foodSnapshot[ffoodName];
 
-                                        fDetailsCtrl.text =
-                                            foodSnapshot[ffoodDetails];
-                                        fCatIdCtrl.text =
-                                            foodSnapshot[ffoodCategID];
-                                            fRestIdCtrl.text =
-                                            foodSnapshot[ffoodResturantID];
+                                          fDetailsCtrl.text =
+                                              foodSnapshot[ffoodDetails];
+                                          fCatIdCtrl.text =
+                                              foodSnapshot[ffoodCategID];
+                                          fRestIdCtrl.text =
+                                              foodSnapshot[ffoodResturantID];
 
-                                        fPriceCtrl.text =
-                                            foodSnapshot[ffoodPrice].toString();
-                                        fTimeCtrl.text =
-                                            foodSnapshot[ffoodTime].toString();
-                                            fStatusCtrl.text =
-                                            foodSnapshot[ffoodStatus].toString();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                          fPriceCtrl.text =
+                                              foodSnapshot[ffoodPrice]
+                                                  .toString();
+                                          fTimeCtrl.text =
+                                              foodSnapshot[ffoodTime]
+                                                  .toString();
+                                          fStatusCtrl.text =
+                                              foodSnapshot[ffoodStatus]
+                                                  .toString();
+                                        },
                                         child: ResurantWdgt(
-                                          title:
-                                              foodSnapshot[ffoodName],
-                                          subtitle: foodSnapshot[
-                                              ffoodDetails],
+                                          title: foodSnapshot[ffoodName],
+                                          subtitle: foodSnapshot[ffoodDetails],
                                         ),
                                       ),
                                     );
@@ -181,262 +185,290 @@ class _ManageFoodsState extends State<ManageFoods> {
                             // crossAxisAlignment: CrossAxisAlignment.center,
                             // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Form(
-                                  key: _formKey,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.image_outlined,
-                                                    size: 20,
-                                                  )),
-                                              SizedBox(
-                                                width: 100,
-                                                height: 100,
-                                                child: Image.asset(
-                                                    "images/groceries.png"),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 10),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    //clear();
-                                                    if (_formKey.currentState!
-                                                        .validate()) {
-                                                      _formKey.currentState!
-                                                          .save();
-                                                      fstoreCtrl.addFood(
-                                                        FoodModel(
-                                                            foodName: fnameCtrl
-                                                                .value.text,
-                                                            foodDetails: fDetailsCtrl
-                                                                .value.text,
-                                                            foodCategID:
-                                                                fCatIdCtrl
-                                                                    .value.text,
-                                                            foodImage: fimg,
-                                                            foodPrice: int.tryParse(fPriceCtrl.value.text),
-                                                            foodResturantID: fRestIdCtrl.value.text,
-                                                            foodTime: int.tryParse(fTimeCtrl.value.text),
-                                                            foodStatus:  fstatus
-                                                            // rimg:"images/groceries.png"
-                                                            ),
-                                                      );
-                                                      Get.snackbar("تنبية",
-                                                          "تم الحفظ بنجاااح",
-                                                          maxWidth: 400,
-                                                          snackPosition:
-                                                              SnackPosition
-                                                                  .BOTTOM,
-                                                          isDismissible: true,
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 3));
-                                                      //clearCtrl();
-                                                    }
-                                                  },
-                                                  child: const TextUtils(
-                                                      text: "إضافة",
-                                                      fontsize: 20,
-                                                      fontweight:
-                                                          FontWeight.bold,
-                                                      color: mainColor,
-                                                      underLine:
-                                                          TextDecoration.none),
-                                                  // Icon(
-                                                  //   Icons.add,
-                                                  //   size: 35,
-                                                  //   color: mainColor,
-                                                  // )
-                                                  // ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Get.snackbar("حذف",
-                                                        "أنت على وشك حذف ملف , هل ترغب بالاستمرار",
-                                                        snackPosition:
-                                                            SnackPosition
-                                                                .BOTTOM,
-                                                        isDismissible: true,
-                                                        maxWidth: 400,
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 5),
-                                                        mainButton: TextButton(
-                                                            onPressed: () {
-                                                              fstoreCtrl
-                                                                  .removeFood(
-                                                                      fID!);
-                                                              clear();
-                                                            },
-                                                            child: const Text(
-                                                                "نعم")));
-                                                  },
-                                                  child: const TextUtils(
-                                                      text: "حذف",
-                                                      fontsize: 20,
-                                                      fontweight:
-                                                          FontWeight.bold,
-                                                      color: mainColor,
-                                                      underLine:
-                                                          TextDecoration.none),
-                                                  // Icon(
-                                                  //     Icons.remove,
-                                                  //     size: 35,
-                                                  //     color: mainColor)
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    if (_formKey.currentState!
-                                                        .validate()) {
-                                                      _formKey.currentState!
-                                                          .save();
-                                                      fstoreCtrl.updateFood(
-                                                        fID!,
-                                                        FoodModel(
-                                                            foodName: fnameCtrl
-                                                                .value.text,
-                                                            foodDetails: fDetailsCtrl
-                                                                .value.text,
-                                                            foodCategID:
-                                                                fCatIdCtrl
-                                                                    .value.text,
-                                                            foodImage: fimg,
-                                                            foodPrice: int.tryParse(fPriceCtrl.value.text),
-                                                            foodResturantID: fRestIdCtrl.value.text,
-                                                            foodTime: int.tryParse(fTimeCtrl.value.text),
-                                                            foodStatus:  fstatus
-                                                            // rimg:"images/groceries.png"
-                                                            ),
-                                                      );
-                                                      Get.snackbar("تعديل",
-                                                          "تم التعديل بنجاااح",
-                                                          maxWidth: 400,
-                                                          snackPosition:
-                                                              SnackPosition
-                                                                  .BOTTOM,
-                                                          isDismissible: true,
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 3));
-                                                    }
-                                                  },
-                                                  child: const TextUtils(
-                                                      text: "تعديل",
-                                                      fontsize: 20,
-                                                      fontweight:
-                                                          FontWeight.bold,
-                                                      color: mainColor,
-                                                      underLine:
-                                                          TextDecoration.none),
-                                                  // Icon(
-                                                  //     Icons.update,
-                                                  //     size: 35,
-                                                  //     color: mainColor)
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          TextFormWdgt(
-                                            controller: fnameCtrl,
-                                            lable: const Text("اسم الطعام  "),
-                                            validator: (value) {
-                                              if (value.toString().isEmpty) {
-                                                return "الحقل لايجب ان يكون فارغ";
-                                              } else {
-                                                return null;
-                                              }
-                                            },
-                                          ),
-                                          TextFormWdgt(
-                                              controller: fCatIdCtrl,
-                                              lable: const Text(" الصنف "),
-                                              // hint: "عباره عن رقم فريد",
-                                              validator: (value) {
-                                                if (value.toString().isEmpty) {
-                                                  return "الحقل لايجب ان يكون فارغ";
-                                                } else {
-                                                  return null;
-                                                }
-                                              }),
-                                          TextFormWdgt(
-                                              controller: fDetailsCtrl,
-                                              lable:
-                                                  const Text(" تفاصيل الطعام "),
-                                              validator: (value) {
-                                                if (value.toString().isEmpty) {
-                                                  return "الحقل لايجب ان يكون فارغ";
-                                                } else {
-                                                  return null;
-                                                }
-                                              }),
-                                              TextFormWdgt(
-                                              controller: fRestIdCtrl,
-                                              lable:
-                                                  const Text(" المطعم "),
-                                              validator: (value) {
-                                                if (value.toString().isEmpty) {
-                                                  return "الحقل لايجب ان يكون فارغ";
-                                                } else {
-                                                  return null;
-                                                }
-                                              }),
-                                              TextFormWdgt(
-                                              controller: fPriceCtrl,
-                                              lable:
-                                                  const Text(" السعر "),
-                                              validator: (value) {
-                                                if (value.toString().isEmpty) {
-                                                  return "الحقل لايجب ان يكون فارغ";
-                                                } else {
-                                                  return null;
-                                                }
-                                              }),TextFormWdgt(
-                                              controller: fTimeCtrl,
-                                              lable:
-                                                  const Text(" الزمن اللازم "),
-                                              validator: (value) {
-                                                if (value.toString().isEmpty) {
-                                                  return "الحقل لايجب ان يكون فارغ";
-                                                } else {
-                                                  return null;
-                                                }
-                                              }),
-                                              // TextFormWdgt(
-                                              // controller: fStatusCtrl,
-                                              // lable:
-                                              //     const Text(" متوفر "),
-                                              // validator: (value) {
-                                              //   if (value.toString().isEmpty) {
-                                              //     return "الحقل لايجب ان يكون فارغ";
-                                              //   } else {
-                                              //     return null;
-                                              //   }
-                                              // }),
-                                        ],
-                                      ),
-                                    ),
-                                  ))
+                              OutlinedButton(
+                                  onPressed: () async {
+                                    final fpicker = await FilePicker.platform
+                                        .pickFiles(
+                                            allowMultiple: false,
+                                            type: FileType.custom,
+                                            allowedExtensions: ['jpg, png']);
+
+                                    if (fpicker == null) {
+                                      Get.snackbar("Error", "No Image Was Selected !!!");
+                                      
+                                    }
+                                    if (fpicker != null) {
+                                      uploadImage(fpicker.files.first);
+                                    }
+                                  },
+                                  child: const Text("upload")
+                                  // _displayIMG()
+                                  ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    // StorageRepo().uploadImage(uImage)
+
+                                    // DatabaseRepo().getItem(ffoodID);print(ffoodID);
+                                  },
+                                  child: const Text("press"))
+
+                              // Form(
+                              //     key: _formKey,
+                              //     child: Padding(
+                              //       padding: const EdgeInsets.symmetric(
+                              //           horizontal: 10),
+                              //       child: Center(
+                              //         child: Column(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.center,
+                              //           crossAxisAlignment:
+                              //               CrossAxisAlignment.center,
+                              //           children: [
+                              //             Row(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.center,
+                              //               children: [
+                              //                 IconButton(
+                              //                     onPressed: () {},
+                              //                     icon: const Icon(
+                              //                       Icons.image_outlined,
+                              //                       size: 20,
+                              //                     )),
+                              //                 SizedBox(
+                              //                   width: 100,
+                              //                   height: 100,
+                              //                   child: Image.asset(
+                              //                       "images/groceries.png"),
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //             Padding(
+                              //               padding:
+                              //                   const EdgeInsets.only(top: 10),
+                              //               child: Row(
+                              //                 mainAxisAlignment:
+                              //                     MainAxisAlignment.center,
+                              //                 children: [
+                              //                   TextButton(
+                              //                     onPressed: () {
+                              //                       //clear();
+                              //                       if (_formKey.currentState!
+                              //                           .validate()) {
+                              //                         _formKey.currentState!
+                              //                             .save();
+                              //                         fstoreCtrl.addFood(
+                              //                           FoodModel(
+                              //                               foodName: fnameCtrl
+                              //                                   .value.text,
+                              //                               foodDetails: fDetailsCtrl
+                              //                                   .value.text,
+                              //                               foodCategID:
+                              //                                   fCatIdCtrl
+                              //                                       .value.text,
+                              //                               foodImage: fimg,
+                              //                               foodPrice: int.tryParse(fPriceCtrl.value.text),
+                              //                               foodResturantID: fRestIdCtrl.value.text,
+                              //                               foodTime: int.tryParse(fTimeCtrl.value.text),
+                              //                               foodStatus:  fstatus
+                              //                               // rimg:"images/groceries.png"
+                              //                               ),
+                              //                         );
+                              //                         Get.snackbar("تنبية",
+                              //                             "تم الحفظ بنجاااح",
+                              //                             maxWidth: 400,
+                              //                             snackPosition:
+                              //                                 SnackPosition
+                              //                                     .BOTTOM,
+                              //                             isDismissible: true,
+                              //                             duration:
+                              //                                 const Duration(
+                              //                                     seconds: 3));
+                              //                         //clearCtrl();
+                              //                       }
+                              //                     },
+                              //                     child: const TextUtils(
+                              //                         text: "إضافة",
+                              //                         fontsize: 20,
+                              //                         fontweight:
+                              //                             FontWeight.bold,
+                              //                         color: mainColor,
+                              //                         underLine:
+                              //                             TextDecoration.none),
+                              //                     // Icon(
+                              //                     //   Icons.add,
+                              //                     //   size: 35,
+                              //                     //   color: mainColor,
+                              //                     // )
+                              //                     // ),
+                              //                   ),
+                              //                   TextButton(
+                              //                     onPressed: () {
+                              //                       Get.snackbar("حذف",
+                              //                           "أنت على وشك حذف ملف , هل ترغب بالاستمرار",
+                              //                           snackPosition:
+                              //                               SnackPosition
+                              //                                   .BOTTOM,
+                              //                           isDismissible: true,
+                              //                           maxWidth: 400,
+                              //                           duration:
+                              //                               const Duration(
+                              //                                   seconds: 5),
+                              //                           mainButton: TextButton(
+                              //                               onPressed: () {
+                              //                                 fstoreCtrl
+                              //                                     .removeFood(
+                              //                                         fID!);
+                              //                                 clear();
+                              //                               },
+                              //                               child: const Text(
+                              //                                   "نعم")));
+                              //                     },
+                              //                     child: const TextUtils(
+                              //                         text: "حذف",
+                              //                         fontsize: 20,
+                              //                         fontweight:
+                              //                             FontWeight.bold,
+                              //                         color: mainColor,
+                              //                         underLine:
+                              //                             TextDecoration.none),
+                              //                     // Icon(
+                              //                     //     Icons.remove,
+                              //                     //     size: 35,
+                              //                     //     color: mainColor)
+                              //                   ),
+                              //                   TextButton(
+                              //                     onPressed: () {
+                              //                       if (_formKey.currentState!
+                              //                           .validate()) {
+                              //                         _formKey.currentState!
+                              //                             .save();
+                              //                         fstoreCtrl.updateFood(
+                              //                           fID!,
+                              //                           FoodModel(
+                              //                               foodName: fnameCtrl
+                              //                                   .value.text,
+                              //                               foodDetails: fDetailsCtrl
+                              //                                   .value.text,
+                              //                               foodCategID:
+                              //                                   fCatIdCtrl
+                              //                                       .value.text,
+                              //                               foodImage: fimg,
+                              //                               foodPrice: int.tryParse(fPriceCtrl.value.text),
+                              //                               foodResturantID: fRestIdCtrl.value.text,
+                              //                               foodTime: int.tryParse(fTimeCtrl.value.text),
+                              //                               foodStatus:  fstatus
+                              //                               // rimg:"images/groceries.png"
+                              //                               ),
+                              //                         );
+                              //                         Get.snackbar("تعديل",
+                              //                             "تم التعديل بنجاااح",
+                              //                             maxWidth: 400,
+                              //                             snackPosition:
+                              //                                 SnackPosition
+                              //                                     .BOTTOM,
+                              //                             isDismissible: true,
+                              //                             duration:
+                              //                                 const Duration(
+                              //                                     seconds: 3));
+                              //                       }
+                              //                     },
+                              //                     child: const TextUtils(
+                              //                         text: "تعديل",
+                              //                         fontsize: 20,
+                              //                         fontweight:
+                              //                             FontWeight.bold,
+                              //                         color: mainColor,
+                              //                         underLine:
+                              //                             TextDecoration.none),
+                              //                     // Icon(
+                              //                     //     Icons.update,
+                              //                     //     size: 35,
+                              //                     //     color: mainColor)
+                              //                   ),
+                              //                 ],
+                              //               ),
+                              //             ),
+                              //             TextFormWdgt(
+                              //               controller: fnameCtrl,
+                              //               lable: const Text("اسم الطعام  "),
+                              //               validator: (value) {
+                              //                 if (value.toString().isEmpty) {
+                              //                   return "الحقل لايجب ان يكون فارغ";
+                              //                 } else {
+                              //                   return null;
+                              //                 }
+                              //               },
+                              //             ),
+                              //             TextFormWdgt(
+                              //                 controller: fCatIdCtrl,
+                              //                 lable: const Text(" الصنف "),
+                              //                 // hint: "عباره عن رقم فريد",
+                              //                 validator: (value) {
+                              //                   if (value.toString().isEmpty) {
+                              //                     return "الحقل لايجب ان يكون فارغ";
+                              //                   } else {
+                              //                     return null;
+                              //                   }
+                              //                 }),
+                              //             TextFormWdgt(
+                              //                 controller: fDetailsCtrl,
+                              //                 lable:
+                              //                     const Text(" تفاصيل الطعام "),
+                              //                 validator: (value) {
+                              //                   if (value.toString().isEmpty) {
+                              //                     return "الحقل لايجب ان يكون فارغ";
+                              //                   } else {
+                              //                     return null;
+                              //                   }
+                              //                 }),
+                              //                 TextFormWdgt(
+                              //                 controller: fRestIdCtrl,
+                              //                 lable:
+                              //                     const Text(" المطعم "),
+                              //                 validator: (value) {
+                              //                   if (value.toString().isEmpty) {
+                              //                     return "الحقل لايجب ان يكون فارغ";
+                              //                   } else {
+                              //                     return null;
+                              //                   }
+                              //                 }),
+                              //                 TextFormWdgt(
+                              //                 controller: fPriceCtrl,
+                              //                 lable:
+                              //                     const Text(" السعر "),
+                              //                 validator: (value) {
+                              //                   if (value.toString().isEmpty) {
+                              //                     return "الحقل لايجب ان يكون فارغ";
+                              //                   } else {
+                              //                     return null;
+                              //                   }
+                              //                 }),TextFormWdgt(
+                              //                 controller: fTimeCtrl,
+                              //                 lable:
+                              //                     const Text(" الزمن اللازم "),
+                              //                 validator: (value) {
+                              //                   if (value.toString().isEmpty) {
+                              //                     return "الحقل لايجب ان يكون فارغ";
+                              //                   } else {
+                              //                     return null;
+                              //                   }
+                              //                 }),
+                              //                 // TextFormWdgt(
+                              //                 // controller: fStatusCtrl,
+                              //                 // lable:
+                              //                 //     const Text(" متوفر "),
+                              //                 // validator: (value) {
+                              //                 //   if (value.toString().isEmpty) {
+                              //                 //     return "الحقل لايجب ان يكون فارغ";
+                              //                 //   } else {
+                              //                 //     return null;
+                              //                 //   }
+                              //                 // }),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     )
+                              //     )
                             ],
                           ),
                         )
@@ -444,5 +476,25 @@ class _ManageFoodsState extends State<ManageFoods> {
                     ))
                   ]))
         ]);
+  }
+
+
+  Future<String> uploadImage(PlatformFile file) async {
+    try {
+      TaskSnapshot upload =
+          await FirebaseStorage.instance.ref(file.name).putData(
+                file.bytes!,
+                SettableMetadata(contentType: 'image/${file.extension}'),
+              );
+
+      String url = await upload.ref.getDownloadURL();
+      
+      print(url);
+      
+      return url;
+    } catch (e) {
+       Get.snackbar("Error",e.toString());
+      return '';
+    }
   }
 }

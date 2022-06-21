@@ -2,18 +2,18 @@
 class CategoryModel {
 String? cname;
 
-String? cCode;
+// String? cCode;
 
 String? cdetial;
-String? cimg;
-String? cID;
+String? cimgURL;
+String? cId;
 
   CategoryModel({
     required this.cname,
-    required this.cCode,
+    //  this.cCode,
     required this.cdetial,
-    this.cimg,
-    this.cID
+    this.cimgURL,
+    this.cId
   });
 
 
