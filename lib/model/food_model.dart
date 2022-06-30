@@ -17,7 +17,7 @@ class FoodModel {
     required this.foodImageURL,
     required this.foodName,
     required this.foodPrice,
-    this.foodStatus,
+    this.foodStatus, 
   });
 
   static FoodModel fromSnapShot(DocumentSnapshot snap) {

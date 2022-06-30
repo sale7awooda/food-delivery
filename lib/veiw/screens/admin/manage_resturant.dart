@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fire_storage;
@@ -43,7 +42,7 @@ class _ManageResturantsState extends State<ManageResturants> {
   static String fResturantLoc = 'resLoc';
   static String fResturantDetails = 'restDetail';
   static String imgREF = 'resturants';
-  //static String fResturantImg = 'restImg';
+  static String fResturantImg = 'restImg';
 
   static String? fResturantID;
 
@@ -132,12 +131,16 @@ class _ManageResturantsState extends State<ManageResturants> {
                                               fResturantDetails];
                                           rLocationCtrl.text =
                                               resturantSnapshot[fResturantLoc];
+                                          rImageCtrl.text =
+                                              resturantSnapshot[fResturantImg];
                                         },
                                         child: ResurantWdgt(
                                           title:
                                               resturantSnapshot[fResturantName],
                                           subtitle: resturantSnapshot[
                                               fResturantDetails],
+                                          imgUrl:
+                                              resturantSnapshot[fResturantImg],
                                         ),
                                       ),
                                     );
@@ -159,90 +162,7 @@ class _ManageResturantsState extends State<ManageResturants> {
 
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Expanded(
-                    //     flex: 1,
-                    //     child: Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(15),
-                    //           child: IconButton(
-                    //               onPressed: () {
-                    //                 //clear();
-                    //                 if (_formKey.currentState!.validate()) {
-                    //                   _formKey.currentState!.save();
-                    //                   fstoreCtrl.addResturant(
-                    //                     ResturantModel(
-                    //                       rname: rnameCtrl.value.text,
-                    //                       rowner: rOwnerCtrl.value.text,
-                    //                       rpass: rPassCtrl.value.text,
-                    //                       rloc: rLocationCtrl.value.text,
-                    //                       rdetial: rDetailsCtrl.value.text,
-                    //                       // rimg:"images/groceries.png"
-                    //                     ),
-                    //                   );
-                    //                   Get.snackbar("تنبية", "تم الحفظ بنجاااح",
-                    //                       maxWidth: 400,
-                    //                       snackPosition: SnackPosition.BOTTOM,
-                    //                       isDismissible: true,
-                    //                       duration: const Duration(seconds: 3));
-                    //                   //clearCtrl();
-                    //                 }
-                    //               },
-                    //               icon: const Icon(
-                    //                 Icons.add,
-                    //                 size: 35,
-                    //                 color: mainColor,
-                    //               )),
-                    //         ),
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(15.0),
-                    //           child: IconButton(
-                    //               onPressed: () {
-                    //                 Get.snackbar("حفظ",
-                    //                     "أنت على وشك حذف ملف , هل ترغب بالاستمرار",
-                    //                     snackPosition: SnackPosition.BOTTOM,
-                    //                     isDismissible: true,
-                    //                     maxWidth: 400,
-                    //                     duration: const Duration(seconds: 5),
-                    //                     mainButton: TextButton(
-                    //                         onPressed: () {
-                    //                           fstoreCtrl.removeResturant(rID!);
-                    //                           clear();
-                    //                         },
-                    //                         child: const Text("نعم")));
-                    //               },
-                    //               icon: const Icon(Icons.remove,
-                    //                   size: 35, color: mainColor)),
-                    //         ),
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(15.0),
-                    //           child: IconButton(
-                    //               onPressed: () {
-                    //                  if (_formKey.currentState!.validate()) {
-                    //                   _formKey.currentState!.save();
-                    //                 fstoreCtrl.updateResturant(
-                    //                     rID!,
-                    //                     ResturantModel(
-                    //                       rname: rnameCtrl.value.text,
-                    //                       rowner: rOwnerCtrl.value.text,
-                    //                       rpass: rPassCtrl.value.text,
-                    //                       rloc: rLocationCtrl.value.text,
-                    //                       rdetial: rDetailsCtrl.value.text,
-                    //                       // rimg:"images/groceries.png"
-                    //                     ),);
-                    //                     Get.snackbar("تعديل", "تم التعديل بنجاااح",
-                    //                       maxWidth: 400,
-                    //                       snackPosition: SnackPosition.BOTTOM,
-                    //                       isDismissible: true,
-                    //                       duration: const Duration(seconds: 3)); }
-                    //               },
-                    //               icon: const Icon(Icons.update,
-                    //                   size: 35, color: mainColor)),
-                    //         ),
-                    //       ],
-                    //     )),
+                    
                     Expanded(
                         // flex: 6,
                         child: Column(
@@ -261,8 +181,6 @@ class _ManageResturantsState extends State<ManageResturants> {
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             controller: ScrollController(),
-                            // crossAxisAlignment: CrossAxisAlignment.center,
-                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Form(
                                   key: _formKey,
@@ -274,138 +192,43 @@ class _ManageResturantsState extends State<ManageResturants> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(5),
-                                            // color: Colors.black,
-                                            height: 110,
-
-                                            child: FutureBuilder(
-                                              future:
-                                                  fstoreCtrl.listImgs(imgREF),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<
-                                                          fire_storage
-                                                              .ListResult>
-                                                      snapshot) {
-                                                if (snapshot.connectionState ==
-                                                        ConnectionState.done &&
-                                                    snapshot.hasData) {
-                                                  return ListView.builder(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemCount: snapshot
-                                                          .data!.items.length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        final imgName = snapshot
-                                                            .data!
-                                                            .items[index]
-                                                            .name;
-
-                                                        return Stack(
-                                                         
-                                                          children: [
-                                                            FutureBuilder(
-                                                              future: fstoreCtrl
-                                                                  .dwnlodURL(
-                                                                      imgName
-                                                                      ,imgREF),
-                                                              builder: (BuildContext
-                                                                      context,
-                                                                  AsyncSnapshot<
-                                                                          String>
-                                                                      snapshot) {
-                                                                if (snapshot.connectionState ==
-                                                                        ConnectionState
-                                                                            .done &&
-                                                                    snapshot
-                                                                        .hasData) {
-                                                                  return Container( margin: EdgeInsets.all(5),
-                                                                      height: 100,
-                                                                      width: 100,
-                                                                      color: lightGreyclr,
-                                                                      child: InkWell(
-                                                                        onTap:
-                                                                            () {
-                                                                          
-                                                                              rImageCtrl.text = snapshot.data!;
-                                                                              print(rImageCtrl.value);
-                                                                          setState(() {
-                                                                            rImageCtrl.text = snapshot.data!;
-                                                                          });
-                                                                          
-                                                                        },
-                                                                        child:
-                                                                            ImageNetwork(
-                                                                          image:
-                                                                              snapshot.data!,
-                                                                          height:
-                                                                              100,
-                                                                          width:
-                                                                              100,
-                                                                          fitAndroidIos:
-                                                                              BoxFit.cover,
-                                                                          fitWeb:
-                                                                              BoxFitWeb.cover,
-                                                                        ),
-                                                                      )
-                                                                    
-                                                                      );
-                                                                }
-                                                                if (snapshot.connectionState ==
-                                                                        ConnectionState
-                                                                            .waiting ||
-                                                                    !snapshot
-                                                                        .hasData) {
-                                                                  return const CircularProgressIndicator();
-                                                                }
-                                                                return Container(
-                                                                  color: redClr,
-                                                                );
-                                                              },
-                                                            ),
-                                                          ],
-                                                        );
-                                                      });
-                                                }
-                                                if (snapshot.connectionState ==
-                                                        ConnectionState
-                                                            .waiting ||
-                                                    !snapshot.hasData) {
-                                                  return const CircularProgressIndicator();
-                                                }
-                                                return Container(
-                                                  color: redClr,
-                                                );
-                                              },
-                                            ),
-                                          ),
                                           IconButton(
                                               onPressed: () async {
                                                 final fpicker = await FilePicker
                                                     .platform
                                                     .pickFiles(
-                                                        allowMultiple: false,
-                                                        type: FileType.custom,
-                                                        allowedExtensions: [
-                                                      'jpg, png'
-                                                    ]);
+                                                  allowMultiple: false,
+                                                  type: FileType.image,
+                                                  //     allowedExtensions: [
+                                                  //   'jpg, png'
+                                                  // ]
+                                                );
 
                                                 if (fpicker == null) {
                                                   Get.snackbar("Error",
                                                       "No Image Was Selected !!!");
                                                 }
                                                 if (fpicker != null) {
-                                                  fstoreCtrl.uploadImage(
-                                                      fpicker.files.first,
-                                                      imgREF).then((value) => fstoreCtrl.dwnlodURL(imgName,imgREF));
+                                                  fstoreCtrl
+                                                          .uploadImage(
+                                                              fpicker
+                                                                  .files.first,
+                                                              imgREF)
+                                                          .then(
+                                                    (value) {
+                                                      //print(value);
+                                                      setState(() {
+                                                        rImageCtrl.text = value;
+                                                      });
+                                                    },
+                                                  )
+                                                      ;
                                                 }
                                               },
                                               icon: const Icon(
                                                 Icons.image_outlined,
                                                 size: 20,
-                                              )),Text(rImageCtrl.text),
+                                              )),
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 10),
@@ -433,8 +256,10 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                             rdetial:
                                                                 rDetailsCtrl
                                                                     .value.text,
-                                                            rimgURL: rImageCtrl.text),
+                                                            rimgURL: rImageCtrl
+                                                                .text),
                                                       );
+                                                      
                                                       Get.snackbar("تنبية",
                                                           "تم الحفظ بنجاااح",
                                                           maxWidth: 400,
@@ -445,7 +270,7 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                           duration:
                                                               const Duration(
                                                                   seconds: 3));
-                                                      //clearCtrl();
+                                                      clear();
                                                     }
                                                   },
                                                   child: const TextUtils(
@@ -508,6 +333,7 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                               .value.text,
                                                           rdetial: rDetailsCtrl
                                                               .value.text,
+                                                          rimgURL: rImageCtrl.value.text
                                                           // rimg:"images/groceries.png"
                                                         ),
                                                       );
@@ -533,6 +359,21 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                           TextDecoration.none),
                                                 ),
                                               ],
+                                            ),
+                                          ),
+                                          AbsorbPointer(
+                                            child: TextFormWdgt(
+                                              controller: rImageCtrl,
+                                              lable: const Text(
+                                                  "Resturant Image "),
+                                            
+                                              validator: (value) {
+                                                if (value.toString().isEmpty) {
+                                                  return "الحقل لايجب ان يكون فارغ";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
                                             ),
                                           ),
                                           TextFormWdgt(

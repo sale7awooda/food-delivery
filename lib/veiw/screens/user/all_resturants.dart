@@ -27,6 +27,7 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
   final scrollctrl = ScrollController();
   static String fResturantName = 'restName';
   static String fResturantDetails = 'restDetail';
+  static String fResturantImg = 'restImg';
 
   //final List<ResturantModel> _loaddedResturants = [];
   @override
@@ -48,46 +49,87 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
             // const SizedBox(height: 20),
             Expanded(
                 child: StreamBuilder(
-                    stream: fstoreCtrl.restaurantCol.snapshots(),
-                    //initialData: initialData,
-                    builder:
-                        (BuildContext context, AsyncSnapshot streamSnapshot) {
-                      if (streamSnapshot.hasData) {
-                        return !streamSnapshot.hasData
-                            ? const Center(child: CircularProgressIndicator())
-                            : ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                controller: scrollctrl,
-                                itemCount: streamSnapshot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  final DocumentSnapshot resturantSnapshot =
-                                      streamSnapshot.data!.docs[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: InkWell(
-                                      hoverColor: Colors.lightBlue[200],
-                                      onTap: () {},
-                                      child: ResurantWdgt(
-                                        title:
-                                            resturantSnapshot[fResturantName],
-                                        subtitle: resturantSnapshot[
-                                            fResturantDetails],
-                                      ),
+                      stream: fstoreCtrl.restaurantCol.snapshots(),
+                      //initialData: initialData,
+                      builder:
+                          (BuildContext context, AsyncSnapshot streamSnapshot) {
+                        if (streamSnapshot.hasData) {
+                          return !streamSnapshot.hasData
+                              ? const Center(child: CircularProgressIndicator())
+                              : ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  controller: scrollctrl,
+                                  itemCount: streamSnapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    final DocumentSnapshot resturantSnapshot =
+                                        streamSnapshot.data!.docs[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: InkWell(
+                                        hoverColor: Colors.lightBlue[200],
+                                        onTap: () {
+                                          
 
-                                      // ResurantWdgt(
-                                      //   title: categorySnapshot[
-                                      //   fCategoryName],
-                                      //   subtitle: categorySnapshot[
-                                      //   fCategoryDetails],
-                                      // ),
-                                    ),
-                                  );
-                                });
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    })
+                                          
+                                        },
+                                        child: ResurantWdgt(
+                                          title:
+                                              resturantSnapshot[fResturantName],
+                                          subtitle: resturantSnapshot[
+                                              fResturantDetails],
+                                          imgUrl:
+                                              resturantSnapshot[fResturantImg],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }),
+                
+                
+                
+                // StreamBuilder(
+                //     stream: fstoreCtrl.restaurantCol.snapshots(),
+                //     //initialData: initialData,
+                //     builder:
+                //         (BuildContext context, AsyncSnapshot streamSnapshot) {
+                //       if (streamSnapshot.hasData) {
+                //         return !streamSnapshot.hasData
+                //             ? const Center(child: CircularProgressIndicator())
+                //             : ListView.builder(
+                //                 scrollDirection: Axis.vertical,
+                //                 controller: scrollctrl,
+                //                 itemCount: streamSnapshot.data!.docs.length,
+                //                 itemBuilder: (context, index) {
+                //                   final DocumentSnapshot resturantSnapshot =
+                //                       streamSnapshot.data!.docs[index];
+                //                   return Padding(
+                //                     padding: const EdgeInsets.all(10.0),
+                //                     child: InkWell(
+                //                       hoverColor: Colors.lightBlue[200],
+                //                       onTap: () {},
+                //                       child: ResurantWdgt(
+                //                         title:
+                //                             resturantSnapshot[fResturantName],
+                //                         subtitle: resturantSnapshot[
+                //                             fResturantDetails],
+                //                       ),
+
+                                     
+                //                     ),
+                //                   );
+                //                 });
+                //       }
+                //       return const Center(
+                //         child: CircularProgressIndicator(),
+                //       );
+                //     })
+
+
+
 
                 //         ListView.builder(
                 //   scrollDirection: Axis.vertical,

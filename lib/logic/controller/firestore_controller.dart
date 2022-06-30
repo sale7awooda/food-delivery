@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fire_storage;
@@ -36,11 +35,12 @@ class FirestoreController extends GetxController {
   static String ffoodPrice = 'foodPrice';
   static String ffoodTime = 'foodTime';
   static String ffoodStatus = 'foodStatus';
-  String itemIMG = '';
+  String? itemIMG ;
 
   final restaurantCol = FirebaseFirestore.instance.collection('restaurants');
   final categoryCol = FirebaseFirestore.instance.collection('categories');
   final foodCol = FirebaseFirestore.instance.collection('foods');
+  final resturantOwnerCol= FirebaseFirestore.instance.collection('resturantsOwners');
 
   Future<void> addResturant(ResturantModel resturantModel) async {
     await restaurantCol.add({
@@ -71,6 +71,16 @@ class FirestoreController extends GetxController {
       ffoodResturantID: foodModel.foodResturantID,
       ffoodPrice: foodModel.foodPrice,
       ffoodStatus: foodModel.foodStatus,
+    });
+  }
+  Future<void> addResturantOwner(ResturantModel resturantModel) async {
+    await resturantOwnerCol.add({
+      fResturantName: resturantModel.rname,
+      fResturantOwner: resturantModel.rowner,
+      fResturantPass: resturantModel.rpass,
+      
+      
+      
     });
   }
 
@@ -150,6 +160,7 @@ class FirestoreController extends GetxController {
               );
 
       String itemurl = await upload.ref.getDownloadURL();
+      
       
 
       return itemurl;

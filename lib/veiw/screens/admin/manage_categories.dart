@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
@@ -29,7 +30,8 @@ class _ManageCategoriesState extends State<ManageCategories> {
   DocumentSnapshot? cID;
   static String fCategoryName = 'catName';
   static String fCategoryDetails = 'catDetail';
-  //static String fCategoryImg = 'catImg';
+  static String fCategoryImg = 'catImg';
+  static String imgREF = 'category';
 
   // ignore: unused_field
   static String? fCategoryID ;
@@ -112,12 +114,16 @@ class _ManageCategoriesState extends State<ManageCategories> {
 
                                           cDetailsCtrl.text = categorySnapshot[
                                               fCategoryDetails];
+                                          cImageCtrl.text = categorySnapshot[
+                                              fCategoryImg];
                                         },
                                         child: ResurantWdgt(
                                           title:
                                               categorySnapshot[fCategoryName],
                                           subtitle: categorySnapshot[
                                               fCategoryDetails],
+                                          imgUrl:
+                                              categorySnapshot[fCategoryImg],
                                         ),
                                       ),
                                     );
@@ -172,24 +178,43 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.image_outlined,
-                                                    size: 20,
-                                                  )),
-                                              SizedBox(
-                                                width: 100,
-                                                height: 100,
-                                                child: Image.asset(
-                                                    "images/groceries.png"),
-                                              ),
-                                            ],
-                                          ),
+                                           IconButton(
+                                              onPressed: () async {
+                                                final fpicker = await FilePicker
+                                                    .platform
+                                                    .pickFiles(
+                                                  allowMultiple: false,
+                                                  type: FileType.image,
+                                                  //     allowedExtensions: [
+                                                  //   'jpg, png'
+                                                  // ]
+                                                );
+
+                                                if (fpicker == null) {
+                                                  Get.snackbar("Error",
+                                                      "No Image Was Selected !!!");
+                                                }
+                                                if (fpicker != null) {
+                                                  fstoreCtrl
+                                                          .uploadImage(
+                                                              fpicker
+                                                                  .files.first,
+                                                              imgREF)
+                                                          .then(
+                                                    (value) {
+                                                      //print(value);
+                                                      setState(() {
+                                                        cImageCtrl.text = value;
+                                                      });
+                                                    },
+                                                  )
+                                                      ;
+                                                }
+                                              },
+                                              icon: const Icon(
+                                                Icons.image_outlined,
+                                                size: 20,
+                                              )),
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 10),
@@ -211,10 +236,11 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                             cdetial:
                                                                 cDetailsCtrl
                                                                     .value.text,
-                                                            cimgURL: cimg
+                                                            cimgURL: cImageCtrl
+                                                                .text
                                                             // rimg:"images/groceries.png"
                                                             ),
-                                                      );
+                                                      );clear();
                                                       Get.snackbar("تنبية",
                                                           "تم الحفظ بنجاااح",
                                                           maxWidth: 400,
@@ -289,10 +315,10 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                             cdetial:
                                                                 cDetailsCtrl
                                                                     .value.text,
-                                                            cimgURL: cimg
+                                                            cimgURL: cImageCtrl.value.text
                                                             // rimg:"images/groceries.png"
                                                             ),
-                                                      );
+                                                      );clear();
                                                       Get.snackbar("تعديل",
                                                           "تم التعديل بنجاااح",
                                                           maxWidth: 400,
@@ -313,12 +339,24 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                       color: mainColor,
                                                       underLine:
                                                           TextDecoration.none),
-                                                  // Icon(
-                                                  //     Icons.update,
-                                                  //     size: 35,
-                                                  //     color: mainColor)
+                                                
                                                 ),
                                               ],
+                                            ),
+                                          ),
+                                           AbsorbPointer(
+                                            child: TextFormWdgt(
+                                              controller: cImageCtrl,
+                                              lable: const Text(
+                                                  "Resturant Image "),
+                                            
+                                              validator: (value) {
+                                                if (value.toString().isEmpty) {
+                                                  return "الحقل لايجب ان يكون فارغ";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
                                             ),
                                           ),
                                           TextFormWdgt(
@@ -332,17 +370,7 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                               }
                                             },
                                           ),
-                                          // TextFormWdgt(
-                                          //     controller: cCodeCtrl,
-                                          //     lable: const Text(" رمز الصنف "),
-                                          //     hint: "عباره عن رقم فريد",
-                                          //     validator: (value) {
-                                          //       if (value.toString().isEmpty) {
-                                          //         return "الحقل لايجب ان يكون فارغ";
-                                          //       } else {
-                                          //         return null;
-                                          //       }
-                                          //     }),
+                                         
                                           TextFormWdgt(
                                               controller: cDetailsCtrl,
                                               lable:
