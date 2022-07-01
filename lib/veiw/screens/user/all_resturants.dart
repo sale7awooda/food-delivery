@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
+import 'package:orders/routes/routes.dart';
 
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/widgets/user/resturant_wdgt.dart';
@@ -28,6 +29,7 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
   static String fResturantName = 'restName';
   static String fResturantDetails = 'restDetail';
   static String fResturantImg = 'restImg';
+  static String? fResturantID;
 
   //final List<ResturantModel> _loaddedResturants = [];
   @override
@@ -68,6 +70,13 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
                                       child: InkWell(
                                         hoverColor: Colors.lightBlue[200],
                                         onTap: () {
+                                          setState(() {
+                                      fResturantID =
+                                          streamSnapshot.data!.docs[index].id;
+                                     // print(fResturantID);
+                                    });
+                                    Get.toNamed(Routes.resturant,
+                                        arguments: fResturantID);
                                           
 
                                           

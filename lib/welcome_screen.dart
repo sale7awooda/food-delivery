@@ -64,29 +64,31 @@ class WelcomeScreen extends StatelessWidget {
                         color: Colors.white,
                         underLine: TextDecoration.none)),
                 const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    
-                    const TextUtils(
-                        text: "ليس لديك حساب؟",
-                        fontsize: 20,
-                        fontweight: FontWeight.normal,
-                        color: mainColor,
-                        underLine: TextDecoration.none),
-                        TextButton(
-                      onPressed: () {
-                        Get.offNamed(Routes.signUpScreen);
-                      },
-                      child: const TextUtils(
-                        text: "مستخدم جديد",
-                        fontsize: 20,
-                        fontweight: FontWeight.bold,
-                        color: mainColor,
-                        underLine: TextDecoration.underline,
+                Container(
+                  child:!Responsive.isDesktop(context)? null: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      
+                      const TextUtils(
+                          text: "ليس لديك حساب؟",
+                          fontsize: 20,
+                          fontweight: FontWeight.normal,
+                          color: mainColor,
+                          underLine: TextDecoration.none),
+                          TextButton(
+                        onPressed: () {
+                          Get.offNamed(Routes.signUpScreen);
+                        },
+                        child: const TextUtils(
+                          text: "مستخدم جديد",
+                          fontsize: 20,
+                          fontweight: FontWeight.bold,
+                          color: mainColor,
+                          underLine: TextDecoration.underline,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),

@@ -5,14 +5,14 @@ import 'package:orders/routes/routes.dart';
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AuthController extends GetxController{
-bool isVisable = false;
+class AuthController extends GetxController {
+  bool isVisable = false;
   bool ischecked = false;
   FirebaseAuth auth = FirebaseAuth.instance;
   var googleSign = GoogleSignIn();
-  String? displayUsername = "";
+  var displayUsername = "";
   var displayUserPhoto = "";
-  var adminEmail="";
+  var adminEmail = "";
 
   void visibility() {
     isVisable = !isVisable;
@@ -84,13 +84,11 @@ bool isVisable = false;
       update();
       if (emailAddress == "f.delivery.project@gmail.com") {
         Get.offAllNamed(Routes.adminScreen);
-        displayUsername= "Admin";
-        
+        displayUsername = "Admin";
       } else {
         Get.offNamed(Routes.userScreen);
         displayUsername = auth.currentUser!.displayName!;
       }
-      
     } on FirebaseAuthException catch (e) {
       String message = "";
       String title = e.code.replaceAll(RegExp('-'), ' ').capitalize!;
@@ -130,21 +128,18 @@ bool isVisable = false;
     // Trigger the authentication flow
     try {
       // ignore: unused_local_variable
-      final GoogleSignInAccount?  googleUser = await googleSign.signIn();
-       displayUsername = googleSign.currentUser!.displayName;
+      final GoogleSignInAccount? googleUser = await googleSign.signIn();
+      displayUsername = googleSign.currentUser!.displayName!;
       // displayUserPhoto = googleSign.currentUser!.photoUrl!;
       adminEmail = googleSign.currentUser!.email;
-     
 
       update();
       //Get.offAllNamed(Routes.userScreen);
       if (adminEmail == "f.delivery.project@gmail.com") {
         Get.offAllNamed(Routes.adminScreen);
-        
       } else {
         Get.offNamed(Routes.userScreen);
       }
-
     } catch (error) {
       Get.snackbar(
         "خطا!",
@@ -194,6 +189,30 @@ bool isVisable = false;
     }
   }
 
-  void signOut() {}
+  void signOut() async {
+    try {
+      await auth.signOut();
+      await googleSign.signOut();
+      displayUsername = "";
+      update(); 
+      Get.offAllNamed(Routes.welcomeScreen);
+    } catch (error) {
+      Get.snackbar("خطأ!", error.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red[200]);
+    }
+  }
+  void signOutAdmin() async {
+    try {
+      await auth.signOut();
+      // await googleSign.signOut();
+      displayUsername = "";
+      update(); 
+      Get.offAllNamed(Routes.welcomeScreen);
+    } catch (error) {
+      Get.snackbar("خطأ!", error.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red[200]);
+    }
+  }
 }
-

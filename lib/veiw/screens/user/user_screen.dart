@@ -49,7 +49,7 @@ class _UserScreenState extends State<UserScreen> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.shopping_cart), label: "Orders"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person), label: "Profile"),
+                  icon: Icon(Icons.person), label: "SignOut"),
               // BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Close"),
             ]),
       );

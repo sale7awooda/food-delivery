@@ -171,16 +171,16 @@ class FirestoreController extends GetxController {
     }
   }
 
-  final fstorageINS = fire_storage.FirebaseStorage.instance;
-  Future<fire_storage.ListResult> listImgs(String imgREF) async {
-    fire_storage.ListResult results = await fstorageINS.ref(imgREF).listAll();
-    results.items.forEach((fire_storage.Reference ref) {
-      print(ref);
-    });
-    return results;
-  }
-  Future<String> dwnlodURL (String imageName ,String imgREF) async{
-    String dwnlodURL = await  fstorageINS.ref('$imgREF/$imageName').getDownloadURL() ;
-    return dwnlodURL;
-  }
+  // final fstorageINS = fire_storage.FirebaseStorage.instance;
+  // Future<fire_storage.ListResult> listImgs(String imgREF) async {
+  //   fire_storage.ListResult results = await fstorageINS.ref(imgREF).listAll();
+  //   results.items.forEach((fire_storage.Reference ref) {
+  //     print(ref);
+  //   });
+  //   return results;
+  // }
+  // Future<String> dwnlodURL (String imageName ,String imgREF) async{
+  //   String dwnlodURL = await  fstorageINS.ref('$imgREF/$imageName').getDownloadURL() ;
+  //   return dwnlodURL;
+  // }
 }

@@ -11,6 +11,8 @@ import 'package:orders/veiw/widgets/user/search_box.dart';
 import 'package:orders/veiw/widgets/user/side_title.dart';
 import 'package:orders/veiw/widgets/user/welcome_text.dart';
 
+import '../../../routes/routes.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -23,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final scrollctrl = ScrollController();
   static String fCategoryName = 'catName';
   static String fCategoryImg = 'catImg';
+  static String? fCategoryID;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,14 +55,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemBuilder: (context, index) {
                               final DocumentSnapshot categorySnapshot =
                                   streamSnapshot.data!.docs[index];
-                              return InkWell(
-                                hoverColor: Colors.lightBlue[200],
-                                onTap: () {},
+                              return GestureDetector(
+                                onTap: () {
+                                   
+                                      setState(() {
+                                        fCategoryID =
+                                            streamSnapshot.data!.docs[index].id;
+                                       // print(fCategoryID);
+                                      });
+                                      Get.toNamed(Routes.categorydetails, arguments: fCategoryID);},
                                 child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: CategoryCard(
                                       text: categorySnapshot[fCategoryName],
-                                      image: categorySnapshot[fCategoryImg],
+                                      imgUrl: categorySnapshot[fCategoryImg],
                                     )
 
                                     // ResurantWdgt(
