@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FoodModel {
-  String? foodName,
-      foodDetails,
-      foodImageURL,
-      foodCategID,
-      foodResturantID,
-      foodID;
+  String? foodName;
+  String? foodDetails;
+  String? foodImageURL;
+  String? foodCategID;
+  String? foodResturantID;
+  String? foodID;
   int? foodPrice;
   bool? foodStatus = true;
   FoodModel({
@@ -17,12 +17,12 @@ class FoodModel {
     required this.foodImageURL,
     required this.foodName,
     required this.foodPrice,
-    this.foodStatus, 
+    this.foodStatus,
   });
 
   static FoodModel fromSnapShot(DocumentSnapshot snap) {
     FoodModel foodModel = FoodModel(
-      foodID: snap['foodCategortID'],
+      foodID: snap['foodID'],
       foodCategID: snap['foodCategortID'],
       foodDetails: snap['foodDetails'],
       foodImageURL: snap['foodImgUrl'],
