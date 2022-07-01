@@ -142,9 +142,9 @@ class _ManageFoodsState extends State<ManageFoods> {
 
                                             fDetailsCtrl.text =
                                                 foodSnapshot[ffoodDetails];
-                                            fCatIdCtrl.text =
+                                            cnameCtrl.text =
                                                 foodSnapshot[ffoodCategID];
-                                            fRestIdCtrl.text =
+                                            rnameCtrl.text =
                                                 foodSnapshot[ffoodResturantID];
 
                                             fPriceCtrl.text =
