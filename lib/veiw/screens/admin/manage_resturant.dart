@@ -2,15 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_storage/firebase_storage.dart' as fire_storage;
-import 'package:image_network/image_network.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/model/resturant_model.dart';
 // import 'package:orders/logic/controller/firestore_controller.dart';
 // import 'package:orders/model/resturant_model.dart';
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/widgets/admin/text_form_wdgt.dart';
-import 'package:orders/veiw/widgets/user/resturant_wdgt.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
 
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 

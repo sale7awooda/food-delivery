@@ -5,7 +5,7 @@ import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/routes/routes.dart';
 
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/user/resturant_wdgt.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
 
 
 class AllResturantsScreen extends StatefulWidget {

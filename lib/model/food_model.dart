@@ -32,4 +32,27 @@ class FoodModel {
     );
     return foodModel;
   }
+
+
+    factory FoodModel.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data();
+    return FoodModel(
+      foodID: data?['foodID'],
+      foodCategID: data?['foodCategortID'],
+      foodDetails: data?['foodDetails'],
+      foodImageURL: data?['foodImgUrl'],
+      foodName: data?['foodName'],
+      foodPrice: data?['foodPrice'],
+      foodResturantID: data?['foodResturantID'],
+    );
+  }
+  Map<String, dynamic> toFirestore() {
+    return {
+     
+    };
+  }
 }
+

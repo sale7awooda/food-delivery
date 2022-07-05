@@ -10,6 +10,7 @@ import 'package:orders/veiw/screens/user/category_details_screen.dart';
 import 'package:orders/veiw/screens/user/food_details.dart';
 import 'package:orders/veiw/screens/user/home.dart';
 import 'package:orders/veiw/screens/user/most_ordered.dart';
+import 'package:orders/veiw/screens/user/my_orders.dart';
 import 'package:orders/veiw/screens/user/user_screen.dart';
 import '../veiw/screens/user/resturant.dart';
 import '../welcome_screen.dart';
@@ -67,10 +68,10 @@ class AppRoutes {
         name: Routes.fooddetails,
         page: () => const FoodDetailsScreen(),
         bindings: [AuthBinding(), AppBinding(), FirestoreBinding()]),
-    // GetPage(
-    //     name: Routes.managefoods,
-    //     page: () => const ManageFoods(),
-    //     binding: AppBinding()),
+    GetPage(
+        name: Routes.myordersScreen,
+        page: () => const MyOrdersScreen(),
+        bindings: [AuthBinding(), AppBinding(), FirestoreBinding()]),
     // GetPage(
     //     name: Routes.manageresturants,
     //     page: () => const ManageResturants(),
@@ -106,5 +107,5 @@ class Routes {
   static const manageresturants = '/manageresturants';
   static const managerorders = '/managerorders';
   static const managefoods = '/managefoods';
-  static const cart = '/cart';
+  static const myordersScreen = '/myorders';
 }

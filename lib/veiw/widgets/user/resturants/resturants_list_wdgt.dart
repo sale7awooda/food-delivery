@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/model/resturant_model.dart';
 
-import 'package:orders/veiw/widgets/user/resturant_wdgt.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
 
 class ResturantsList extends StatefulWidget {
   const ResturantsList({

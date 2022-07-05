@@ -13,6 +13,10 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   final controller = Get.find<AppController>();
+  
+ 
+  final rnameCtrl = TextEditingController();
+  final cnameCtrl = TextEditingController();
 
   int selectedIndex = 0;
   @override
@@ -24,13 +28,7 @@ class _UserScreenState extends State<UserScreen> {
           elevation: 0,
           title: const Text(" FOOD DELIVERY"),
           centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Get.toNamed(Routes.cart);
-                },
-                icon: const Icon(Icons.shopping_cart)),
-          ],
+          
         ),
         body: IndexedStack(
             index: controller.selectedIndex.value,

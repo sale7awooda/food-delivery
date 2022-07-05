@@ -1,9 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_network/image_network.dart';
-import 'package:orders/routes/routes.dart';
 import 'package:orders/utils/theme.dart';
 
 class CategoryCard extends StatelessWidget {

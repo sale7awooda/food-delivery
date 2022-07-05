@@ -5,7 +5,7 @@ import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/routes/routes.dart';
 
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/user/resturant_wdgt.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
 
 class ResturantScreen extends StatefulWidget {
   const ResturantScreen({
@@ -35,6 +35,11 @@ class _ResturantScreenState extends State<ResturantScreen> {
   static String ffoodDetails = 'foodDetails';
   static String ffoodImgURL = 'foodImgUrl';
   static String ffoodCategID = 'foodCategortID';
+  static String ffoodPrice1 = 'foodPrice';
+  static String ffoodDetails1 = 'foodDetails';
+  static String ffoodName1 = 'foodName';
+  static String ffoodID1 = 'foodID';
+  static String ffoodImgURL1 = 'foodImgUrl';
   //static String ffoodResturantID = 'foodResturantID';
   // ignore: unused_field
   static String ffoodID = 'foodID';
@@ -60,7 +65,9 @@ class _ResturantScreenState extends State<ResturantScreen> {
             // const SizedBox(height: 20),
             Expanded(
               child: StreamBuilder(
-                  stream: fstoreCtrl.foodCol.where('foodResturantID', isEqualTo: fResturantID).snapshots(),
+                  stream: fstoreCtrl.foodCol
+                      .where('foodResturantID', isEqualTo: fResturantID)
+                      .snapshots(),
                   //initialData: initialData,
                   builder:
                       (BuildContext context, AsyncSnapshot streamSnapshot) {
@@ -77,20 +84,31 @@ class _ResturantScreenState extends State<ResturantScreen> {
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                             
-                                              ffoodID = streamSnapshot
-                                                  .data!.docs[index].id;
-                                                   //print(fCategoryID);
-                                             
-                                            });
-                                    
+                                      ffoodID =
+                                          streamSnapshot.data!.docs[index].id;
+                                      //print(fCategoryID);
+                                      ffoodID1 =
+                                          streamSnapshot.data!.docs[index].id;
+                                      ffoodName1 = foodSnapshot[ffoodName];
+                                      ffoodImgURL1 = foodSnapshot[ffoodImgURL];
+                                      ffoodDetails1 =
+                                          foodSnapshot[ffoodDetails];
+                                      ffoodPrice1 =
+                                          foodSnapshot[ffoodPrice].toString();
+                                    });
+                                    Get.toNamed(Routes.fooddetails, arguments: [
+                                      ffoodID1,
+                                      ffoodName1,
+                                      ffoodDetails1,
+                                      ffoodImgURL1,
+                                      ffoodPrice1
+                                    ]);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: ResurantWdgt(
                                       title: foodSnapshot[ffoodName],
-                                      subtitle:
-                                          foodSnapshot[ffoodDetails],
+                                      subtitle: foodSnapshot[ffoodDetails],
                                       imgUrl: foodSnapshot[ffoodImgURL],
                                     ),
                                   ),
