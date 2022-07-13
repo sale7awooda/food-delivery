@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:orders/routes/routes.dart';
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/user/buttun_wdgt.dart';
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 
 class EmptyCart extends StatelessWidget {

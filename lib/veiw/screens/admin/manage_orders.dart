@@ -1,47 +1,690 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/utils/theme.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
 
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 
-class ManageOrders extends StatelessWidget {
-  const ManageOrders({
+class ManageOrders extends StatefulWidget {
+  ManageOrders({
     Key? key,
   }) : super(key: key);
+  static String ffoodName = 'foodName';
+  static String ffoodDetails = 'foodDetails';
+  static String ffoodImgURL = 'foodImgUrl';
+  static String ffoodCategID = 'foodCategortID';
+  static String ffoodResturantID = 'foodResturantID';
+  static String ffoodID = 'foodID';
+  static String ffoodPrice = 'foodPrice';
+  static String imgREF = 'foods';
+
+  @override
+  State<ManageOrders> createState() => _ManageOrdersState();
+}
+
+class _ManageOrdersState extends State<ManageOrders> {
+  final fstoreCtrl = Get.find<FirestoreController>();
+
+  final scrollctrl = ScrollController();
+
+  final scrollctr2 = ScrollController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  final fnameCtrl = TextEditingController();
+
+  final fidCtrl = TextEditingController();
+
+  final fCatIdCtrl = TextEditingController();
+
+  final fImageCtrl = TextEditingController();
+
+  final fDetailsCtrl = TextEditingController();
+
+  final fRestIdCtrl = TextEditingController();
+
+  final fStatusCtrl = TextEditingController();
+
+  final fPriceCtrl = TextEditingController();
+
+  clear() {
+    fnameCtrl.clear();
+    fidCtrl.clear();
+    fDetailsCtrl.clear();
+    fCatIdCtrl.clear();
+    fImageCtrl.clear();
+    fPriceCtrl.clear();
+    fRestIdCtrl.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // String name = '';
+    // String detail = '';
+    // bool fstatus = true;
+
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Column(
-          children: const [
-            Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 50),
-                child: TextUtils(
-                    text: "الطلبات",
-                    fontsize: 25,
-                    fontweight: FontWeight.bold,
-                    color: mainColor,
-                    underLine: TextDecoration.none),
-              ),
-            ),
-            Center(
-              child: Divider(),
-            )
-          ],
-        ),
-        Expanded(
+        Flexible(
+          flex: 2,
+          fit: FlexFit.tight,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                color: lightGreyclr,
-                height: MediaQuery.of(context).size.height,
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: TextUtils(
+                      text: "الطلبات",
+                      fontsize: 25,
+                      fontweight: FontWeight.bold,
+                      color: mainColor,
+                      underLine: TextDecoration.none),
+                ),
+              ),
+              const Divider(
+                indent: 8.0,
+                endIndent: 8.0,
+              ),
+              Expanded(
+                child: StreamBuilder(
+                    stream: fstoreCtrl.orderCol.snapshots(),
+                    //initialData: initialData,
+                    builder:
+                        (BuildContext context, AsyncSnapshot streamSnapshot) {
+                      if (streamSnapshot.hasData) {
+                        return !streamSnapshot.hasData
+                            ? const Center(child: CircularProgressIndicator())
+                            : ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                controller: scrollctrl,
+                                itemCount: streamSnapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  final DocumentSnapshot ordersSnapshot =
+                                      streamSnapshot.data!.docs[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: InkWell(
+                                      // hoverColor: Colors.lightBlue[200],
+                                      onTap: () {
+                                        // rnameCtrl.text =
+                                        //     resturantSnapshot[fResturantName];
+                                        // rOwnerCtrl.text =
+                                        //     resturantSnapshot[fResturantOwner];
+                                        // // rPassCtrl.text =
+                                        // //     resturantSnapshot[fResturantPass];
+                                        // rDetailsCtrl.text = resturantSnapshot[
+                                        //     fResturantDetails];
+                                        // rLocationCtrl.text =
+                                        //     resturantSnapshot[fResturantLoc];
+                                        // rImageCtrl.text =
+                                        //     resturantSnapshot[fResturantImg];
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                color: lightGreyclr,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Center(
+                                              child: ListTile(
+                                                  title: TextUtils(
+                                                      text: ordersSnapshot[
+                                                              'oPhone']
+                                                          .toString(),
+                                                      fontsize: 20,
+                                                      fontweight: FontWeight
+                                                          .normal,
+                                                      color: mainColor,
+                                                      underLine: TextDecoration
+                                                          .none),
+                                                  subtitle: TextUtils(
+                                                      text: ordersSnapshot[
+                                                          'oAddress'],
+                                                      fontsize: 17,
+                                                      fontweight:
+                                                          FontWeight.normal,
+                                                      color: mainColor,
+                                                      underLine:
+                                                          TextDecoration.none)),
+                                            ),
+                                          ),
+                                          // Center(child: Text(
+                                          //   ordersSnapshot['oItems']))
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }),
               )
             ],
           ),
+        ),
+        Flexible(
+          flex: 4,
+          child: Center(),
         )
+        // child: Row(
+        //     // mainAxisSize: MainAxisSize.max,
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+
+        //     // mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Expanded(
+        //           // flex: 6,
+        //           child: Column(
+        //         children: [
+        //           const SizedBox(height: 10),
+        //           const TextUtils(
+        //               text: "بيانات الطعام ",
+        //               fontsize: 30,
+        //               fontweight: FontWeight.bold,
+        //               color: mainColor,
+        //               underLine: TextDecoration.none),
+        //           const Divider(),
+        //           const SizedBox(height: 20),
+        //           Expanded(
+        //             child: ListView(
+        //               scrollDirection: Axis.vertical,
+        //               shrinkWrap: true,
+        //               controller: ScrollController(),
+        //               // crossAxisAlignment: CrossAxisAlignment.center,
+        //               // mainAxisAlignment: MainAxisAlignment.start,
+        //               children: [
+        //                 Row(
+        //                   //mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //                   children: [
+        //                     const Expanded(
+        //                       flex: 1,
+        //                       child: TextUtils(
+        //                           text: "Select Resturant",
+        //                           fontsize: 20,
+        //                           fontweight: FontWeight.bold,
+        //                           color: mainColor,
+        //                           underLine: TextDecoration.none),
+        //                     ),
+        //                     Expanded(
+        //                       flex: 4,
+        //                       child: Padding(
+        //                         padding: const EdgeInsets.symmetric(
+        //                             horizontal: 10),
+        //                         child: Container(
+        //                           decoration: BoxDecoration(
+        //                               color: lightGreyclr,
+        //                               borderRadius:
+        //                                   BorderRadius.circular(10)),
+        //                           height: 50,
+        //                           child: StreamBuilder(
+        //                               stream: fstoreCtrl.restaurantCol
+        //                                   .snapshots(),
+        //                               //initialData: initialData,
+        //                               builder: (BuildContext context,
+        //                                   AsyncSnapshot streamSnapshot2) {
+        //                                 if (streamSnapshot2.hasData) {
+        //                                   return !streamSnapshot2.hasData
+        //                                       ? const Center(
+        //                                           child:
+        //                                               CircularProgressIndicator())
+        //                                       : ListView.builder(
+        //                                           scrollDirection:
+        //                                               Axis.horizontal,
+        //                                           controller: scrollctr2,
+        //                                           itemCount: streamSnapshot2
+        //                                               .data!.docs.length,
+        //                                           itemBuilder:
+        //                                               (context, index) {
+        //                                             final DocumentSnapshot
+        //                                                 resturantSnapshot =
+        //                                                 streamSnapshot2
+        //                                                     .data!
+        //                                                     .docs[index];
+        //                                             return Padding(
+        //                                               padding:
+        //                                                   const EdgeInsets
+        //                                                       .all(10.0),
+        //                                               child: InkWell(
+        //                                                 hoverColor: Colors
+        //                                                     .lightBlue[200],
+        //                                                 onTap: () {
+        //                                                   setState(() {
+        //                                                     rID =
+        //                                                         resturantSnapshot;
+        //                                                     fResturantID =
+        //                                                         streamSnapshot2
+        //                                                             .data!
+        //                                                             .docs[
+        //                                                                 index]
+        //                                                             .id;
+        //                                                     // print(fResturantID);
+        //                                                   });
+
+        //                                                   rnameCtrl.text =
+        //                                                       streamSnapshot2
+        //                                                           .data!
+        //                                                           .docs[
+        //                                                               index]
+        //                                                           .id;
+        //                                                 },
+        //                                                 child: ClipRRect(
+        //                                                   borderRadius:
+        //                                                       BorderRadius
+        //                                                           .circular(
+        //                                                               15),
+        //                                                   child: Container(
+        //                                                     color:
+        //                                                         mainColor,
+        //                                                     height: 50,
+        //                                                     width: 100,
+        //                                                     child: Center(
+        //                                                       child: Text(
+        //                                                           resturantSnapshot[
+        //                                                               fResturantName]),
+        //                                                     ),
+        //                                                   ),
+        //                                                 ),
+        //                                               ),
+        //                                             );
+        //                                           });
+        //                                 }
+        //                                 return const Center(
+        //                                   child:
+        //                                       CircularProgressIndicator(),
+        //                                 );
+        //                               }),
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ],
+        //                 ),
+        //                 const SizedBox(
+        //                   height: 10,
+        //                 ),
+        //                 Row(
+        //                   children: [
+        //                     const Expanded(
+        //                       flex: 1,
+        //                       child: TextUtils(
+        //                           text: "Select Category",
+        //                           fontsize: 20,
+        //                           fontweight: FontWeight.bold,
+        //                           color: mainColor,
+        //                           underLine: TextDecoration.none),
+        //                     ),
+        //                     Expanded(
+        //                       flex: 4,
+        //                       child: Padding(
+        //                         padding: const EdgeInsets.symmetric(
+        //                             horizontal: 10),
+        //                         child: Container(
+        //                           decoration: BoxDecoration(
+        //                               color: lightGreyclr,
+        //                               borderRadius:
+        //                                   BorderRadius.circular(10)),
+        //                           height: 50,
+        //                           //width: 400,
+
+        //                           child: StreamBuilder(
+        //                               stream: fstoreCtrl.categoryCol
+        //                                   .snapshots(),
+        //                               //initialData: initialData,
+        //                               builder: (BuildContext context,
+        //                                   AsyncSnapshot streamSnapshot3) {
+        //                                 if (streamSnapshot3.hasData) {
+        //                                   return !streamSnapshot3.hasData
+        //                                       ? const Center(
+        //                                           child:
+        //                                               CircularProgressIndicator())
+        //                                       : ListView.builder(
+        //                                           scrollDirection:
+        //                                               Axis.horizontal,
+        //                                           controller: scrollctr3,
+        //                                           itemCount: streamSnapshot3
+        //                                               .data!.docs.length,
+        //                                           itemBuilder:
+        //                                               (context, index) {
+        //                                             final DocumentSnapshot
+        //                                                 categorySnapshot =
+        //                                                 streamSnapshot3
+        //                                                     .data!
+        //                                                     .docs[index];
+        //                                             return Padding(
+        //                                               padding:
+        //                                                   const EdgeInsets
+        //                                                       .all(10.0),
+        //                                               child: InkWell(
+        //                                                 hoverColor: Colors
+        //                                                     .lightBlue[200],
+        //                                                 onTap: () {
+        //                                                   setState(() {
+        //                                                     cID =
+        //                                                         categorySnapshot;
+        //                                                     fCategoryID =
+        //                                                         streamSnapshot3
+        //                                                             .data!
+        //                                                             .docs[
+        //                                                                 index]
+        //                                                             .id;
+        //                                                     // print(fResturantID);
+        //                                                   });
+
+        //                                                   cnameCtrl.text =
+        //                                                       streamSnapshot3
+        //                                                           .data!
+        //                                                           .docs[
+        //                                                               index]
+        //                                                           .id;
+        //                                                 },
+        //                                                 child: ClipRRect(
+        //                                                   borderRadius:
+        //                                                       BorderRadius
+        //                                                           .circular(
+        //                                                               15),
+        //                                                   child: Container(
+        //                                                     color:
+        //                                                         mainColor,
+        //                                                     height: 50,
+        //                                                     width: 100,
+        //                                                     child: Center(
+        //                                                       child: Text(
+        //                                                           categorySnapshot[
+        //                                                               fCategoryName]),
+        //                                                     ),
+        //                                                   ),
+        //                                                 ),
+        //                                               ),
+        //                                             );
+        //                                           });
+        //                                 }
+        //                                 return const Center(
+        //                                   child:
+        //                                       CircularProgressIndicator(),
+        //                                 );
+        //                               }),
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ],
+        //                 ),
+        //                 Form(
+        //                     key: _formKey,
+        //                     child: Padding(
+        //                       padding: const EdgeInsets.symmetric(
+        //                           horizontal: 10),
+        //                       child: Center(
+        //                         child: Column(
+        //                           crossAxisAlignment:
+        //                               CrossAxisAlignment.center,
+        //                           children: [
+        //                             IconButton(
+        //                                 onPressed: () async {
+        //                                   final fpicker = await FilePicker
+        //                                       .platform
+        //                                       .pickFiles(
+        //                                     allowMultiple: false,
+        //                                     type: FileType.image,
+        //                                     //     allowedExtensions: [
+        //                                     //   'jpg, png'
+        //                                     // ]
+        //                                   );
+
+        //                                   if (fpicker == null) {
+        //                                     Get.snackbar("Error",
+        //                                         "No Image Was Selected !!!");
+        //                                   }
+        //                                   if (fpicker != null) {
+        //                                     fstoreCtrl
+        //                                         .uploadImage(
+        //                                             fpicker.files.first,
+        //                                             ManageOrders.imgREF)
+        //                                         .then(
+        //                                       (value) {
+        //                                         //print(value);
+        //                                         setState(() {
+        //                                           fImageCtrl.text = value;
+        //                                         });
+        //                                       },
+        //                                     );
+        //                                   }
+        //                                 },
+        //                                 icon: const Icon(
+        //                                   Icons.image_outlined,
+        //                                   size: 20,
+        //                                 )),
+        //                             Padding(
+        //                               padding:
+        //                                   const EdgeInsets.only(top: 10),
+        //                               child: Row(
+        //                                 mainAxisAlignment:
+        //                                     MainAxisAlignment.center,
+        //                                 children: [
+        //                                   TextButton(
+        //                                     onPressed: () {
+        //                                       //clear();
+        //                                       if (_formKey.currentState!
+        //                                           .validate()) {
+        //                                         _formKey.currentState!
+        //                                             .save();
+
+        //                                         fstoreCtrl
+        //                                             .addFood(FoodModel(
+        //                                           foodImageURL:
+        //                                               fImageCtrl.value.text,
+        //                                           foodName:
+        //                                               fnameCtrl.value.text,
+        //                                           foodDetails: fDetailsCtrl
+        //                                               .value.text,
+        //                                           foodCategID:
+        //                                               cnameCtrl.value.text,
+        //                                           foodPrice: int.tryParse(
+        //                                               fPriceCtrl
+        //                                                   .value.text),
+        //                                           foodResturantID:
+        //                                               rnameCtrl.value.text,
+        //                                         ));
+        //                                         clear();
+
+        //                                         Get.snackbar("تنبية",
+        //                                             "تم الحفظ بنجاااح",
+        //                                             maxWidth: 400,
+        //                                             snackPosition:
+        //                                                 SnackPosition
+        //                                                     .BOTTOM,
+        //                                             isDismissible: true,
+        //                                             duration:
+        //                                                 const Duration(
+        //                                                     seconds: 3));
+        //                                         clear();
+        //                                       }
+        //                                     },
+        //                                     child: const TextUtils(
+        //                                         text: "إضافة",
+        //                                         fontsize: 20,
+        //                                         fontweight: FontWeight.bold,
+        //                                         color: mainColor,
+        //                                         underLine:
+        //                                             TextDecoration.none),
+        //                                   ),
+        //                                   TextButton(
+        //                                     onPressed: () {
+        //                                       Get.snackbar("حذف",
+        //                                           "أنت على وشك حذف ملف , هل ترغب بالاستمرار",
+        //                                           snackPosition:
+        //                                               SnackPosition.BOTTOM,
+        //                                           isDismissible: true,
+        //                                           maxWidth: 400,
+        //                                           duration: const Duration(
+        //                                               seconds: 5),
+        //                                           mainButton: TextButton(
+        //                                               onPressed: () {
+        //                                                 fstoreCtrl
+        //                                                     .removeFood(
+        //                                                         fID!);
+        //                                                 clear();
+        //                                               },
+        //                                               child: const Text(
+        //                                                   "نعم")));
+        //                                     },
+        //                                     child: const TextUtils(
+        //                                         text: "حذف",
+        //                                         fontsize: 20,
+        //                                         fontweight: FontWeight.bold,
+        //                                         color: mainColor,
+        //                                         underLine:
+        //                                             TextDecoration.none),
+        //                                   ),
+        //                                   TextButton(
+        //                                     onPressed: () {
+        //                                       if (_formKey.currentState!
+        //                                           .validate()) {
+        //                                         _formKey.currentState!
+        //                                             .save();
+        //                                         fstoreCtrl.updateFood(
+        //                                             fID!,
+        //                                             FoodModel(
+        //                                               foodImageURL:
+        //                                                   fImageCtrl.text,
+        //                                               foodID: fidCtrl.text,
+        //                                               foodName: fnameCtrl
+        //                                                   .value.text,
+        //                                               foodDetails:
+        //                                                   fDetailsCtrl
+        //                                                       .value.text,
+        //                                               foodCategID:
+        //                                                   cnameCtrl.text,
+        //                                               foodPrice:
+        //                                                   int.tryParse(
+        //                                                       fPriceCtrl
+        //                                                           .value
+        //                                                           .text),
+        //                                               foodResturantID:
+        //                                                   rnameCtrl.text,
+        //                                             ));
+        //                                         clear();
+        //                                         Get.snackbar("تعديل",
+        //                                             "تم التعديل بنجاااح",
+        //                                             maxWidth: 400,
+        //                                             snackPosition:
+        //                                                 SnackPosition
+        //                                                     .BOTTOM,
+        //                                             isDismissible: true,
+        //                                             duration:
+        //                                                 const Duration(
+        //                                                     seconds: 3));
+        //                                       }
+        //                                     },
+        //                                     child: const TextUtils(
+        //                                         text: "تعديل",
+        //                                         fontsize: 20,
+        //                                         fontweight: FontWeight.bold,
+        //                                         color: mainColor,
+        //                                         underLine:
+        //                                             TextDecoration.none),
+        //                                   ),
+        //                                 ],
+        //                               ),
+        //                             ),
+        //                             AbsorbPointer(
+        //                               child: TextFormWdgt(
+        //                                 controller: fImageCtrl,
+        //                                 lable: const Text("Food Image "),
+        //                                 validator: (value) {
+        //                                   if (value.toString().isEmpty) {
+        //                                     return "الحقل لايجب ان يكون فارغ";
+        //                                   } else {
+        //                                     return null;
+        //                                   }
+        //                                 },
+        //                               ),
+        //                             ),
+        //                             AbsorbPointer(
+        //                               child: TextFormWdgt(
+        //                                 controller: fidCtrl,
+        //                                 lable: const Text("Food ID "),
+        //                                 validator: (value) {
+        //                                   // if (value.toString().isEmpty) {
+        //                                   //   return "الحقل لايجب ان يكون فارغ";
+        //                                   // } else {
+        //                                   //   return null;
+        //                                   // }
+        //                                 },
+        //                               ),
+        //                             ),
+        //                             TextFormWdgt(
+        //                               controller: fnameCtrl,
+        //                               lable: const Text("Food Name "),
+        //                               validator: (value) {
+        //                                 if (value.toString().isEmpty) {
+        //                                   return "الحقل لايجب ان يكون فارغ";
+        //                                 } else {
+        //                                   return null;
+        //                                 }
+        //                               },
+        //                             ),
+        //                             TextFormWdgt(
+        //                                 controller: fDetailsCtrl,
+        //                                 lable: const Text("Food Details "),
+        //                                 validator: (value) {
+        //                                   if (value.toString().isEmpty) {
+        //                                     return "الحقل لايجب ان يكون فارغ";
+        //                                   } else {
+        //                                     return null;
+        //                                   }
+        //                                 }),
+        //                             TextFormWdgt(
+        //                                 controller: fPriceCtrl,
+        //                                 lable: const Text("Food Price "),
+        //                                 hint: "ادخل ارقام فقط !!",
+        //                                 validator: (value) {
+        //                                   if (value.toString().isEmpty) {
+        //                                     return "الحقل لايجب ان يكون فارغ";
+        //                                   } else {
+        //                                     return null;
+        //                                   }
+        //                                 }),
+        //                             AbsorbPointer(
+        //                               child: TextFormWdgt(
+        //                                   controller: rnameCtrl,
+        //                                   lable:
+        //                                       const Text(" Food Resturant"),
+        //                                   validator: (value) {
+        //                                     if (value.toString().isEmpty) {
+        //                                       return "الحقل لايجب ان يكون فارغ";
+        //                                     } else {
+        //                                       return null;
+        //                                     }
+        //                                   }),
+        //                             ),
+        //                             AbsorbPointer(
+        //                               child: TextFormWdgt(
+        //                                   controller: cnameCtrl,
+        //                                   lable:
+        //                                       const Text(" Food Categort"),
+        //                                   validator: (value) {
+        //                                     if (value.toString().isEmpty) {
+        //                                       return "الحقل لايجب ان يكون فارغ";
+        //                                     } else {
+        //                                       return null;
+        //                                     }
+        //                                   }),
+        //                             )
+        //                           ],
+        //                         ),
+        //                       ),
+        //                     ))
+        //               ],
+        //             ),
+        //           )
+        //         ],
+        //       ))
+        //     ]))
       ],
     );
   }

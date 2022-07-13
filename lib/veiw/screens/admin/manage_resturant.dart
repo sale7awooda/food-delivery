@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,7 @@ class _ManageResturantsState extends State<ManageResturants> {
 
   final rnameCtrl = TextEditingController();
   final rOwnerCtrl = TextEditingController();
-  final rPassCtrl = TextEditingController();
+  //final rPassCtrl = TextEditingController();
   final rLocationCtrl = TextEditingController();
   final rImageCtrl = TextEditingController();
   final rDetailsCtrl = TextEditingController();
@@ -54,7 +56,7 @@ class _ManageResturantsState extends State<ManageResturants> {
   clear() {
     rnameCtrl.clear();
     rOwnerCtrl.clear();
-    rPassCtrl.clear();
+    //rPassCtrl.clear();
     rDetailsCtrl.clear();
     rLocationCtrl.clear();
     rImageCtrl.clear();
@@ -123,8 +125,8 @@ class _ManageResturantsState extends State<ManageResturants> {
                                               resturantSnapshot[fResturantName];
                                           rOwnerCtrl.text = resturantSnapshot[
                                               fResturantOwner];
-                                          rPassCtrl.text =
-                                              resturantSnapshot[fResturantPass];
+                                          // rPassCtrl.text =
+                                          //     resturantSnapshot[fResturantPass];
                                           rDetailsCtrl.text = resturantSnapshot[
                                               fResturantDetails];
                                           rLocationCtrl.text =
@@ -248,8 +250,8 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                                 .value.text,
                                                             rowner: rOwnerCtrl
                                                                 .value.text,
-                                                            rpass: rPassCtrl
-                                                                .value.text,
+                                                            // rpass: rPassCtrl
+                                                            //     .value.text,
                                                             rloc: rLocationCtrl
                                                                 .value.text,
                                                             rdetial:
@@ -326,8 +328,8 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                               .value.text,
                                                           rowner: rOwnerCtrl
                                                               .value.text,
-                                                          rpass: rPassCtrl
-                                                              .value.text,
+                                                          // rpass: rPassCtrl
+                                                          //     .value.text,
                                                           rloc: rLocationCtrl
                                                               .value.text,
                                                           rdetial: rDetailsCtrl
@@ -398,17 +400,17 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                   return null;
                                                 }
                                               }),
-                                          TextFormWdgt(
-                                              controller: rPassCtrl,
-                                              lable: const Text(
-                                                  " Owner Password "),
-                                              validator: (value) {
-                                                if (value.toString().isEmpty) {
-                                                  return "الحقل لايجب ان يكون فارغ";
-                                                } else {
-                                                  return null;
-                                                }
-                                              }),
+                                          // TextFormWdgt(
+                                          //     controller: rPassCtrl,
+                                          //     lable: const Text(
+                                          //         " Owner Password "),
+                                          //     validator: (value) {
+                                          //       if (value.toString().isEmpty) {
+                                          //         return "الحقل لايجب ان يكون فارغ";
+                                          //       } else {
+                                          //         return null;
+                                          //       }
+                                          //     }),
                                           TextFormWdgt(
                                               controller: rDetailsCtrl,
                                               lable: const Text(

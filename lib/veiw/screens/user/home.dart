@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
+          
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,13 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
           //CategoryList(),
           const SizedBox(height: 10),
-          const SideTitle(sTitle: "الأكثر طلبا"),
+          const SideTitle(sTitle: "الأكثر شيوعا"),
           const SizedBox(height: 10),
           const MostOrderedWdgt(),
           const SizedBox(height: 10),
-
-          // const OrderAgainText(),
-          // const ReorderList(),
           const AllResturantsBtn(),
         ],
       ),
@@ -58,46 +56,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
   SizedBox categorieslist2() {
     return SizedBox(
-          height: 150,
-          child: StreamBuilder(
-              stream: fstoreCtrl.categoryCol.snapshots(),
-              //initialData: initialData,
-              builder: (BuildContext context, AsyncSnapshot streamSnapshot) {
-                if (streamSnapshot.hasData) {
-                  return !streamSnapshot.hasData
-                      ? const Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          controller: scrollctrl,
-                          itemCount: streamSnapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            final DocumentSnapshot categorySnapshot =
-                                streamSnapshot.data!.docs[index];
-                            return GestureDetector(
-                              onTap: () {
-                                 
-                                    setState(() {
-                                      fCategoryID =
-                                          streamSnapshot.data!.docs[index].id;
-                                      
-                                     // print(fCategoryID);
-                                    });
-                                    Get.toNamed(Routes.categorydetails, arguments: fCategoryID);},
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CategoryCard(
-                                    text: categorySnapshot[fCategoryName],
-                                    imgUrl: categorySnapshot[fCategoryImg],
-                                  )
+      height: 150,
+      child: StreamBuilder(
+          stream: fstoreCtrl.categoryCol.snapshots(),
+          //initialData: initialData,
+          builder: (BuildContext context, AsyncSnapshot streamSnapshot) {
+            if (streamSnapshot.hasData) {
+              return !streamSnapshot.hasData
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      controller: scrollctrl,
+                      itemCount: streamSnapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final DocumentSnapshot categorySnapshot =
+                            streamSnapshot.data!.docs[index];
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              fCategoryID = streamSnapshot.data!.docs[index].id;
 
-                                  ),
-                            );
-                          });
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }),
-        );
+                              // print(fCategoryID);
+                            });
+                            Get.toNamed(Routes.categorydetails,
+                                arguments: fCategoryID);
+                          },
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CategoryCard(
+                                text: categorySnapshot[fCategoryName],
+                                imgUrl: categorySnapshot[fCategoryImg],
+                              )),
+                        );
+                      });
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
+    );
   }
 }

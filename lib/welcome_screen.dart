@@ -12,7 +12,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
+        child: Scaffold(resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[50],
       body: Stack(
         children: [

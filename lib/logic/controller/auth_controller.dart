@@ -1,18 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:orders/routes/routes.dart';
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
   bool isVisable = false;
   bool ischecked = false;
   FirebaseAuth auth = FirebaseAuth.instance;
   var googleSign = GoogleSignIn();
-  var displayUsername = "";
-  var displayUserPhoto = "";
-  var adminEmail = "";
+  String displayUsername = "";
+  String displayUserPhoto = "";
+  var loginEmail = "";
+  final String adminEmail = "f.delivery.project@gmail.com";
+
+  String cartid = const Uuid().v4();
+  //final fstoreCtrl = Get.find<FirestoreController>();
 
   void visibility() {
     isVisable = !isVisable;
@@ -77,17 +83,44 @@ class AuthController extends GetxController {
 
   void logInUsingEmail(
       {required String emailAddress, required String password}) async {
+    String chechEmail = "";
+    String restID = '';
+    String restName = '';
+    String restImg = '';
     try {
       await auth
           .signInWithEmailAndPassword(email: emailAddress, password: password)
-          .then((value) => displayUsername = auth.currentUser!.displayName!);
+          .then((value) => displayUsername = auth.currentUser!.email!);
+
+      //fstoreCtrl.getrestName(emailAddress).then((value) => print(value));
+      await FirebaseFirestore.instance
+          .collection('restaurants')
+          .where('restOwner', isEqualTo: emailAddress.trim())
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          chechEmail = doc["restOwner"];
+          restID = doc.id;
+          restName = doc["restName"];
+          restImg = doc["restImg"];
+          //print(loginEmail+" loginEmail");
+          // print(doc.id);
+        }
+      });
       update();
+
       if (emailAddress == "f.delivery.project@gmail.com") {
         Get.offAllNamed(Routes.adminScreen);
         displayUsername = "Admin";
+      } else if (emailAddress == chechEmail) {
+        Get.offAllNamed(Routes.resturantsScreen,
+            arguments: [restID, restName, restImg]);
       } else {
-        Get.offNamed(Routes.userScreen);
-        displayUsername = auth.currentUser!.displayName!;
+        Get.offAllNamed(
+          Routes.userScreen,
+        );
+        // displayUsername = auth.currentUser!.displayName!;
+        displayUsername = auth.currentUser!.uid;
       }
     } on FirebaseAuthException catch (e) {
       String message = "";
@@ -126,17 +159,41 @@ class AuthController extends GetxController {
 
   void signUpUsingGoogle() async {
     // Trigger the authentication flow
+    String chechEmail = "";
+    String restID = '';
+    String restName = '';
+    String restImg = '';
     try {
       // ignore: unused_local_variable
       final GoogleSignInAccount? googleUser = await googleSign.signIn();
-      displayUsername = googleSign.currentUser!.displayName!;
+      // displayUsername = googleSign.currentUser!.email;
+      displayUsername = googleSign.currentUser!.id;
       // displayUserPhoto = googleSign.currentUser!.photoUrl!;
-      adminEmail = googleSign.currentUser!.email;
+      loginEmail = googleSign.currentUser!.email;
+
+      await FirebaseFirestore.instance
+          .collection('restaurants')
+          .where('restOwner', isEqualTo: loginEmail.trim())
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          chechEmail = doc["restOwner"];
+          restID = doc.id;
+          restName = doc["restName"];
+          restImg = doc["restImg"];
+          //print(loginEmail+" loginEmail");
+          // print(doc.id);
+        }
+      });
 
       update();
+      //  fstoreCtrl.getrestName(loginEmail).then((value) => print(value));
       //Get.offAllNamed(Routes.userScreen);
-      if (adminEmail == "f.delivery.project@gmail.com") {
-        Get.offAllNamed(Routes.adminScreen);
+      if (loginEmail == adminEmail) {
+        Get.offNamed(Routes.adminScreen);
+      } else if (loginEmail == chechEmail) {
+        Get.offAllNamed(Routes.resturantsScreen,
+            arguments: [restID, restName, restImg]);
       } else {
         Get.offNamed(Routes.userScreen);
       }
@@ -150,7 +207,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void signUpUsingFaceBook() {}
+  // void signUpUsingFaceBook() {}
   void resetPassword(String emailAddress) async {
     try {
       await auth.sendPasswordResetEmail(email: emailAddress);
@@ -191,10 +248,10 @@ class AuthController extends GetxController {
 
   void signOut() async {
     try {
-      await auth.signOut();
       await googleSign.signOut();
+      await auth.signOut();
       displayUsername = "";
-      update(); 
+      update();
       Get.offAllNamed(Routes.welcomeScreen);
     } catch (error) {
       Get.snackbar("خطأ!", error.toString(),
@@ -202,12 +259,18 @@ class AuthController extends GetxController {
           backgroundColor: Colors.red[200]);
     }
   }
-  void signOutAdmin() async {
+
+  void signOutAdmin(int w) async {
     try {
-      await auth.signOut();
-      // await googleSign.signOut();
+      if (w <= 400) {
+        await googleSign.signOut();
+        await auth.signOut();
+      } else {
+        await auth.signOut();
+      }
+
       displayUsername = "";
-      update(); 
+      update();
       Get.offAllNamed(Routes.welcomeScreen);
     } catch (error) {
       Get.snackbar("خطأ!", error.toString(),

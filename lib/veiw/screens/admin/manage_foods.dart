@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +42,7 @@ class _ManageFoodsState extends State<ManageFoods> {
   static String ffoodImgURL = 'foodImgUrl';
   static String ffoodCategID = 'foodCategortID';
   static String ffoodResturantID = 'foodResturantID';
-  // ignore: unused_field
+
   static String ffoodID = 'foodID';
   static String ffoodPrice = 'foodPrice';
   static String imgREF = 'foods';
@@ -49,6 +51,7 @@ class _ManageFoodsState extends State<ManageFoods> {
 
   DocumentSnapshot? rID;
   static String fResturantName = 'restName';
+
   static String? fResturantID;
 
   DocumentSnapshot? cID;
@@ -58,6 +61,7 @@ class _ManageFoodsState extends State<ManageFoods> {
   //static String ffoodStatus = 'foodStatus';
 
   final fnameCtrl = TextEditingController();
+  final fidCtrl = TextEditingController();
   final fCatIdCtrl = TextEditingController();
   final fImageCtrl = TextEditingController();
   final fDetailsCtrl = TextEditingController();
@@ -68,6 +72,7 @@ class _ManageFoodsState extends State<ManageFoods> {
   //String _rname,_rowner,rpass,rloc,rdetal;
   clear() {
     fnameCtrl.clear();
+    fidCtrl.clear();
     fDetailsCtrl.clear();
     fCatIdCtrl.clear();
     fImageCtrl.clear();
@@ -137,6 +142,8 @@ class _ManageFoodsState extends State<ManageFoods> {
 
                                             fnameCtrl.text =
                                                 foodSnapshot[ffoodName];
+                                            fidCtrl.text = streamSnapshot
+                                                .data!.docs[index].id;
 
                                             fDetailsCtrl.text =
                                                 foodSnapshot[ffoodDetails];
@@ -321,7 +328,8 @@ class _ManageFoodsState extends State<ManageFoods> {
                                         color: mainColor,
                                         underLine: TextDecoration.none),
                                   ),
-                                  Expanded(flex: 4,
+                                  Expanded(
+                                    flex: 4,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10),
@@ -479,23 +487,27 @@ class _ManageFoodsState extends State<ManageFoods> {
                                                         .validate()) {
                                                       _formKey.currentState!
                                                           .save();
-                                                          
+
                                                       fstoreCtrl.addFood(FoodModel(
                                                           foodImageURL:
-                                                              fImageCtrl.value.text,
+                                                              fImageCtrl
+                                                                  .value.text,
                                                           foodName: fnameCtrl
                                                               .value.text,
                                                           foodDetails:
                                                               fDetailsCtrl
                                                                   .value.text,
-                                                          foodCategID:
-                                                              cnameCtrl
-                                                                  .value.text,
-                                                          foodPrice:     int.tryParse(fPriceCtrl.value.text),
+                                                          foodCategID: cnameCtrl
+                                                              .value.text,
+                                                          foodPrice: int
+                                                              .tryParse(
+                                                                  fPriceCtrl
+                                                                      .value
+                                                                      .text),
                                                           foodResturantID:
                                                               rnameCtrl
                                                                   .value.text,
-                                                          foodStatus: fstatus));
+                                                          ));
                                                       clear();
 
                                                       Get.snackbar("تنبية",
@@ -562,22 +574,23 @@ class _ManageFoodsState extends State<ManageFoods> {
                                                         FoodModel(
                                                             foodImageURL:
                                                                 fImageCtrl.text,
-                                                            foodName:
-                                                                fnameCtrl
-                                                                    .value.text,
+                                                            foodID: fidCtrl
+                                                                .text,
+                                                            foodName: fnameCtrl
+                                                                .value.text,
                                                             foodDetails:
                                                                 fDetailsCtrl
                                                                     .value.text,
                                                             foodCategID:
-                                                                cnameCtrl
-                                                                    .text,
-                                                            foodPrice: 
-                                                                    int.tryParse(fPriceCtrl.value.text),
+                                                                cnameCtrl.text,
+                                                            foodPrice:
+                                                                int.tryParse(
+                                                                    fPriceCtrl
+                                                                        .value
+                                                                        .text),
                                                             foodResturantID:
-                                                                rnameCtrl
-                                                                    .text,
-                                                            foodStatus:
-                                                                fstatus),
+                                                                rnameCtrl.text,
+                                                        )
                                                       );
                                                       clear();
                                                       Get.snackbar("تعديل",
@@ -617,6 +630,19 @@ class _ManageFoodsState extends State<ManageFoods> {
                                               },
                                             ),
                                           ),
+                                          AbsorbPointer(
+                                            child: TextFormWdgt(
+                                              controller: fidCtrl,
+                                              lable: const Text("Food ID "),
+                                              validator: (value) {
+                                                // if (value.toString().isEmpty) {
+                                                //   return "الحقل لايجب ان يكون فارغ";
+                                                // } else {
+                                                //   return null;
+                                                // }
+                                              },
+                                            ),
+                                          ),
                                           TextFormWdgt(
                                             controller: fnameCtrl,
                                             lable: const Text("Food Name "),
@@ -641,9 +667,8 @@ class _ManageFoodsState extends State<ManageFoods> {
                                               }),
                                           TextFormWdgt(
                                               controller: fPriceCtrl,
-                                              lable:
-                                                  const Text("Food Price "),
-                                                  hint: "ادخل ارقام فقط !!",
+                                              lable: const Text("Food Price "),
+                                              hint: "ادخل ارقام فقط !!",
                                               validator: (value) {
                                                 if (value.toString().isEmpty) {
                                                   return "الحقل لايجب ان يكون فارغ";
@@ -685,8 +710,6 @@ class _ManageFoodsState extends State<ManageFoods> {
                                       ),
                                     ),
                                   ))
-
-                            
                             ],
                           ),
                         )

@@ -96,7 +96,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                                               foodSnapshot[ffoodDetails];
                                           ffoodPrice1 = foodSnapshot[ffoodPrice]
                                               .toString();
-                                          //print(fCategoryID);
+                                          //print(ffoodID);
                                         });
                                         Get.toNamed(
                                   Routes.fooddetails,

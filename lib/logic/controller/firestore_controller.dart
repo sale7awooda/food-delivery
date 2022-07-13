@@ -1,9 +1,9 @@
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fire_storage;
 import 'package:get/get.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:orders/model/cart_model.dart';
 import 'package:orders/model/category_model.dart';
 import 'package:orders/model/food_model.dart';
 import 'package:orders/model/resturant_model.dart';
@@ -34,19 +34,29 @@ class FirestoreController extends GetxController {
   static String ffoodID = 'foodID';
   static String ffoodPrice = 'foodPrice';
   static String ffoodTime = 'foodTime';
-  static String ffoodStatus = 'foodStatus';
-  String? itemIMG ;
+  // static String ffoodStatus = 'foodStatus';
+  static String ostatus = 'ostatus';
+  static String ffoPhone = 'oPhone';
+  static String ffoAddress = 'oAddress';
+  static String ffoItems = 'oItems';
+  String? itemIMG;
+  RxInt pTotal = 0.obs;
+  RxInt quantity = 0.obs;
+  String restID ='';
+  // RxInt itemsCount = 1.obs;
+
+  // var price=0;
 
   final restaurantCol = FirebaseFirestore.instance.collection('restaurants');
   final categoryCol = FirebaseFirestore.instance.collection('categories');
   final foodCol = FirebaseFirestore.instance.collection('foods');
-  final resturantOwnerCol= FirebaseFirestore.instance.collection('resturantsOwners');
+  final orderCol = FirebaseFirestore.instance.collection('orders');
 
   Future<void> addResturant(ResturantModel resturantModel) async {
     await restaurantCol.add({
       fResturantName: resturantModel.rname,
       fResturantOwner: resturantModel.rowner,
-      fResturantPass: resturantModel.rpass,
+      //fResturantPass: resturantModel.rpass,
       fResturantDetails: resturantModel.rdetial,
       fResturantLoc: resturantModel.rloc,
       fResturantImg: resturantModel.rimgURL,
@@ -70,17 +80,36 @@ class FirestoreController extends GetxController {
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
       ffoodPrice: foodModel.foodPrice,
-      ffoodStatus: foodModel.foodStatus,
+      // ffoodStatus: foodModel.foodStatus,
     });
   }
-  Future<void> addResturantOwner(ResturantModel resturantModel) async {
-    await resturantOwnerCol.add({
-      fResturantName: resturantModel.rname,
-      fResturantOwner: resturantModel.rowner,
-      fResturantPass: resturantModel.rpass,
-      
-      
-      
+
+  Future<void> addFoodToCart(FoodModel foodModel, String cartID) async {
+    await FirebaseFirestore.instance.collection(cartID).add({
+      ffoodName: foodModel.foodName,
+      ffoodDetails: foodModel.foodDetails,
+      ffoodImg: foodModel.foodImageURL,
+      ffoodCategID: foodModel.foodCategID,
+      ffoodResturantID: foodModel.foodResturantID,
+      ffoodPrice: foodModel.foodPrice,
+      ffoodID: foodModel.foodID
+    });
+  }
+
+  Future<void> addOrder(CartModel cartModel) async {
+    await orderCol.add({
+      // ffoodName: cartModel.foodName,
+      // ffoodDetails: cartModel.foodDetails,
+      // ffoodImg: cartModel.foodImageURL,
+      // ffoodPrice: cartModel.foodPrice,
+      // ffoodID: cartModel.foodID,
+      ffoodResturantID: cartModel.foodResturantId,
+      ostatus: cartModel.ostatus,
+      ffoPhone: cartModel.oPHone,
+      ffoAddress: cartModel.oAddress,
+      ffoItems: FieldValue.arrayUnion(
+          cartModel.cartItems!) //cartModel.cartItems//{"key":"value"}
+      // ffoodStatus: foodModel.foodStatus,
     });
   }
 
@@ -96,12 +125,16 @@ class FirestoreController extends GetxController {
     await foodCol.doc(doc.id).delete();
   }
 
+  Future<void> removeFoodFromCart(DocumentSnapshot doc, String cartID) async {
+    await FirebaseFirestore.instance.collection(cartID).doc(doc.id).delete();
+  }
+
   Future<void> updateResturant(
       DocumentSnapshot doc, ResturantModel resturantModel) async {
     await restaurantCol.doc(doc.id).update({
       fResturantName: resturantModel.rname,
       fResturantOwner: resturantModel.rowner,
-      fResturantPass: resturantModel.rpass,
+      //  fResturantPass: resturantModel.rpass,
       fResturantDetails: resturantModel.rdetial,
       fResturantLoc: resturantModel.rloc,
       fResturantImg: resturantModel.rimgURL,
@@ -126,42 +159,85 @@ class FirestoreController extends GetxController {
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
       ffoodPrice: foodModel.foodPrice,
-      ffoodStatus: foodModel.foodStatus,
+      // ffoodStatus: foodModel.foodStatus,
+      ffoodID: foodModel.foodID
+    });
+  }
+  Future<void> updateOrder(DocumentSnapshot doc, CartModel cartModel) async {
+    await foodCol.doc(doc.id).update({
+      ffoodResturantID: cartModel.foodResturantId,
+      ostatus: cartModel.ostatus,
+      ffoPhone: cartModel.oPHone,
+      ffoAddress: cartModel.oAddress,
+      ffoItems: FieldValue.arrayUnion(
+          cartModel.cartItems!)
+      
     });
   }
 
-  addOrder() {}
-  updateOrder() {}
+  Future<void> deleteAllColl(DocumentSnapshot doc, String cartID) async {
+    await FirebaseFirestore.instance
+        .collection(cartID)
+        .get()
+        .then((querySnapshot) {
+      for (var snapshot in querySnapshot.docs) {
+        snapshot.reference.delete();
+      }
+    });
+  }
+
+  Future<void> getTotalPrice(DocumentSnapshot doc, String cartID) async {
+    await FirebaseFirestore.instance
+        .collection(cartID)
+        .get()
+        .then((querySnapshot) {
+      for (var snapshot in querySnapshot.docs) {
+        pTotal += snapshot.get(ffoodPrice);
+
+        //     //pTotal = pTotal + pTotal.toInt();
+      }
+    });
+  }
+
+
   removeOrder() {}
 
-  Future<List<DocumentSnapshot>> getResturants() {
-    return restaurantCol.get().then(
-      (snaps) {
-        return snaps.docs;
-      },
-    );
+  // Future<List<DocumentSnapshot>> getResturants() {
+  //   return restaurantCol.get().then(
+  //     (snaps) {
+  //       return snaps.docs;
+  //     },
+  //   );
+  // }
+
+  Future getRestDetails(String restID) async {
+    await FirebaseFirestore.instance
+        .collection('restaurants')
+        .where('restOwner', isEqualTo: restID)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        //print(loginEmail+" loginEmail");
+        // print(doc.id);
+      }
+    });
+
+    // String restOwnerName = snap[fResturantOwner];
+    // return restOwnerName;
   }
 
-  Future<List<DocumentSnapshot>> getCategories() {
-    return categoryCol.get().then(
-      (snaps) {
-        return snaps.docs;
-      },
-    );
-  }
-
-  Future<String> uploadImage(PlatformFile file,String imgREF) async {
+  Future<String> uploadImage(PlatformFile file, String imgREF) async {
     try {
-      fire_storage.TaskSnapshot upload =
-          await fire_storage.FirebaseStorage.instance.ref('$imgREF/${file.name}').putData(
-                file.bytes!,
-                fire_storage.SettableMetadata(
-                    contentType: 'image/${file.extension}'),
-              );
+      fire_storage.TaskSnapshot upload = await fire_storage
+          .FirebaseStorage.instance
+          .ref('$imgREF/${file.name}')
+          .putData(
+            file.bytes!,
+            fire_storage.SettableMetadata(
+                contentType: 'image/${file.extension}'),
+          );
 
       String itemurl = await upload.ref.getDownloadURL();
-      
-      
 
       return itemurl;
     } catch (e) {
@@ -171,16 +247,11 @@ class FirestoreController extends GetxController {
     }
   }
 
-  // final fstorageINS = fire_storage.FirebaseStorage.instance;
-  // Future<fire_storage.ListResult> listImgs(String imgREF) async {
-  //   fire_storage.ListResult results = await fstorageINS.ref(imgREF).listAll();
-  //   results.items.forEach((fire_storage.Reference ref) {
-  //     print(ref);
-  //   });
-  //   return results;
-  // }
-  // Future<String> dwnlodURL (String imageName ,String imgREF) async{
-  //   String dwnlodURL = await  fstorageINS.ref('$imgREF/$imageName').getDownloadURL() ;
-  //   return dwnlodURL;
+  // Stream<List<FoodModel>> ordersList(String cartID) {
+  //   return FirebaseFirestore.instance
+  //       .collection(cartID)
+  //       .snapshots()
+  //       .map((snapShot) => snapShot.docs)
+  //       ;
   // }
 }

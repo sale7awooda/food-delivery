@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/utils/theme.dart';
 
 class SearchBox extends StatelessWidget {
@@ -11,14 +12,17 @@ class SearchBox extends StatelessWidget {
       child: Material(
           elevation: 5,
           borderRadius: BorderRadius.circular(20),
-          child:  TextField(
-            decoration: InputDecoration(filled: true,
-                suffixIcon: Material(elevation: 5,
-                borderRadius: BorderRadius.circular(20),
-                  child: const Icon(
-                    Icons.search,
-                    color: mainColor,
-                  ),
+          child: TextField(
+            decoration: InputDecoration(
+                filled: true,
+                suffixIcon: Material(
+                  elevation: 5,
+                  borderRadius: BorderRadius.circular(20),
+                  child: IconButton(
+                      icon: const Icon(Icons.search, color: mainColor),
+                      onPressed: () {
+                        // print(authCtrl.cartid);
+                      }),
                 ),
                 hintText: "ابحث عن ...",
                 hintStyle: const TextStyle(color: mainColor),

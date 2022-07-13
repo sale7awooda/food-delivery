@@ -4,13 +4,14 @@ import 'package:orders/veiw/widgets/auth/auth_buttun.dart';
 
 import '../../../logic/controller/auth_controller.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class RestSettingsScreen extends StatelessWidget {
+  const RestSettingsScreen({Key? key}) : super(key: key);
+  
    
 
   @override
   Widget build(BuildContext context) {
-  
+   
     final fstoreCtrl = Get.find<AuthController>();
     return  Scaffold(
       body: Center(

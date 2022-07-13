@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FoodModel {
@@ -8,7 +10,7 @@ class FoodModel {
   String? foodResturantID;
   String? foodID;
   int? foodPrice;
-  bool? foodStatus = true;
+  // bool? foodStatus = true;
   FoodModel({
     required this.foodResturantID,
     this.foodID,
@@ -17,7 +19,7 @@ class FoodModel {
     required this.foodImageURL,
     required this.foodName,
     required this.foodPrice,
-    this.foodStatus,
+    
   });
 
   static FoodModel fromSnapShot(DocumentSnapshot snap) {
@@ -36,7 +38,7 @@ class FoodModel {
 
     factory FoodModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
+    // SnapshotOptions? options,
   ) {
     final data = snapshot.data();
     return FoodModel(
@@ -54,5 +56,33 @@ class FoodModel {
      
     };
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'foodName': foodName,
+      'foodDetails': foodDetails,
+      'foodImageURL': foodImageURL,
+      'foodCategID': foodCategID,
+      'foodResturantID': foodResturantID,
+      'foodID': foodID,
+      'foodPrice': foodPrice,
+    };
+  }
+
+  factory FoodModel.fromMap(Map<String, dynamic> map) {
+    return FoodModel(
+      foodName: map['foodName'],
+      foodDetails: map['foodDetails'],
+      foodImageURL: map['foodImageURL'],
+      foodCategID: map['foodCategID'],
+      foodResturantID: map['foodResturantID'],
+      foodID: map['foodID'],
+      foodPrice: map['foodPrice']?.toInt(),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory FoodModel.fromJson(String source) => FoodModel.fromMap(json.decode(source));
 }
 

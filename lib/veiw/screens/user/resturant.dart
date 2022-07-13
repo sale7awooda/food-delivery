@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,8 +9,8 @@ import 'package:orders/routes/routes.dart';
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
 
-class ResturantScreen extends StatefulWidget {
-  const ResturantScreen({
+class Resturant extends StatefulWidget {
+  const Resturant({
     Key? key,
     this.title,
     this.image,
@@ -19,10 +21,10 @@ class ResturantScreen extends StatefulWidget {
   final String? subtitle;
 
   @override
-  State<ResturantScreen> createState() => _ResturantScreenState();
+  State<Resturant> createState() => _ResturantState();
 }
 
-class _ResturantScreenState extends State<ResturantScreen> {
+class _ResturantState extends State<Resturant> {
   final fstoreCtrl = Get.find<FirestoreController>();
   final scrollctrl = ScrollController();
   static String fResturantName = 'restName';
@@ -41,7 +43,7 @@ class _ResturantScreenState extends State<ResturantScreen> {
   static String ffoodID1 = 'foodID';
   static String ffoodImgURL1 = 'foodImgUrl';
   //static String ffoodResturantID = 'foodResturantID';
-  // ignore: unused_field
+  
   static String ffoodID = 'foodID';
   static String ffoodPrice = 'foodPrice';
 
@@ -86,7 +88,7 @@ class _ResturantScreenState extends State<ResturantScreen> {
                                     setState(() {
                                       ffoodID =
                                           streamSnapshot.data!.docs[index].id;
-                                      //print(fCategoryID);
+                                      
                                       ffoodID1 =
                                           streamSnapshot.data!.docs[index].id;
                                       ffoodName1 = foodSnapshot[ffoodName];
@@ -95,6 +97,7 @@ class _ResturantScreenState extends State<ResturantScreen> {
                                           foodSnapshot[ffoodDetails];
                                       ffoodPrice1 =
                                           foodSnapshot[ffoodPrice].toString();
+                                          //print(ffoodID1);
                                     });
                                     Get.toNamed(Routes.fooddetails, arguments: [
                                       ffoodID1,

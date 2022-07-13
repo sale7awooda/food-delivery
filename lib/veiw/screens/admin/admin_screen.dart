@@ -1,6 +1,7 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orders/logic/controller/app_controller.dart';
 import 'package:orders/logic/controller/auth_controller.dart';
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/screens/admin/manage_categories.dart';
@@ -21,9 +22,11 @@ class AdminScreen extends StatefulWidget {
 class _AdminScreenState extends State<AdminScreen> {
   PageController page = PageController();
   final fstoreCtrl = Get.find<AuthController>();
+  //final appCtrl= Get.find<AppController>();
 
   @override
   Widget build(BuildContext context) {
+    int wid =MediaQuery.of(context).size.width.toInt();
     return SafeArea(
         child: Scaffold(
             backgroundColor: lightGreyclr,
@@ -129,7 +132,7 @@ class _AdminScreenState extends State<AdminScreen> {
                       priority: 4,
                       title: 'خروج',
                       onTap: () {
-                        fstoreCtrl.signOutAdmin();
+                        fstoreCtrl.signOutAdmin(wid);
                       },
                       icon: const Icon(Icons.exit_to_app),
                     ),
@@ -148,7 +151,7 @@ class _AdminScreenState extends State<AdminScreen> {
                           color: Colors.white, child: const ManageCategories()),
                       Container(
                         color: Colors.white,
-                        child: const ManageOrders(),
+                        child:  ManageOrders(),
                       ),
                       Container(
                         color: Colors.white,
