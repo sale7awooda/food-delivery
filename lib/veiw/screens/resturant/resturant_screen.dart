@@ -25,7 +25,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   @override
   Widget build(BuildContext context) {
     var restID=arguments[0];
-    return Obx(() {
+    // return Obx(() {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: mainColor,
@@ -34,14 +34,19 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
           centerTitle: true,
         ),
         body: IndexedStack(
-            index: controller.selectedIndexResturant.value,
+            index: selectedIndexResturant,
+            //controller.selectedIndexResturant.value,
             // ignore: invalid_use_of_protected_member
             children: controller.resturantScreens.value),
         //screens[selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
-            currentIndex: controller.selectedIndexResturant.value,
+            currentIndex: selectedIndexResturant,
+            //controller.selectedIndexResturant.value,
             onTap: (index) {
-              controller.selectedIndexResturant.value = index;
+              setState(() {
+                selectedIndexResturant=index;
+              });
+              //controller.selectedIndexResturant.value = index;
               fsctrl.restID=restID;
 
             },
@@ -56,6 +61,6 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
               // BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Close"),
             ]),
       );
-    });
+    // });
   }
 }

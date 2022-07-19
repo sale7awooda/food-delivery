@@ -1,6 +1,5 @@
 // ignore_for_file: unused_local_variable, must_be_immutable
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,10 +44,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     String ffoodCategID = 'foodCategortID';
     String ffoodResturantID = 'foodResturantID';
     String ffoodPrice = 'foodPrice';
-    
 
     String ffoodID = argumnts[0];
-    return Scaffold(
+    return Scaffold(resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: mainColor,
           elevation: 0,
@@ -82,7 +80,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                   authCtrl: authCtrl,
                                   fstoreCtrl: fstoreCtrl,
                                   cartid: authCtrl.cartid,
-                                  
                                   foodModel: FoodModel(
                                       foodImageURL: foodSnapshot[ffoodImg],
                                       foodName: foodSnapshot[ffoodName],
@@ -92,7 +89,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                       foodPrice: foodSnapshot[ffoodPrice],
                                       foodResturantID:
                                           foodSnapshot[ffoodResturantID])),
-                             
+
                               // Positioned(
                               //     left: 50,
                               //     bottom: 150,
@@ -180,9 +177,10 @@ class FoodDtlsWdgt extends StatelessWidget {
           ButtonWdgt(
               text: "اضف للسلة",
               onPress: () {
-                
                 fstoreCtrl.addFoodToCart(foodModel, cartid);
-                Get.snackbar("إضافه عنصر", "تمت الإضافة بنجاح");
+                Get.snackbar("إضافه عنصر", "تمت الإضافة بنجاح",
+                    snackPosition: SnackPosition.BOTTOM,
+                    duration: const Duration(seconds: 2));
                 //Get.toNamed(Routes.myordersScreen, arguments: []);
                 // print(authctrl.displayUsername.toString());
               }),

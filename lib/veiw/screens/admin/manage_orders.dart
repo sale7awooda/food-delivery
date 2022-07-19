@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
+import 'package:orders/veiw/widgets/admin/text_form_wdgt.dart';
 
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 
@@ -26,37 +26,38 @@ class ManageOrders extends StatefulWidget {
 
 class _ManageOrdersState extends State<ManageOrders> {
   final fstoreCtrl = Get.find<FirestoreController>();
-
   final scrollctrl = ScrollController();
-
-  final scrollctr2 = ScrollController();
-
+  // final scrollctr2 = ScrollController();
   final _formKey = GlobalKey<FormState>();
-
-  final fnameCtrl = TextEditingController();
-
-  final fidCtrl = TextEditingController();
-
-  final fCatIdCtrl = TextEditingController();
-
-  final fImageCtrl = TextEditingController();
-
-  final fDetailsCtrl = TextEditingController();
-
-  final fRestIdCtrl = TextEditingController();
-
-  final fStatusCtrl = TextEditingController();
-
-  final fPriceCtrl = TextEditingController();
+  final oPhoneCtrl = TextEditingController();
+  //final oRestNameCtrl = TextEditingController();
+  final oAddressCtrl = TextEditingController();
+  final Item1Ctrl = TextEditingController();
+  final Item2Ctrl = TextEditingController();
+  final Item3Ctrl = TextEditingController();
+  final Item4Ctrl = TextEditingController();
+  final Item5Ctrl = TextEditingController();
+  String? item1 = "item";
+  String? item2 = "item";
+  String? item3 = "item";
+  String? item4 = "item";
+  String? item5 = "item";
+  bool v1 = false;
+  bool v2 = false;
+  bool v3 = false;
+  bool v4 = false;
+  bool v5 = false;
+  bool v6 = false;
+  bool v7 = false;
 
   clear() {
-    fnameCtrl.clear();
-    fidCtrl.clear();
-    fDetailsCtrl.clear();
-    fCatIdCtrl.clear();
-    fImageCtrl.clear();
-    fPriceCtrl.clear();
-    fRestIdCtrl.clear();
+    oPhoneCtrl.clear();
+    //oRestNameCtrl.clear();
+    Item2Ctrl.clear();
+    oAddressCtrl.clear();
+    Item1Ctrl.clear();
+    Item5Ctrl.clear();
+    Item3Ctrl.clear();
   }
 
   @override
@@ -104,23 +105,79 @@ class _ManageOrdersState extends State<ManageOrders> {
                                 itemBuilder: (context, index) {
                                   final DocumentSnapshot ordersSnapshot =
                                       streamSnapshot.data!.docs[index];
+                                  List<dynamic> items =
+                                      List.from(ordersSnapshot['oItems']);
+                                  switch (items.length) {
+                                    case 1:
+                                      item1 = items[0]["foodName"];
+                                      v1 = true;
+                                      v2 = true;
+                                      v3 = true;
+                                      break;
+                                    case 2:
+                                      item1 = items[0]["foodName"];
+                                      item2 = items[1]["foodName"];
+                                      v1 = true;
+                                      v2 = true;
+                                      v3 = true;
+                                      v4 = true;
+
+                                      break;
+                                    case 3:
+                                      v1 = true;
+                                      v2 = true;
+                                      v3 = true;
+                                      v4 = true;
+                                      v5 = true;
+                                      item1 = items[0]["foodName"];
+                                      item2 = items[1]["foodName"];
+                                      item3 = items[2]["foodName"];
+                                      break;
+                                    case 4:
+                                      v1 = true;
+                                      v2 = true;
+                                      v3 = true;
+                                      v4 = true;
+                                      v5 = true;
+                                      v6 = true;
+                                      item1 = items[0]["foodName"];
+                                      item2 = items[1]["foodName"];
+                                      item3 = items[2]["foodName"];
+                                      item4 = items[3]["foodName"];
+                                      break;
+                                    case 5:
+                                      v1 = true;
+                                      v2 = true;
+                                      v3 = true;
+                                      v4 = true;
+                                      v5 = true;
+                                      v6 = true;
+                                      v7 = true;
+                                      item1 = items[0]["foodName"];
+                                      item2 = items[1]["foodName"];
+                                      item3 = items[2]["foodName"];
+                                      item4 = items[3]["foodName"];
+                                      item5 = items[4]["foodName"];
+                                      break;
+                                    default:
+                                  }
                                   return Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: InkWell(
                                       // hoverColor: Colors.lightBlue[200],
                                       onTap: () {
-                                        // rnameCtrl.text =
-                                        //     resturantSnapshot[fResturantName];
-                                        // rOwnerCtrl.text =
-                                        //     resturantSnapshot[fResturantOwner];
-                                        // // rPassCtrl.text =
-                                        // //     resturantSnapshot[fResturantPass];
-                                        // rDetailsCtrl.text = resturantSnapshot[
-                                        //     fResturantDetails];
-                                        // rLocationCtrl.text =
-                                        //     resturantSnapshot[fResturantLoc];
-                                        // rImageCtrl.text =
-                                        //     resturantSnapshot[fResturantImg];
+                                        setState(() {
+                                          oPhoneCtrl.text =
+                                              ordersSnapshot['oPhone']
+                                                  .toString();
+                                          oAddressCtrl.text=ordersSnapshot[
+                                                          'oAddress'];
+                                          Item1Ctrl.text=item1.toString();
+                                          Item2Ctrl.text=item2.toString();
+                                          Item3Ctrl.text=item3.toString();
+                                          Item4Ctrl.text=item4.toString();
+                                          Item5Ctrl.text=item5.toString();
+                                        });
                                       },
                                       child: Stack(
                                         children: [
@@ -152,6 +209,19 @@ class _ManageOrdersState extends State<ManageOrders> {
                                                           TextDecoration.none)),
                                             ),
                                           ),
+                                          Positioned(
+                                              top: 5,
+                                              left: 5,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        ordersSnapshot['ostatus']==null?redClr:(ordersSnapshot['ostatus']?Colors.green:redClr),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                height: 20,
+                                                width: 20,
+                                              )),
                                           // Center(child: Text(
                                           //   ordersSnapshot['oItems']))
                                         ],
@@ -170,7 +240,126 @@ class _ManageOrdersState extends State<ManageOrders> {
         ),
         Flexible(
           flex: 4,
-          child: Center(),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Visibility(
+                  visible: v1,
+                  child: AbsorbPointer(
+                    child: TextFormWdgt(
+                      controller: oPhoneCtrl,
+                      lable: const Text("رقم هاتف العميل "),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return "الحقل لايجب ان يكون فارغ";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: v2,
+                  child: AbsorbPointer(
+                    child: TextFormWdgt(
+                      controller: oAddressCtrl,
+                      lable: const Text("عنوان العميل "),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return "الحقل لايجب ان يكون فارغ";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: v3,
+                  child: AbsorbPointer(
+                    child: TextFormWdgt(
+                      controller: Item1Ctrl,
+                      lable: const Text("العنصر الاول  "),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return "الحقل لايجب ان يكون فارغ";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: v4,
+                  child: AbsorbPointer(
+                    child: TextFormWdgt(
+                      controller: Item2Ctrl,
+                      lable: const Text("العنصر الثاني "),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return "الحقل لايجب ان يكون فارغ";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: v5,
+                  child: AbsorbPointer(
+                    child: TextFormWdgt(
+                      controller: Item3Ctrl,
+                      lable: const Text("العنصر الثالث "),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return "الحقل لايجب ان يكون فارغ";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: v6,
+                  child: AbsorbPointer(
+                    child: TextFormWdgt(
+                      controller: Item4Ctrl,
+                      lable: const Text("العنصر الرابع  "),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return "الحقل لايجب ان يكون فارغ";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: v7,
+                  child: AbsorbPointer(
+                    child: TextFormWdgt(
+                      controller: Item5Ctrl,
+                      lable: const Text("العنصر الخامس "),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return "الحقل لايجب ان يكون فارغ";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         )
         // child: Row(
         //     // mainAxisSize: MainAxisSize.max,

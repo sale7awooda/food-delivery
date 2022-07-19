@@ -44,43 +44,37 @@ class CartModel {
 class CartItemClass {
   CartItemClass({
     required this.ffoodName,
-    required this.foodDetails,
-    required this.foodImageUrl,
-    required this.foodResturantId,
+    
     required this.foodId,
     required this.foodPrice,
-    required this.orderitem,
+    
     
   });
 
   String ffoodName;
-  String foodDetails;
-  String foodImageUrl;
-  String foodResturantId;
+
   String foodId;
   int foodPrice;
-  String orderitem;
+  
   
 
   factory CartItemClass.fromMap(Map<String, dynamic> json) => CartItemClass(
         ffoodName: json["ffoodName"],
-        foodDetails: json["foodDetails"],
-        foodImageUrl: json["foodImageURL"],
-        foodResturantId: json["foodResturantID"],
+        
+        
         foodId: json["foodID"],
         foodPrice: json["foodPrice"],
-        orderitem: json["orderitem"],
+       
         
       );
 
   Map<String, dynamic> toMap() => {
         "ffoodName": ffoodName,
-        "foodDetails": foodDetails,
-        "foodImageURL": foodImageUrl,
-        "foodResturantID": foodResturantId,
+        
+    
         "foodID": foodId,
         "foodPrice": foodPrice,
-        "orderitem": orderitem,
+       
       
       };
 }

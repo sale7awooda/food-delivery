@@ -43,6 +43,7 @@ class FirestoreController extends GetxController {
   RxInt pTotal = 0.obs;
   RxInt quantity = 0.obs;
   String restID ='';
+  var deleteDOC;
   // RxInt itemsCount = 1.obs;
 
   // var price=0;
