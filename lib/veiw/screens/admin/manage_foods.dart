@@ -46,16 +46,18 @@ class _ManageFoodsState extends State<ManageFoods> {
   static String ffoodID = 'foodID';
   static String ffoodPrice = 'foodPrice';
   static String imgREF = 'foods';
-  final rnameCtrl = TextEditingController();
-  final cnameCtrl = TextEditingController();
+  final rIDCtrl = TextEditingController();
+  final cIDCtrl = TextEditingController();
 
   DocumentSnapshot? rID;
   static String fResturantName = 'restName';
+  static String resName = '';
 
   static String? fResturantID;
 
   DocumentSnapshot? cID;
   static String fCategoryName = 'catName';
+  static String catName = '';
   static String? fCategoryID;
 
   //static String ffoodStatus = 'foodStatus';
@@ -66,6 +68,8 @@ class _ManageFoodsState extends State<ManageFoods> {
   final fImageCtrl = TextEditingController();
   final fDetailsCtrl = TextEditingController();
   final fRestIdCtrl = TextEditingController();
+  final fRestNameCtrl = TextEditingController();
+  final fCatNameCtrl = TextEditingController();
   final fStatusCtrl = TextEditingController();
   final fPriceCtrl = TextEditingController();
   //final fTimeCtrl = TextEditingController();
@@ -78,8 +82,9 @@ class _ManageFoodsState extends State<ManageFoods> {
     fImageCtrl.clear();
     fPriceCtrl.clear();
     fRestIdCtrl.clear();
-    cnameCtrl.clear();
-    rnameCtrl.clear();
+    cIDCtrl.clear();
+    rIDCtrl.clear();
+    fRestNameCtrl.clear();
   }
 
   @override
@@ -97,81 +102,91 @@ class _ManageFoodsState extends State<ManageFoods> {
             fit: FlexFit.tight,
             child: Column(
               children: [
-                const Center(
+                const Flexible(
+                    flex: 1,
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: TextUtils(
+                            text: " قائمة الاطعمه",
+                            fontsize: 25,
+                            fontweight: FontWeight.bold,
+                            color: mainColor,
+                            underLine: TextDecoration.none),
+                      ),
+                    )),
+                Flexible(
+                  flex: 9,
                   child: Padding(
-                    padding: EdgeInsets.all(10),
-                    // EdgeInsets.symmetric(horizontal: 100, vertical: 50),
-                    child: TextUtils(
-                        text: "قائمة الاطعمه",
-                        fontsize: 25,
-                        fontweight: FontWeight.bold,
-                        color: mainColor,
-                        underLine: TextDecoration.none),
+                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    child: StreamBuilder(
+                        stream: fstoreCtrl.foodCol.snapshots(),
+                        //initialData: initialData,
+                        builder: (BuildContext context,
+                            AsyncSnapshot streamSnapshot) {
+                          if (streamSnapshot.hasData) {
+                            return !streamSnapshot.hasData
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    controller: scrollctrl,
+                                    itemCount: streamSnapshot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      final DocumentSnapshot foodSnapshot =
+                                          streamSnapshot.data!.docs[index];
+                                      return Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: InkWell(
+                                            hoverColor: Colors.lightBlue[200],
+                                            onTap: () {
+                                              setState(() {
+                                                fID = foodSnapshot;
+                                                ffoodID = streamSnapshot
+                                                    .data!.docs[index].id;
+                                              });
+    
+                                              fnameCtrl.text =
+                                                  foodSnapshot[ffoodName];
+                                              fidCtrl.text = ffoodID;
+                                              // streamSnapshot
+                                              //     .data!.docs[index].id;
+    
+                                              fDetailsCtrl.text =
+                                                  foodSnapshot[ffoodDetails];
+                                              cIDCtrl.text =
+                                                  foodSnapshot[ffoodCategID];
+                                              rIDCtrl.text = foodSnapshot[
+                                                  ffoodResturantID];
+                                              fRestNameCtrl.text =
+                                                  foodSnapshot[fResturantName];
+                                              fCatNameCtrl.text =
+                                                  foodSnapshot[fCategoryName];
+                                              fImageCtrl.text =
+                                                  foodSnapshot[fCategoryName];
+    
+                                              fPriceCtrl.text =
+                                                  foodSnapshot[ffoodPrice]
+                                                      .toString();
+                                              fImageCtrl.text =
+                                                  foodSnapshot[ffoodImgURL];
+                                            },
+                                            child: ResurantWdgt(
+                                              title: foodSnapshot[ffoodName],
+                                              subtitle:
+                                                  foodSnapshot[ffoodDetails],
+                                              imgUrl: foodSnapshot[ffoodImgURL],
+                                            ),
+                                          ));
+                                    });
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }),
                   ),
-                ),
-                const Divider(
-                  indent: 8.0,
-                  endIndent: 8.0,
-                ),
-                Expanded(
-                  child: StreamBuilder(
-                      stream: fstoreCtrl.foodCol.snapshots(),
-                      //initialData: initialData,
-                      builder:
-                          (BuildContext context, AsyncSnapshot streamSnapshot) {
-                        if (streamSnapshot.hasData) {
-                          return !streamSnapshot.hasData
-                              ? const Center(child: CircularProgressIndicator())
-                              : ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  controller: scrollctrl,
-                                  itemCount: streamSnapshot.data!.docs.length,
-                                  itemBuilder: (context, index) {
-                                    final DocumentSnapshot foodSnapshot =
-                                        streamSnapshot.data!.docs[index];
-                                    return Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: InkWell(
-                                          hoverColor: Colors.lightBlue[200],
-                                          onTap: () {
-                                            setState(() {
-                                              fID = foodSnapshot;
-                                              ffoodID = streamSnapshot
-                                                  .data!.docs[index].id;
-                                            });
-
-                                            fnameCtrl.text =
-                                                foodSnapshot[ffoodName];
-                                            fidCtrl.text = streamSnapshot
-                                                .data!.docs[index].id;
-
-                                            fDetailsCtrl.text =
-                                                foodSnapshot[ffoodDetails];
-                                            cnameCtrl.text =
-                                                foodSnapshot[ffoodCategID];
-                                            rnameCtrl.text =
-                                                foodSnapshot[ffoodResturantID];
-
-                                            fPriceCtrl.text =
-                                                foodSnapshot[ffoodPrice]
-                                                    .toString();
-                                            fImageCtrl.text =
-                                                foodSnapshot[ffoodImgURL];
-                                          },
-                                          child: ResurantWdgt(
-                                            title: foodSnapshot[ffoodName],
-                                            subtitle:
-                                                foodSnapshot[ffoodDetails],
-                                            imgUrl: foodSnapshot[ffoodImgURL],
-                                          ),
-                                        ));
-                                  });
-                        }
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }),
                 )
+              //,Text("data")
               ],
             ),
           ),
@@ -180,7 +195,7 @@ class _ManageFoodsState extends State<ManageFoods> {
               child: Row(
                   // mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
-
+    
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
@@ -272,15 +287,21 @@ class _ManageFoodsState extends State<ManageFoods> {
                                                                           .docs[
                                                                               index]
                                                                           .id;
+                                                                  resName =
+                                                                      resturantSnapshot[
+                                                                          fResturantName];
                                                                   // print(fResturantID);
                                                                 });
-
-                                                                rnameCtrl.text =
+    
+                                                                rIDCtrl.text =
                                                                     streamSnapshot2
                                                                         .data!
                                                                         .docs[
                                                                             index]
                                                                         .id;
+                                                                fRestNameCtrl
+                                                                        .text =
+                                                                    resName;
                                                               },
                                                               child: ClipRRect(
                                                                 borderRadius:
@@ -340,7 +361,7 @@ class _ManageFoodsState extends State<ManageFoods> {
                                                 BorderRadius.circular(10)),
                                         height: 50,
                                         //width: 400,
-
+    
                                         child: StreamBuilder(
                                             stream: fstoreCtrl.categoryCol
                                                 .snapshots(),
@@ -386,15 +407,22 @@ class _ManageFoodsState extends State<ManageFoods> {
                                                                           .docs[
                                                                               index]
                                                                           .id;
-                                                                  // print(fResturantID);
+                                                                  catName =
+                                                                      categorySnapshot[
+                                                                          fCategoryName];
+                                                                  // print(
+                                                                  //     catName);
                                                                 });
-
-                                                                cnameCtrl.text =
+    
+                                                                cIDCtrl.text =
                                                                     streamSnapshot3
                                                                         .data!
                                                                         .docs[
                                                                             index]
                                                                         .id;
+                                                                fCatNameCtrl
+                                                                        .text =
+                                                                    catName;
                                                               },
                                                               child: ClipRRect(
                                                                 borderRadius:
@@ -449,7 +477,7 @@ class _ManageFoodsState extends State<ManageFoods> {
                                                   //   'jpg, png'
                                                   // ]
                                                 );
-
+    
                                                 if (fpicker == null) {
                                                   Get.snackbar("Error",
                                                       "No Image Was Selected !!!");
@@ -487,29 +515,30 @@ class _ManageFoodsState extends State<ManageFoods> {
                                                         .validate()) {
                                                       _formKey.currentState!
                                                           .save();
-
-                                                      fstoreCtrl.addFood(FoodModel(
-                                                          foodImageURL:
-                                                              fImageCtrl
-                                                                  .value.text,
-                                                          foodName: fnameCtrl
-                                                              .value.text,
-                                                          foodDetails:
-                                                              fDetailsCtrl
-                                                                  .value.text,
-                                                          foodCategID: cnameCtrl
-                                                              .value.text,
-                                                          foodPrice: int
-                                                              .tryParse(
-                                                                  fPriceCtrl
-                                                                      .value
-                                                                      .text),
-                                                          foodResturantID:
-                                                              rnameCtrl
-                                                                  .value.text,
-                                                          ));
+    
+                                                      fstoreCtrl
+                                                          .addFood(FoodModel(
+                                                        foodImageURL: fImageCtrl
+                                                            .value.text,
+                                                        foodName: fnameCtrl
+                                                            .value.text,
+                                                        foodDetails:
+                                                            fDetailsCtrl
+                                                                .value.text,
+                                                        foodCategID:
+                                                            cIDCtrl.value.text,
+                                                        fResturantName:
+                                                            fRestNameCtrl.text,
+                                                        fCategoryName:
+                                                            fCatNameCtrl.text,
+                                                        foodPrice: int.tryParse(
+                                                            fPriceCtrl
+                                                                .value.text),
+                                                        foodResturantID:
+                                                            rIDCtrl.value.text,
+                                                      ));
                                                       clear();
-
+    
                                                       Get.snackbar("تنبية",
                                                           "تم الحفظ بنجاااح",
                                                           maxWidth: 400,
@@ -570,28 +599,33 @@ class _ManageFoodsState extends State<ManageFoods> {
                                                       _formKey.currentState!
                                                           .save();
                                                       fstoreCtrl.updateFood(
-                                                        fID!,
-                                                        FoodModel(
+                                                          fID!,
+                                                          FoodModel(
                                                             foodImageURL:
                                                                 fImageCtrl.text,
-                                                            foodID: fidCtrl
-                                                                .text,
+                                                            foodID:
+                                                                fidCtrl.text,
                                                             foodName: fnameCtrl
                                                                 .value.text,
                                                             foodDetails:
                                                                 fDetailsCtrl
                                                                     .value.text,
                                                             foodCategID:
-                                                                cnameCtrl.text,
+                                                                cIDCtrl.text,
                                                             foodPrice:
                                                                 int.tryParse(
                                                                     fPriceCtrl
                                                                         .value
                                                                         .text),
                                                             foodResturantID:
-                                                                rnameCtrl.text,
-                                                        )
-                                                      );
+                                                                rIDCtrl.text,
+                                                            fResturantName:
+                                                                fRestNameCtrl
+                                                                    .text,
+                                                            fCategoryName:
+                                                                fCatNameCtrl
+                                                                    .text,
+                                                          ));
                                                       clear();
                                                       Get.snackbar("تعديل",
                                                           "تم التعديل بنجاااح",
@@ -630,19 +664,19 @@ class _ManageFoodsState extends State<ManageFoods> {
                                               },
                                             ),
                                           ),
-                                          AbsorbPointer(
-                                            child: TextFormWdgt(
-                                              controller: fidCtrl,
-                                              lable: const Text("Food ID "),
-                                              validator: (value) {
-                                                // if (value.toString().isEmpty) {
-                                                //   return "الحقل لايجب ان يكون فارغ";
-                                                // } else {
-                                                //   return null;
-                                                // }
-                                              },
-                                            ),
-                                          ),
+                                          // AbsorbPointer(
+                                          //   child: TextFormWdgt(
+                                          //     controller: fidCtrl,
+                                          //     lable: const Text("Food ID "),
+                                          //     validator: (value) {
+                                          //       // if (value.toString().isEmpty) {
+                                          //       //   return "الحقل لايجب ان يكون فارغ";
+                                          //       // } else {
+                                          //       //   return null;
+                                          //       // }
+                                          //     },
+                                          //   ),
+                                          // ),
                                           TextFormWdgt(
                                             controller: fnameCtrl,
                                             lable: const Text("Food Name "),
@@ -678,7 +712,7 @@ class _ManageFoodsState extends State<ManageFoods> {
                                               }),
                                           AbsorbPointer(
                                             child: TextFormWdgt(
-                                                controller: rnameCtrl,
+                                                controller: fRestNameCtrl,
                                                 lable: const Text(
                                                     " Food Resturant"),
                                                 validator: (value) {
@@ -693,7 +727,7 @@ class _ManageFoodsState extends State<ManageFoods> {
                                           ),
                                           AbsorbPointer(
                                             child: TextFormWdgt(
-                                                controller: cnameCtrl,
+                                                controller: fCatNameCtrl,
                                                 lable: const Text(
                                                     " Food Categort"),
                                                 validator: (value) {

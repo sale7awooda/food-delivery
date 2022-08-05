@@ -77,7 +77,7 @@ class AppRoutes {
         bindings: [AuthBinding(), AppBinding(), FirestoreBinding()]),
     GetPage(
         name: Routes.myordersScreen,
-        page: () =>  MyOrdersScreen(),
+        page: () =>  const MyOrdersScreen(),
         bindings: [AuthBinding(), AppBinding(), FirestoreBinding()]),
         GetPage(
         name: Routes.resthomeScreen,
@@ -85,7 +85,7 @@ class AppRoutes {
         bindings: [AuthBinding(), AppBinding(), FirestoreBinding()]),
         GetPage(
         name: Routes.restordersScreen,
-        page: () =>  RestOrdersScreen(),
+        page: () =>  const RestOrdersScreen(),
         bindings: [AuthBinding(), AppBinding(), FirestoreBinding()]),
     // GetPage(
     //     name: Routes.manageresturants,

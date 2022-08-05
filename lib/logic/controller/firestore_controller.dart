@@ -39,12 +39,15 @@ class FirestoreController extends GetxController {
   static String ffoPhone = 'oPhone';
   static String ffoAddress = 'oAddress';
   static String ffoItems = 'oItems';
+  static String oTotalPrice = 'oTotalPrice';
   String? itemIMG;
   RxInt pTotal = 0.obs;
   RxInt quantity = 0.obs;
-  String restID ='';
+  String restID = '';
   var deleteDOC;
-  // RxInt itemsCount = 1.obs;
+  var ordersCount;
+
+  // int ordersCount = 0;
 
   // var price=0;
 
@@ -80,6 +83,8 @@ class FirestoreController extends GetxController {
       ffoodImg: foodModel.foodImageURL,
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
+      fResturantName:foodModel.fResturantName,
+      fCategoryName: foodModel.fCategoryName,
       ffoodPrice: foodModel.foodPrice,
       // ffoodStatus: foodModel.foodStatus,
     });
@@ -93,7 +98,9 @@ class FirestoreController extends GetxController {
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
       ffoodPrice: foodModel.foodPrice,
-      ffoodID: foodModel.foodID
+      ffoodID: foodModel.foodID,
+      fResturantName:foodModel.fResturantName,
+      
     });
   }
 
@@ -105,11 +112,14 @@ class FirestoreController extends GetxController {
       // ffoodPrice: cartModel.foodPrice,
       // ffoodID: cartModel.foodID,
       ffoodResturantID: cartModel.foodResturantId,
+      fResturantName:cartModel.foodResturantName,
+
       ostatus: cartModel.ostatus,
       ffoPhone: cartModel.oPHone,
       ffoAddress: cartModel.oAddress,
-      ffoItems: FieldValue.arrayUnion(
-          cartModel.cartItems!) //cartModel.cartItems//{"key":"value"}
+      ffoItems: FieldValue.arrayUnion(cartModel.cartItems!),
+      oTotalPrice: cartModel.oTotalPrice,
+      //cartModel.cartItems//{"key":"value"}
       // ffoodStatus: foodModel.foodStatus,
     });
   }
@@ -160,19 +170,23 @@ class FirestoreController extends GetxController {
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
       ffoodPrice: foodModel.foodPrice,
+      fResturantName:foodModel.fResturantName,
+      fCategoryName: foodModel.fCategoryName,
       // ffoodStatus: foodModel.foodStatus,
-      ffoodID: foodModel.foodID
+      ffoodID: foodModel.foodID,
+      
     });
   }
+
   Future<void> updateOrder(DocumentSnapshot doc, CartModel cartModel) async {
-    await foodCol.doc(doc.id).update({
-      ffoodResturantID: cartModel.foodResturantId,
-      ostatus: cartModel.ostatus,
-      ffoPhone: cartModel.oPHone,
-      ffoAddress: cartModel.oAddress,
-      ffoItems: FieldValue.arrayUnion(
-          cartModel.cartItems!)
-      
+    await orderCol.doc(doc.id).update({
+     //  ffoodResturantID: cartModel.foodResturantId,
+     ostatus: cartModel.ostatus,
+      // ffoPhone: cartModel.oPHone,
+      // ffoAddress: cartModel.oAddress,
+      // ffoItems: FieldValue.arrayUnion(cartModel.cartItems!),
+      // oTotalPrice: cartModel.oTotalPrice,
+      // fResturantName:cartModel.foodResturantName,
     });
   }
 
@@ -200,7 +214,6 @@ class FirestoreController extends GetxController {
     });
   }
 
-
   removeOrder() {}
 
   // Future<List<DocumentSnapshot>> getResturants() {
@@ -211,21 +224,21 @@ class FirestoreController extends GetxController {
   //   );
   // }
 
-  Future getRestDetails(String restID) async {
-    await FirebaseFirestore.instance
-        .collection('restaurants')
-        .where('restOwner', isEqualTo: restID)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        //print(loginEmail+" loginEmail");
-        // print(doc.id);
-      }
-    });
+  // Future getRestDetails(String restID) async {
+  //   await FirebaseFirestore.instance
+  //       .collection('restaurants')
+  //       .where('restOwner', isEqualTo: restID)
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //     for (var doc in querySnapshot.docs) {
+  //       //print(loginEmail+" loginEmail");
+  //       // print(doc.id);
+  //     }
+  //   });
 
-    // String restOwnerName = snap[fResturantOwner];
-    // return restOwnerName;
-  }
+  //   // String restOwnerName = snap[fResturantOwner];
+  //   // return restOwnerName;
+  // }
 
   Future<String> uploadImage(PlatformFile file, String imgREF) async {
     try {

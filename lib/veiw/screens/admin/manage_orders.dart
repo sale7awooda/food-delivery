@@ -8,17 +8,17 @@ import 'package:orders/veiw/widgets/admin/text_form_wdgt.dart';
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 
 class ManageOrders extends StatefulWidget {
-  ManageOrders({
+  const ManageOrders({
     Key? key,
   }) : super(key: key);
-  static String ffoodName = 'foodName';
-  static String ffoodDetails = 'foodDetails';
-  static String ffoodImgURL = 'foodImgUrl';
-  static String ffoodCategID = 'foodCategortID';
-  static String ffoodResturantID = 'foodResturantID';
-  static String ffoodID = 'foodID';
-  static String ffoodPrice = 'foodPrice';
-  static String imgREF = 'foods';
+  final String ffoodName = 'foodName';
+  final String ffoodDetails = 'foodDetails';
+  final String ffoodImgURL = 'foodImgUrl';
+  final String ffoodCategID = 'foodCategortID';
+  final String ffoodResturantID = 'foodResturantID';
+  final String ffoodID = 'foodID';
+  final String ffoodPrice = 'foodPrice';
+  final String imgREF = 'foods';
 
   @override
   State<ManageOrders> createState() => _ManageOrdersState();
@@ -28,20 +28,22 @@ class _ManageOrdersState extends State<ManageOrders> {
   final fstoreCtrl = Get.find<FirestoreController>();
   final scrollctrl = ScrollController();
   // final scrollctr2 = ScrollController();
-  final _formKey = GlobalKey<FormState>();
+  //final _formKey = GlobalKey<FormState>();
   final oPhoneCtrl = TextEditingController();
-  //final oRestNameCtrl = TextEditingController();
+  final oRestNameCtrl = TextEditingController();
+  final oTotalPriceCtrl = TextEditingController();
   final oAddressCtrl = TextEditingController();
-  final Item1Ctrl = TextEditingController();
-  final Item2Ctrl = TextEditingController();
-  final Item3Ctrl = TextEditingController();
-  final Item4Ctrl = TextEditingController();
-  final Item5Ctrl = TextEditingController();
+  final item1Ctrl = TextEditingController();
+  final item2Ctrl = TextEditingController();
+  final item3Ctrl = TextEditingController();
+  final item4Ctrl = TextEditingController();
+  final item5Ctrl = TextEditingController();
   String? item1 = "item";
   String? item2 = "item";
   String? item3 = "item";
   String? item4 = "item";
   String? item5 = "item";
+  bool v0 = false;
   bool v1 = false;
   bool v2 = false;
   bool v3 = false;
@@ -50,14 +52,16 @@ class _ManageOrdersState extends State<ManageOrders> {
   bool v6 = false;
   bool v7 = false;
 
-  clear() {
+  clearCtrls() {
     oPhoneCtrl.clear();
-    //oRestNameCtrl.clear();
-    Item2Ctrl.clear();
+    oTotalPriceCtrl.clear();
+    oRestNameCtrl.clear();
+    item2Ctrl.clear();
     oAddressCtrl.clear();
-    Item1Ctrl.clear();
-    Item5Ctrl.clear();
-    Item3Ctrl.clear();
+    item1Ctrl.clear();
+    item5Ctrl.clear();
+    item3Ctrl.clear();
+    item4Ctrl.clear();
   }
 
   @override
@@ -110,6 +114,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                   switch (items.length) {
                                     case 1:
                                       item1 = items[0]["foodName"];
+                                      v0 = true;
                                       v1 = true;
                                       v2 = true;
                                       v3 = true;
@@ -117,6 +122,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                     case 2:
                                       item1 = items[0]["foodName"];
                                       item2 = items[1]["foodName"];
+                                      v0 = true;
                                       v1 = true;
                                       v2 = true;
                                       v3 = true;
@@ -124,6 +130,7 @@ class _ManageOrdersState extends State<ManageOrders> {
 
                                       break;
                                     case 3:
+                                      v0 = true;
                                       v1 = true;
                                       v2 = true;
                                       v3 = true;
@@ -134,6 +141,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                       item3 = items[2]["foodName"];
                                       break;
                                     case 4:
+                                      v0 = true;
                                       v1 = true;
                                       v2 = true;
                                       v3 = true;
@@ -146,6 +154,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                       item4 = items[3]["foodName"];
                                       break;
                                     case 5:
+                                      v0 = true;
                                       v1 = true;
                                       v2 = true;
                                       v3 = true;
@@ -166,17 +175,100 @@ class _ManageOrdersState extends State<ManageOrders> {
                                     child: InkWell(
                                       // hoverColor: Colors.lightBlue[200],
                                       onTap: () {
+                                       // print(items.length);
                                         setState(() {
+                                          clearCtrls();
                                           oPhoneCtrl.text =
                                               ordersSnapshot['oPhone']
                                                   .toString();
-                                          oAddressCtrl.text=ordersSnapshot[
-                                                          'oAddress'];
-                                          Item1Ctrl.text=item1.toString();
-                                          Item2Ctrl.text=item2.toString();
-                                          Item3Ctrl.text=item3.toString();
-                                          Item4Ctrl.text=item4.toString();
-                                          Item5Ctrl.text=item5.toString();
+                                          oAddressCtrl.text =
+                                              ordersSnapshot['oAddress'];
+                                          oRestNameCtrl.text=ordersSnapshot['restName'];
+                                          oTotalPriceCtrl.text=ordersSnapshot['oTotalPrice'].toString();
+                                          switch (items.length) {
+                                            case 1:
+                                              item1 = items[0]["foodName"];
+                                              v0 = true;
+                                              v1 = true;
+                                              v2 = true;
+                                              v3 = true;
+                                              v4 = false;
+                                              v5 = false;
+                                              v6 = false;
+                                              v7 = false;
+                                              item1Ctrl.text = item1.toString();
+                                              break;
+                                            case 2:
+                                              item1 = items[0]["foodName"];
+                                              item2 = items[1]["foodName"];
+                                              v0 = true;
+                                              v1 = true;
+                                              v2 = true;
+                                              v3 = true;
+                                              v4 = true;
+                                              v5 = false;
+                                              v6 = false;
+                                              v7 = false;
+                                              item1Ctrl.text = item1.toString();
+                                              item2Ctrl.text = item2.toString();
+
+                                              break;
+                                            case 3:
+                                              v0 = true;
+                                              v1 = true;
+                                              v2 = true;
+                                              v3 = true;
+                                              v4 = true;
+                                              v5 = true;
+                                              v6 = false;
+                                              v7 = false;
+                                              item1 = items[0]["foodName"];
+                                              item2 = items[1]["foodName"];
+                                              item3 = items[2]["foodName"];
+                                              item1Ctrl.text = item1.toString();
+                                              item2Ctrl.text = item2.toString();
+                                              item3Ctrl.text = item3.toString();
+                                              break;
+                                            case 4:
+                                              v0 = true;
+                                              v1 = true;
+                                              v2 = true;
+                                              v3 = true;
+                                              v4 = true;
+                                              v5 = true;
+                                              v6 = true;
+                                              v7 = false;
+                                              item1 = items[0]["foodName"];
+                                              item2 = items[1]["foodName"];
+                                              item3 = items[2]["foodName"];
+                                              item4 = items[3]["foodName"];
+                                              item1Ctrl.text = item1.toString();
+                                              item2Ctrl.text = item2.toString();
+                                              item3Ctrl.text = item3.toString();
+                                              item4Ctrl.text = item4.toString();
+                                              break;
+                                            case 5:
+                                              v0 = true;
+                                              v1 = true;
+                                              v2 = true;
+                                              v3 = true;
+                                              v4 = true;
+                                              v5 = true;
+                                              v6 = true;
+                                              v7 = true;
+                                              item1 = items[0]["foodName"];
+                                              item2 = items[1]["foodName"];
+                                              item3 = items[2]["foodName"];
+                                              item4 = items[3]["foodName"];
+                                              item5 = items[4]["foodName"];
+                                              item1Ctrl.text = item1.toString();
+                                              item2Ctrl.text = item2.toString();
+                                              item3Ctrl.text = item3.toString();
+                                              item4Ctrl.text = item4.toString();
+                                              item5Ctrl.text = item5.toString();
+                                              break;
+                                            default:
+                                          }
                                         });
                                       },
                                       child: Stack(
@@ -214,8 +306,14 @@ class _ManageOrdersState extends State<ManageOrders> {
                                               left: 5,
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                    color:
-                                                        ordersSnapshot['ostatus']==null?redClr:(ordersSnapshot['ostatus']?Colors.green:redClr),
+                                                    color: ordersSnapshot[
+                                                                'ostatus'] ==
+                                                            null
+                                                        ? Colors.yellow
+                                                        : (ordersSnapshot[
+                                                                'ostatus']=="true"
+                                                            ? Colors.green
+                                                            : redClr),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15)),
@@ -245,6 +343,44 @@ class _ManageOrdersState extends State<ManageOrders> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Visibility(
+                    visible: v0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: AbsorbPointer(
+                            child: TextFormWdgt(
+                              controller: oRestNameCtrl,
+                              lable: const Text("اسم المطعم "),
+                              validator: (value) {
+                                if (value.toString().isEmpty) {
+                                  return "الحقل لايجب ان يكون فارغ";
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        Expanded(flex: 1,
+                          child: AbsorbPointer(
+                            child: TextFormWdgt(
+                              controller: oTotalPriceCtrl,
+                              lable: const Text("المبلغ الكلي "),
+                              validator: (value) {
+                                if (value.toString().isEmpty) {
+                                  return "الحقل لايجب ان يكون فارغ";
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
                 Visibility(
                   visible: v1,
                   child: AbsorbPointer(
@@ -281,7 +417,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                   visible: v3,
                   child: AbsorbPointer(
                     child: TextFormWdgt(
-                      controller: Item1Ctrl,
+                      controller: item1Ctrl,
                       lable: const Text("العنصر الاول  "),
                       validator: (value) {
                         if (value.toString().isEmpty) {
@@ -297,7 +433,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                   visible: v4,
                   child: AbsorbPointer(
                     child: TextFormWdgt(
-                      controller: Item2Ctrl,
+                      controller: item2Ctrl,
                       lable: const Text("العنصر الثاني "),
                       validator: (value) {
                         if (value.toString().isEmpty) {
@@ -313,7 +449,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                   visible: v5,
                   child: AbsorbPointer(
                     child: TextFormWdgt(
-                      controller: Item3Ctrl,
+                      controller: item3Ctrl,
                       lable: const Text("العنصر الثالث "),
                       validator: (value) {
                         if (value.toString().isEmpty) {
@@ -329,7 +465,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                   visible: v6,
                   child: AbsorbPointer(
                     child: TextFormWdgt(
-                      controller: Item4Ctrl,
+                      controller: item4Ctrl,
                       lable: const Text("العنصر الرابع  "),
                       validator: (value) {
                         if (value.toString().isEmpty) {
@@ -345,7 +481,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                   visible: v7,
                   child: AbsorbPointer(
                     child: TextFormWdgt(
-                      controller: Item5Ctrl,
+                      controller: item5Ctrl,
                       lable: const Text("العنصر الخامس "),
                       validator: (value) {
                         if (value.toString().isEmpty) {

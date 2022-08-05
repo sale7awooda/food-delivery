@@ -10,6 +10,7 @@ import 'package:orders/veiw/widgets/user/buttun_wdgt.dart';
 // import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/veiw/widgets/user/orders_cart/cart_item_card.dart';
 import 'package:orders/veiw/widgets/user/orders_cart/empty_cart.dart';
+import 'package:orders/veiw/widgets/user/text_utils.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   const MyOrdersScreen({Key? key}) : super(key: key);
@@ -39,6 +40,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   final String ffoodImg = 'foodImgUrl';
 
   final String ffoodResturantID = 'foodResturantID';
+  final String fResturantName = 'restName';
 
   final String ffoodPrice = 'foodPrice';
 
@@ -51,16 +53,17 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
 
   //final idCtrl = TextEditingController();
   final nCtrl = TextEditingController();
-
   final nCtrl1 = TextEditingController();
-
   final nCtrl2 = TextEditingController();
-
   final nCtrl3 = TextEditingController();
-
   final nCtrl4 = TextEditingController();
-
+  final pCtrl = TextEditingController();
+  final pCtrl1 = TextEditingController();
+  final pCtrl2 = TextEditingController();
+  final pCtrl3 = TextEditingController();
+  final pCtrl4 = TextEditingController();
   final ridCtrl = TextEditingController();
+  final rNameCtrl = TextEditingController();
 
   clearCtrl() {
     //  idCtrl.clear();
@@ -69,12 +72,19 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     nCtrl2.clear();
     nCtrl3.clear();
     nCtrl4.clear();
+    pCtrl.clear();
+    pCtrl1.clear();
+    pCtrl2.clear();
+    pCtrl3.clear();
+    pCtrl4.clear();
     ridCtrl.clear();
+    rNameCtrl.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     var cartID = authctrl.cartid;
+    int oTotalPrice = 0;
 
     // int pcount=0;
     // DocumentSnapshot<Object?>? ordersList;
@@ -114,52 +124,147 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                     switch (selector) {
                                       case 1:
                                         {
+                                          rNameCtrl.text = streamSnapshot
+                                              .data!.docs[0][fResturantName];
+                                          ridCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodResturantID];
                                           nCtrl.text = streamSnapshot
                                               .data!.docs[0][ffoodName];
+                                          pCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodPrice]
+                                              .toString();
+                                          oTotalPrice = streamSnapshot
+                                              .data!.docs[0][ffoodPrice];
                                         }
                                         break;
                                       case 2:
                                         {
+                                          rNameCtrl.text = streamSnapshot
+                                              .data!.docs[0][fResturantName];
+                                          ridCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodResturantID];
                                           nCtrl.text = streamSnapshot
                                               .data!.docs[0][ffoodName];
+                                          pCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodPrice]
+                                              .toString();
                                           nCtrl1.text = streamSnapshot
                                               .data!.docs[1][ffoodName];
+                                          pCtrl1.text = streamSnapshot
+                                              .data!.docs[1][ffoodPrice]
+                                              .toString();
+                                          oTotalPrice = (streamSnapshot
+                                                  .data!.docs[0][ffoodPrice] +
+                                              streamSnapshot.data!.docs[1]
+                                                  [ffoodPrice]);
                                         }
                                         break;
                                       case 3:
                                         {
+                                          rNameCtrl.text = streamSnapshot
+                                              .data!.docs[0][fResturantName];
+                                          ridCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodResturantID];
                                           nCtrl.text = streamSnapshot
                                               .data!.docs[0][ffoodName];
+                                          pCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodPrice]
+                                              .toString();
                                           nCtrl1.text = streamSnapshot
                                               .data!.docs[1][ffoodName];
+                                          pCtrl1.text = streamSnapshot
+                                              .data!.docs[1][ffoodPrice]
+                                              .toString();
                                           nCtrl2.text = streamSnapshot
                                               .data!.docs[2][ffoodName];
+                                          pCtrl2.text = streamSnapshot
+                                              .data!.docs[2][ffoodPrice]
+                                              .toString();
+                                          oTotalPrice = (streamSnapshot
+                                                  .data!.docs[0][ffoodPrice] +
+                                              streamSnapshot.data!.docs[1]
+                                                  [ffoodPrice] +
+                                              streamSnapshot.data!.docs[2]
+                                                  [ffoodPrice]);
                                         }
                                         break;
                                       case 4:
                                         {
+                                          rNameCtrl.text = streamSnapshot
+                                              .data!.docs[0][fResturantName];
+                                          ridCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodResturantID];
                                           nCtrl.text = streamSnapshot
                                               .data!.docs[0][ffoodName];
+                                          pCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodPrice]
+                                              .toString();
                                           nCtrl1.text = streamSnapshot
                                               .data!.docs[1][ffoodName];
+                                          pCtrl1.text = streamSnapshot
+                                              .data!.docs[1][ffoodPrice]
+                                              .toString();
                                           nCtrl2.text = streamSnapshot
                                               .data!.docs[2][ffoodName];
+                                          pCtrl2.text = streamSnapshot
+                                              .data!.docs[2][ffoodPrice]
+                                              .toString();
                                           nCtrl3.text = streamSnapshot
                                               .data!.docs[3][ffoodName];
+                                          pCtrl3.text = streamSnapshot
+                                              .data!.docs[3][ffoodPrice]
+                                              .toString();
+                                          oTotalPrice = (streamSnapshot
+                                                  .data!.docs[0][ffoodPrice] +
+                                              streamSnapshot.data!.docs[1]
+                                                  [ffoodPrice] +
+                                              streamSnapshot.data!.docs[2]
+                                                  [ffoodPrice] +
+                                              streamSnapshot.data!.docs[3]
+                                                  [ffoodPrice]);
                                         }
                                         break;
                                       case 5:
                                         {
+                                          rNameCtrl.text = streamSnapshot
+                                              .data!.docs[0][fResturantName];
+                                          ridCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodResturantID];
                                           nCtrl.text = streamSnapshot
                                               .data!.docs[0][ffoodName];
+                                          pCtrl.text = streamSnapshot
+                                              .data!.docs[0][ffoodPrice]
+                                              .toString();
                                           nCtrl1.text = streamSnapshot
                                               .data!.docs[1][ffoodName];
+                                          pCtrl1.text = streamSnapshot
+                                              .data!.docs[1][ffoodPrice]
+                                              .toString();
                                           nCtrl2.text = streamSnapshot
                                               .data!.docs[2][ffoodName];
+                                          pCtrl2.text = streamSnapshot
+                                              .data!.docs[2][ffoodPrice]
+                                              .toString();
                                           nCtrl3.text = streamSnapshot
                                               .data!.docs[3][ffoodName];
+                                          pCtrl3.text = streamSnapshot
+                                              .data!.docs[3][ffoodPrice]
+                                              .toString();
                                           nCtrl4.text = streamSnapshot
                                               .data!.docs[4][ffoodName];
+                                          pCtrl4.text = streamSnapshot
+                                              .data!.docs[4][ffoodPrice]
+                                              .toString();
+                                          oTotalPrice = (streamSnapshot
+                                                  .data!.docs[0][ffoodPrice] +
+                                              streamSnapshot.data!.docs[1]
+                                                  [ffoodPrice] +
+                                              streamSnapshot.data!.docs[2]
+                                                  [ffoodPrice] +
+                                              streamSnapshot.data!.docs[3]
+                                                  [ffoodPrice] +
+                                              streamSnapshot.data!.docs[4]
+                                                  [ffoodPrice]);
                                         }
                                         break;
 
@@ -264,11 +369,14 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                                     mainColor,
                                                                 minimumSize:
                                                                     const Size(
-                                                                        100, 50),
+                                                                        100,
+                                                                        50),
                                                                 maximumSize:
                                                                     const Size(
-                                                                        200, 50)),
-                                                        child: const Text("طلب"),
+                                                                        200,
+                                                                        50)),
+                                                        child:
+                                                            const Text("طلب"),
                                                         onPressed: () {
                                                           Get.defaultDialog(
                                                             cancel: ButtonWdgt(
@@ -287,7 +395,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                                             .bold),
                                                             confirm: ButtonWdgt(
                                                               text: "تاكيد",
-                                                              onPress: () async {
+                                                              onPress:
+                                                                  () async {
                                                                 if (_formKey
                                                                     .currentState!
                                                                     .validate()) {
@@ -297,22 +406,28 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                                   switch (
                                                                       itemsLenght) {
                                                                     case 1:
-                                                                      await fstoreCtrl.addOrder(CartModel(
-                                                                          foodResturantId:
-                                                                              ridCtrl
-                                                                                  .text,
-                                                                          oPHone: int.tryParse(orderPhoneCtrl
-                                                                              .text),
-                                                                          oAddress:
-                                                                              orderAddressCtrl.text,
-                                                                          cartItems: [
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl.text,
-                                                                              ffoodResturantID:
-                                                                                  ridCtrl.text
-                                                                            }
-                                                                          ]));
+                                                                      await fstoreCtrl
+                                                                          .addOrder(
+                                                                              CartModel(
+                                                                        foodResturantId:
+                                                                            ridCtrl.text,
+                                                                        oTotalPrice:
+                                                                            oTotalPrice,
+                                                                        foodResturantName:
+                                                                            rNameCtrl.text,
+                                                                        oPHone:
+                                                                            int.tryParse(orderPhoneCtrl.text),
+                                                                        oAddress:
+                                                                            orderAddressCtrl.text,
+                                                                        cartItems: [
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl.text),
+                                                                          }
+                                                                        ],
+                                                                      ));
                                                                       clearCtrl();
                                                                       Get.back();
                                                                       fstoreCtrl.deleteAllColl(
@@ -324,33 +439,41 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                                           "تم ارسال الطلب",
                                                                           snackPosition:
                                                                               SnackPosition.BOTTOM);
-                                                
+
                                                                       break;
                                                                     case 2:
-                                                                      await fstoreCtrl.addOrder(CartModel(
-                                                                          foodResturantId:
-                                                                              ridCtrl
-                                                                                  .text,
-                                                                          oPHone: int.tryParse(orderPhoneCtrl
-                                                                              .text),
-                                                                          oAddress:
-                                                                              orderAddressCtrl.text,
-                                                                          cartItems: [
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl.text,
-                                                                              ffoodResturantID:
-                                                                                  ridCtrl.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl1.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl1.text
-                                                                            }
-                                                                          ]));
+                                                                      await fstoreCtrl
+                                                                          .addOrder(
+                                                                              CartModel(
+                                                                        foodResturantId:
+                                                                            ridCtrl.text,
+                                                                        foodResturantName:
+                                                                            rNameCtrl.text,
+                                                                        oTotalPrice:
+                                                                            oTotalPrice,
+                                                                        oPHone:
+                                                                            int.tryParse(orderPhoneCtrl.text),
+                                                                        oAddress:
+                                                                            orderAddressCtrl.text,
+                                                                        cartItems: [
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl1.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl1.text),
+                                                                          },
+                                                                          // {
+                                                                          //   ffoodName:
+                                                                          //       nCtrl1.text
+                                                                          // }
+                                                                        ],
+                                                                      ));
                                                                       clearCtrl();
                                                                       Get.back();
                                                                       fstoreCtrl.deleteAllColl(
@@ -362,37 +485,47 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                                           "تم ارسال الطلب",
                                                                           snackPosition:
                                                                               SnackPosition.BOTTOM);
-                                                
+
                                                                       break;
                                                                     case 3:
-                                                                      await fstoreCtrl.addOrder(CartModel(
-                                                                          foodResturantId:
-                                                                              ridCtrl
-                                                                                  .text,
-                                                                          oPHone: int.tryParse(orderPhoneCtrl
-                                                                              .text),
-                                                                          oAddress:
-                                                                              orderAddressCtrl.text,
-                                                                          cartItems: [
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl.text,
-                                                                              ffoodResturantID:
-                                                                                  ridCtrl.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl1.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl2.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl2.text
-                                                                            }
-                                                                          ]));
+                                                                      await fstoreCtrl
+                                                                          .addOrder(
+                                                                              CartModel(
+                                                                        foodResturantId:
+                                                                            ridCtrl.text,
+                                                                        foodResturantName:
+                                                                            rNameCtrl.text,
+                                                                        oTotalPrice:
+                                                                            oTotalPrice,
+                                                                        oPHone:
+                                                                            int.tryParse(orderPhoneCtrl.text),
+                                                                        oAddress:
+                                                                            orderAddressCtrl.text,
+                                                                        cartItems: [
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl1.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl1.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl2.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl2.text),
+                                                                          },
+                                                                          // {
+                                                                          //   ffoodName:
+                                                                          //       nCtrl2.text
+                                                                          // }
+                                                                        ],
+                                                                      ));
                                                                       clearCtrl();
                                                                       Get.back();
                                                                       fstoreCtrl.deleteAllColl(
@@ -406,38 +539,51 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                                               SnackPosition.BOTTOM);
                                                                       break;
                                                                     case 4:
-                                                                      await fstoreCtrl.addOrder(CartModel(
-                                                                          foodResturantId:
-                                                                              ridCtrl
-                                                                                  .text,
-                                                                          oPHone: int.tryParse(orderPhoneCtrl
-                                                                              .text),
-                                                                          oAddress:
-                                                                              orderAddressCtrl.text,
-                                                                          cartItems: [
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl.text,
-                                                                              ffoodResturantID:
-                                                                                  ridCtrl.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl1.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl2.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl3.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl3.text
-                                                                            }
-                                                                          ]));
+                                                                      await fstoreCtrl
+                                                                          .addOrder(
+                                                                              CartModel(
+                                                                        foodResturantId:
+                                                                            ridCtrl.text,
+                                                                        foodResturantName:
+                                                                            rNameCtrl.text,
+                                                                        oTotalPrice:
+                                                                            oTotalPrice,
+                                                                        oPHone:
+                                                                            int.tryParse(orderPhoneCtrl.text),
+                                                                        oAddress:
+                                                                            orderAddressCtrl.text,
+                                                                        cartItems: [
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl1.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl1.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl2.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl2.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl3.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl3.text),
+                                                                          },
+                                                                          // {
+                                                                          //   ffoodName:
+                                                                          //       nCtrl4.text
+                                                                          //       ,ffoodPrice:int.tryParse(pCtrl4.text),
+                                                                          // }
+                                                                        ],
+                                                                      ));
                                                                       clearCtrl();
                                                                       Get.back();
                                                                       fstoreCtrl.deleteAllColl(
@@ -449,45 +595,59 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                                           "تم ارسال الطلب",
                                                                           snackPosition:
                                                                               SnackPosition.BOTTOM);
-                                                
+
                                                                       break;
                                                                     case 5:
-                                                                      await fstoreCtrl.addOrder(CartModel(
-                                                                          foodResturantId:
-                                                                              ridCtrl
-                                                                                  .text,
-                                                                          oPHone: int.tryParse(orderPhoneCtrl
-                                                                              .text),
-                                                                          oAddress:
-                                                                              orderAddressCtrl.text,
-                                                                          cartItems: [
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl.text,
-                                                                              ffoodResturantID:
-                                                                                  ridCtrl.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl1.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl2.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl3.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl4.text
-                                                                            },
-                                                                            {
-                                                                              ffoodName:
-                                                                                  nCtrl4.text
-                                                                            }
-                                                                          ]));
+                                                                      await fstoreCtrl
+                                                                          .addOrder(
+                                                                              CartModel(
+                                                                        foodResturantId:
+                                                                            ridCtrl.text,
+                                                                        foodResturantName:
+                                                                            rNameCtrl.text,
+                                                                        oTotalPrice:
+                                                                            oTotalPrice,
+                                                                        oPHone:
+                                                                            int.tryParse(orderPhoneCtrl.text),
+                                                                        oAddress:
+                                                                            orderAddressCtrl.text,
+                                                                        cartItems: [
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl1.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl1.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl2.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl2.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl3.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl3.text),
+                                                                          },
+                                                                          {
+                                                                            ffoodName:
+                                                                                nCtrl4.text,
+                                                                            ffoodPrice:
+                                                                                int.tryParse(pCtrl4.text),
+                                                                          },
+                                                                          // {
+                                                                          //   ffoodName:
+                                                                          //       nCtrl4.text
+                                                                          // }
+                                                                        ],
+                                                                      ));
                                                                       clearCtrl();
                                                                       Get.back();
                                                                       fstoreCtrl.deleteAllColl(
@@ -505,9 +665,41 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                                 }
                                                               },
                                                             ),
-                                                            title: "تاكيد الطلب",
+                                                            title:
+                                                                "تاكيد الطلب",
                                                             content: Column(
                                                               children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceAround,
+                                                                  children: [
+                                                                    const TextUtils(
+                                                                        text:
+                                                                            "المبلغ المطلوب :",
+                                                                        fontsize:
+                                                                            20,
+                                                                        fontweight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        color:
+                                                                            mainColor,
+                                                                        underLine:
+                                                                            TextDecoration.none),
+                                                                    TextUtils(
+                                                                        text: oTotalPrice
+                                                                            .toString(),
+                                                                        fontsize:
+                                                                            20,
+                                                                        fontweight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        color:
+                                                                            mainColor,
+                                                                        underLine:
+                                                                            TextDecoration.none)
+                                                                  ],
+                                                                ),
                                                                 TextFormWdgt(
                                                                   controller:
                                                                       orderPhoneCtrl,

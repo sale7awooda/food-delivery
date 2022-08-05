@@ -21,10 +21,7 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
   // static String frestImg = 'catImg';
   // static String? frestID;
   var arguments = Get.arguments;
-  @override
-  void initState() {
-    super.initState();
-  }
+  RxInt counter = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -54,20 +51,24 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
                   fitWeb: BoxFitWeb.cover,
                 )),
             const SizedBox(height: 30),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                TextUtils(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const TextUtils(
                     text: "عداد الطلبات ",
                     fontsize: 25,
                     fontweight: FontWeight.bold,
                     color: mainColor,
                     underLine: TextDecoration.none),
-                Text("counter")
+                TextUtils(
+                    text: fstoreCtrl.ordersCount.toString(),
+                    fontsize: 25,
+                    fontweight: FontWeight.bold,
+                    color: mainColor,
+                    underLine: TextDecoration.none)
               ],
             ),
             const SizedBox(height: 20),
-            
-            
           ]),
     ));
   }

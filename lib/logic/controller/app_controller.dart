@@ -9,11 +9,11 @@ import 'package:orders/veiw/screens/user/settings.dart';
 class AppController extends GetxController {
   RxInt selectedIndex = 0.obs;
   final adminScreens =
-      [const HomeScreen(), MyOrdersScreen(), const SettingsScreen()].obs;
+      [const HomeScreen(), const MyOrdersScreen(), const SettingsScreen()].obs;
   RxInt selectedIndexResturant = 0.obs;
   final resturantScreens = [
     const RestHomeScreen(),
-    RestOrdersScreen(),
+    const RestOrdersScreen(),
     const RestSettingsScreen()
   ].obs;
   var restid=0;

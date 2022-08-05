@@ -10,15 +10,19 @@ class FoodModel {
   String? foodResturantID;
   String? foodID;
   int? foodPrice;
+  String? fResturantName;
+  String? fCategoryName;
   // bool? foodStatus = true;
   FoodModel({
     required this.foodResturantID,
     this.foodID,
+    required this.fResturantName,
     required this.foodCategID,
     required this.foodDetails,
     required this.foodImageURL,
     required this.foodName,
     required this.foodPrice,
+    required this.fCategoryName,
     
   });
 
@@ -31,6 +35,10 @@ class FoodModel {
       foodName: snap['foodName'],
       foodPrice: snap['foodPrice'],
       foodResturantID: snap['foodResturantID'],
+      fResturantName: snap['restName'],
+      fCategoryName: snap['catName'],
+
+      // static String fCategoryName = 'catName';
     );
     return foodModel;
   }
@@ -49,6 +57,8 @@ class FoodModel {
       foodName: data?['foodName'],
       foodPrice: data?['foodPrice'],
       foodResturantID: data?['foodResturantID'],
+      fResturantName: data?['restName'],
+      fCategoryName: data?['catName'],
     );
   }
   Map<String, dynamic> toFirestore() {
@@ -66,6 +76,7 @@ class FoodModel {
       'foodResturantID': foodResturantID,
       'foodID': foodID,
       'foodPrice': foodPrice,
+      'restName':fResturantName,
     };
   }
 
@@ -78,6 +89,8 @@ class FoodModel {
       foodResturantID: map['foodResturantID'],
       foodID: map['foodID'],
       foodPrice: map['foodPrice']?.toInt(),
+      fResturantName: map['restName'],
+      fCategoryName: map['catName'],
     );
   }
 

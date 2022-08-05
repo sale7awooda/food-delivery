@@ -7,7 +7,6 @@ import 'package:orders/veiw/widgets/user/resturants/all_resturants_btn.dart';
 import 'package:orders/veiw/widgets/user/categories/category.dart';
 // import 'package:orders/veiw/widgets/user/category_list.dart';
 import 'package:orders/veiw/widgets/user/most_oredered_wdgt.dart';
-import 'package:orders/veiw/widgets/user/search_box.dart';
 import 'package:orders/veiw/widgets/user/side_title.dart';
 import 'package:orders/veiw/widgets/user/welcome_text.dart';
 
@@ -37,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 10),
           const WelcomeText(),
           const SizedBox(height: 20),
-          const SearchBox(),
+         // const SearchBox(),
           const SizedBox(height: 20),
 
           categorieslist2(),

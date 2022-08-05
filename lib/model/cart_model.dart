@@ -12,10 +12,12 @@ String cartModelToMap(CartModel data) => json.encode(data.toMap());
 class CartModel {
   CartModel({
     this.ostatus,
-    required this.oPHone,
-    required this.oAddress,
-    required this.foodResturantId,
-    required this.cartItems,
+     this.oPHone,
+     this.oAddress,
+     this.foodResturantId,
+     this.cartItems,
+    this.oTotalPrice,
+     this.foodResturantName
   });
 
   String? ostatus;
@@ -23,6 +25,8 @@ class CartModel {
   String? oAddress;
   String? foodResturantId;
   List<dynamic>? cartItems;
+  int? oTotalPrice;
+  String? foodResturantName;
 
   factory CartModel.fromMap(Map<String, dynamic> json) => CartModel(
         ostatus: json["ostatus"],
@@ -30,6 +34,8 @@ class CartModel {
         oAddress: json["oAddress"],
         foodResturantId: json["foodResturantID"],
         cartItems: List<dynamic>.from(json["cartItems"].map((x) => x)),
+        oTotalPrice: json["oTotalPrice"],
+        foodResturantName: json["foodResturantName"]
       );
 
   Map<String, dynamic> toMap() => {
@@ -38,6 +44,8 @@ class CartModel {
         "oAddress": oAddress,
         "quantity": foodResturantId,
         "cartItems": List<dynamic>.from(cartItems!.map((x) => x)),
+        "oTotalPrice":oTotalPrice,
+        "foodResturantName":foodResturantName
       };
 }
 

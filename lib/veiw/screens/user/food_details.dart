@@ -43,10 +43,13 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     String ffoodImg = 'foodImgUrl';
     String ffoodCategID = 'foodCategortID';
     String ffoodResturantID = 'foodResturantID';
+    String fResturantName = 'restName';
+    String fCategoryName = 'catName';
     String ffoodPrice = 'foodPrice';
 
     String ffoodID = argumnts[0];
-    return Scaffold(resizeToAvoidBottomInset: false,
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: mainColor,
           elevation: 0,
@@ -88,7 +91,11 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                       foodCategID: foodSnapshot[ffoodCategID],
                                       foodPrice: foodSnapshot[ffoodPrice],
                                       foodResturantID:
-                                          foodSnapshot[ffoodResturantID])),
+                                          foodSnapshot[ffoodResturantID],
+                                      fResturantName:
+                                          foodSnapshot[fResturantName],
+                                      fCategoryName:
+                                          foodSnapshot[fCategoryName])),
 
                               // Positioned(
                               //     left: 50,

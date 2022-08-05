@@ -1,7 +1,6 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:orders/logic/controller/app_controller.dart';
 import 'package:orders/logic/controller/auth_controller.dart';
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/screens/admin/manage_categories.dart';
@@ -140,7 +139,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
                 Expanded(
                   child: PageView(
-                    scrollDirection: Axis.vertical,
+                    scrollDirection: Axis.horizontal,
                     physics: const NeverScrollableScrollPhysics(),
                     controller: page,
                     children: [
@@ -151,7 +150,7 @@ class _AdminScreenState extends State<AdminScreen> {
                           color: Colors.white, child: const ManageCategories()),
                       Container(
                         color: Colors.white,
-                        child:  ManageOrders(),
+                        child:  const ManageOrders(),
                       ),
                       Container(
                         color: Colors.white,
