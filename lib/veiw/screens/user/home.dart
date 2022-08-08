@@ -29,15 +29,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 10),
           const WelcomeText(),
           const SizedBox(height: 20),
-         // const SearchBox(),
-          const SizedBox(height: 20),
+          // const SearchBox(),
+         // const SizedBox(height: 20),
+          const SideTitle(sTitle: "الاصناف المتاحه"),
 
           categorieslist2(),
 

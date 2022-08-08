@@ -15,7 +15,7 @@ class FirestoreController extends GetxController {
 
   static String fResturantName = 'restName';
   static String fResturantOwner = 'restOwner';
-  static String fResturantPass = 'restPass';
+  static String fResturantStatus = 'restStatus';
   static String fResturantLoc = 'resLoc';
   static String fResturantDetails = 'restDetail';
   static String fResturantImg = 'restImg';
@@ -44,8 +44,9 @@ class FirestoreController extends GetxController {
   RxInt pTotal = 0.obs;
   RxInt quantity = 0.obs;
   String restID = '';
+  // ignore: prefer_typing_uninitialized_variables
   var deleteDOC;
-  var ordersCount;
+  RxInt ordersCount = 0.obs;
 
   // int ordersCount = 0;
 
@@ -60,7 +61,7 @@ class FirestoreController extends GetxController {
     await restaurantCol.add({
       fResturantName: resturantModel.rname,
       fResturantOwner: resturantModel.rowner,
-      //fResturantPass: resturantModel.rpass,
+      fResturantStatus: resturantModel.rStatus,
       fResturantDetails: resturantModel.rdetial,
       fResturantLoc: resturantModel.rloc,
       fResturantImg: resturantModel.rimgURL,
@@ -83,7 +84,7 @@ class FirestoreController extends GetxController {
       ffoodImg: foodModel.foodImageURL,
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
-      fResturantName:foodModel.fResturantName,
+      fResturantName: foodModel.fResturantName,
       fCategoryName: foodModel.fCategoryName,
       ffoodPrice: foodModel.foodPrice,
       // ffoodStatus: foodModel.foodStatus,
@@ -99,8 +100,7 @@ class FirestoreController extends GetxController {
       ffoodResturantID: foodModel.foodResturantID,
       ffoodPrice: foodModel.foodPrice,
       ffoodID: foodModel.foodID,
-      fResturantName:foodModel.fResturantName,
-      
+      fResturantName: foodModel.fResturantName,
     });
   }
 
@@ -112,7 +112,7 @@ class FirestoreController extends GetxController {
       // ffoodPrice: cartModel.foodPrice,
       // ffoodID: cartModel.foodID,
       ffoodResturantID: cartModel.foodResturantId,
-      fResturantName:cartModel.foodResturantName,
+      fResturantName: cartModel.foodResturantName,
 
       ostatus: cartModel.ostatus,
       ffoPhone: cartModel.oPHone,
@@ -145,7 +145,7 @@ class FirestoreController extends GetxController {
     await restaurantCol.doc(doc.id).update({
       fResturantName: resturantModel.rname,
       fResturantOwner: resturantModel.rowner,
-      //  fResturantPass: resturantModel.rpass,
+      fResturantStatus: resturantModel.rStatus,
       fResturantDetails: resturantModel.rdetial,
       fResturantLoc: resturantModel.rloc,
       fResturantImg: resturantModel.rimgURL,
@@ -170,18 +170,17 @@ class FirestoreController extends GetxController {
       ffoodCategID: foodModel.foodCategID,
       ffoodResturantID: foodModel.foodResturantID,
       ffoodPrice: foodModel.foodPrice,
-      fResturantName:foodModel.fResturantName,
+      fResturantName: foodModel.fResturantName,
       fCategoryName: foodModel.fCategoryName,
       // ffoodStatus: foodModel.foodStatus,
       ffoodID: foodModel.foodID,
-      
     });
   }
 
   Future<void> updateOrder(DocumentSnapshot doc, CartModel cartModel) async {
     await orderCol.doc(doc.id).update({
-     //  ffoodResturantID: cartModel.foodResturantId,
-     ostatus: cartModel.ostatus,
+      //  ffoodResturantID: cartModel.foodResturantId,
+      ostatus: cartModel.ostatus,
       // ffoPhone: cartModel.oPHone,
       // ffoAddress: cartModel.oAddress,
       // ffoItems: FieldValue.arrayUnion(cartModel.cartItems!),

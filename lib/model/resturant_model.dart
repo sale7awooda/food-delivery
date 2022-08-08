@@ -2,7 +2,7 @@
 class ResturantModel {
 String? rname;
 String? rowner;
-//String? rpass;
+bool? rStatus;
 String? rloc;
 String? rdetial;
 String? rimgURL;
@@ -11,7 +11,7 @@ String? rID;
   ResturantModel({
     required this.rname,
     required this.rowner,
-   // required this.rpass,
+    this.rStatus,
     required this.rloc,
     required this.rdetial,
      this.rimgURL,
@@ -24,7 +24,7 @@ String? rID;
     return {
       'rname': rname,
       'rowner': rowner,
-    //  'rpass': rpass,
+      'rstatus': rStatus,
       'rloc': rloc,
       'rdetial': rdetial,
       'rimg': rimgURL!,

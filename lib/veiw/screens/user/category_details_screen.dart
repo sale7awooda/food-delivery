@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orders/routes/routes.dart';
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
-import 'package:orders/veiw/widgets/user/search_box.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt2.dart';
 
 import '../../../logic/controller/firestore_controller.dart';
 
@@ -58,7 +57,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         body: Column(
           children: [
             const SizedBox(height: 20),
-            const SearchBox(),
+           // const SearchBox(),
             const SizedBox(height: 20),
             Expanded(
               child: StreamBuilder(
@@ -109,7 +108,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                                   ]
                                 );
                                       },
-                                      child: ResurantWdgt(
+                                      child: ResurantWdgt2(
                                         title: streamSnapshot.data!.docs[index]
                                             [ffoodName],
                                         subtitle: streamSnapshot

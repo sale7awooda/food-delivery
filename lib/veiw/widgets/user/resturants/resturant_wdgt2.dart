@@ -5,8 +5,8 @@ import 'package:image_network/image_network.dart';
 
 import 'package:orders/utils/theme.dart';
 
-class ResurantWdgt extends StatelessWidget {
-  ResurantWdgt({
+class ResurantWdgt2 extends StatelessWidget {
+  ResurantWdgt2({
     Key? key,
     required this.title,
     required this.subtitle,
@@ -68,22 +68,21 @@ class ResurantWdgt extends StatelessWidget {
                 //   width: 15,
                 // ),
               ),
-              Positioned(right: 10,top: 10,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: 
-                      // rStatus == null
-                      //     ? Colors.yellow
-                      //     : (
-                            rStatus!  ? Colors.green : redClr
-                            // )
-                            ,
-                      borderRadius: BorderRadius.circular(15)
-                      ),
-                  height: 20,
-                  width: 20,
-                ),
-              )
+              // Positioned(right: 10,top: 10,
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //         color: 
+              //         // rStatus == null
+              //         //     ? Colors.yellow
+              //         //     : (
+              //               rStatus!  ? Colors.green : redClr
+              //               // )
+              //               ,
+              //         borderRadius: BorderRadius.circular(15)),
+              //     height: 20,
+              //     width: 20,
+              //   ),
+              // )
             ]),
       ),
     );

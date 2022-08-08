@@ -38,7 +38,7 @@ class _ManageResturantsState extends State<ManageResturants> {
   DocumentSnapshot? rID;
   static String fResturantName = 'restName';
   static String fResturantOwner = 'restOwner';
-  static String fResturantPass = 'restPass';
+  static String fResturantStatus = 'restStatus';
   static String fResturantLoc = 'resLoc';
   static String fResturantDetails = 'restDetail';
   static String imgREF = 'resturants';
@@ -48,7 +48,7 @@ class _ManageResturantsState extends State<ManageResturants> {
 
   final rnameCtrl = TextEditingController();
   final rOwnerCtrl = TextEditingController();
-  //final rPassCtrl = TextEditingController();
+  final rStatusCtrl = TextEditingController();
   final rLocationCtrl = TextEditingController();
   final rImageCtrl = TextEditingController();
   final rDetailsCtrl = TextEditingController();
@@ -56,7 +56,7 @@ class _ManageResturantsState extends State<ManageResturants> {
   clear() {
     rnameCtrl.clear();
     rOwnerCtrl.clear();
-    //rPassCtrl.clear();
+    rStatusCtrl.clear();
     rDetailsCtrl.clear();
     rLocationCtrl.clear();
     rImageCtrl.clear();
@@ -141,6 +141,8 @@ class _ManageResturantsState extends State<ManageResturants> {
                                               fResturantDetails],
                                           imgUrl:
                                               resturantSnapshot[fResturantImg],
+                                          rStatus: resturantSnapshot[fResturantStatus],
+                                          
                                         ),
                                       ),
                                     );
@@ -250,8 +252,7 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                                 .value.text,
                                                             rowner: rOwnerCtrl
                                                                 .value.text,
-                                                            // rpass: rPassCtrl
-                                                            //     .value.text,
+                                                            rStatus: true,
                                                             rloc: rLocationCtrl
                                                                 .value.text,
                                                             rdetial:
@@ -328,7 +329,7 @@ class _ManageResturantsState extends State<ManageResturants> {
                                                               .value.text,
                                                           rowner: rOwnerCtrl
                                                               .value.text,
-                                                          // rpass: rPassCtrl
+                                                          // rStatus: rStatusCtrl
                                                           //     .value.text,
                                                           rloc: rLocationCtrl
                                                               .value.text,

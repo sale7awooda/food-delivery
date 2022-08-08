@@ -6,7 +6,7 @@ import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/model/category_model.dart';
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/widgets/admin/text_form_wdgt.dart';
-import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt2.dart';
 
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 
@@ -117,7 +117,7 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                           cImageCtrl.text = categorySnapshot[
                                               fCategoryImg];
                                         },
-                                        child: ResurantWdgt(
+                                        child: ResurantWdgt2(
                                           title:
                                               categorySnapshot[fCategoryName],
                                           subtitle: categorySnapshot[

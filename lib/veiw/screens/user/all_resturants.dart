@@ -5,7 +5,7 @@ import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/routes/routes.dart';
 
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt2.dart';
 
 
 class AllResturantsScreen extends StatefulWidget {
@@ -81,7 +81,7 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
 
                                           
                                         },
-                                        child: ResurantWdgt(
+                                        child: ResurantWdgt2(
                                           title:
                                               resturantSnapshot[fResturantName],
                                           subtitle: resturantSnapshot[

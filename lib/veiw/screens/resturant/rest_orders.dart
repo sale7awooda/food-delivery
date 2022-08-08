@@ -92,7 +92,8 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
     // int pcount=0;
     // DocumentSnapshot<Object?>? ordersList;
     List<dynamic> items = [];
-    DocumentSnapshot docID;
+    // ignore: prefer_typing_uninitialized_variables
+    //var docID;
 
     return SafeArea(
       child: Scaffold(
@@ -117,11 +118,11 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
                           itemBuilder: (context, index) {
                             final DocumentSnapshot ordersSnapshot =
                                 streamSnapshot.data!.docs[index];
-                            docID = ordersSnapshot;
+                           // docID = ordersSnapshot;
                             // int selector =
                             //     streamSnapshot.data!.docs.length;
                             items = List.from(ordersSnapshot['oItems']);
-                            fstoreCtrl.ordersCount=items.length.obs ;
+                            fstoreCtrl.ordersCount.value=items.length ;
                             switch (items.length) {
                               case 1:
                                 item1 = items[0]["foodName"];
@@ -274,7 +275,7 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
                                         confirm: ButtonWdgt(
                                             text: "قبول",
                                             onPress: () {
-                                              fstoreCtrl.updateOrder(docID,
+                                              fstoreCtrl.updateOrder(ordersSnapshot,
                                                   CartModel(ostatus: 'true'));
                                               Get.back();
 
@@ -314,14 +315,11 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
                                         trailing: Container(
                                           decoration: BoxDecoration(
                                               color:
-                                                  ordersSnapshot['ostatus'] ==
-                                                          null
-                                                      ? Colors.yellow
-                                                      : (ordersSnapshot[
+                                                  ordersSnapshot[
                                                                   'ostatus'] ==
                                                               "true"
                                                           ? Colors.green
-                                                          : redClr),
+                                                          : redClr,
                                               borderRadius:
                                                   BorderRadius.circular(15)),
                                           height: 20,

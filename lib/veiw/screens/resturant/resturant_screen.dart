@@ -24,7 +24,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   @override
   Widget build(BuildContext context) {
     var restID = arguments[0];
-     return Obx(() {
+    // return Obx(() {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainColor,
@@ -58,6 +58,6 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
             // BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Close"),
           ]),
     );
-     });
+   //  });
   }
 }

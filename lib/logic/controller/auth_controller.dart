@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -87,6 +89,10 @@ class AuthController extends GetxController {
     String restID = '';
     String restName = '';
     String restImg = '';
+     bool restStatus =true;   
+    String rloc='';
+    String rdetial='';
+    var dDoc;
     try {
       await auth
           .signInWithEmailAndPassword(email: emailAddress, password: password)
@@ -101,8 +107,13 @@ class AuthController extends GetxController {
         for (var doc in querySnapshot.docs) {
           chechEmail = doc["restOwner"];
           restID = doc.id;
+
           restName = doc["restName"];
           restImg = doc["restImg"];
+          restStatus = doc["restStatus"];
+          rloc=doc["resLoc"];
+          rdetial=doc["restDetail"];
+          dDoc = doc;
           //print(loginEmail+" loginEmail");
           // print(doc.id);
         }
@@ -114,7 +125,7 @@ class AuthController extends GetxController {
         displayUsername = "Admin";
       } else if (emailAddress == chechEmail) {
         Get.offAllNamed(Routes.resturantsScreen,
-            arguments: [restID, restName, restImg]);
+            arguments: [restID, restName, restImg, restStatus, dDoc,rloc,rdetial,chechEmail]);
       } else {
         Get.offAllNamed(
           Routes.userScreen,
@@ -163,6 +174,12 @@ class AuthController extends GetxController {
     String restID = '';
     String restName = '';
     String restImg = '';
+    bool restStatus =true;   
+    String rloc='';
+    String rdetial='';
+    
+    
+    var dDoc;
     try {
       // ignore: unused_local_variable
       final GoogleSignInAccount? googleUser = await googleSign.signIn();
@@ -181,6 +198,11 @@ class AuthController extends GetxController {
           restID = doc.id;
           restName = doc["restName"];
           restImg = doc["restImg"];
+          restStatus = doc["restStatus"];
+          rloc=doc["resLoc"];
+          rdetial=doc["restDetail"];
+          dDoc = doc;
+
           //print(loginEmail+" loginEmail");
           // print(doc.id);
         }
@@ -193,7 +215,7 @@ class AuthController extends GetxController {
         Get.offNamed(Routes.adminScreen);
       } else if (loginEmail == chechEmail) {
         Get.offAllNamed(Routes.resturantsScreen,
-            arguments: [restID, restName, restImg]);
+            arguments: [restID, restName, restImg, restStatus, dDoc,rloc,rdetial,chechEmail]);
       } else {
         Get.offNamed(Routes.userScreen);
       }
