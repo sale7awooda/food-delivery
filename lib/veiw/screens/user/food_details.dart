@@ -1,9 +1,9 @@
 // ignore_for_file: unused_local_variable, must_be_immutable
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_network/image_network.dart';
 
 import 'package:orders/logic/controller/auth_controller.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
@@ -155,14 +155,30 @@ class FoodDtlsWdgt extends StatelessWidget {
           const SizedBox(height: 10),
           Center(
               child: Stack(children: [
-            ImageNetwork(
-              image: ffoodImgURL,
+
+                CachedNetworkImage(
+              width: 250 ,
               height: 250,
-              width: 250,
-              fitAndroidIos: BoxFit.cover,
-              fitWeb: BoxFitWeb.cover,
-            )
-          ])),
+              fit: BoxFit.cover,colorBlendMode: BlendMode.clear,
+              
+              imageUrl: ffoodImgURL,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+              errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+                size: 120,
+                color: Colors.red,
+              ),
+            ),
+            // ImageNetwork(
+            //   image: ffoodImgURL,
+            //   height: 250,
+            //   width: 250,
+            //   fitAndroidIos: BoxFit.cover,
+            //   fitWeb: BoxFitWeb.cover,
+            // )
+          ])
+          ),
           const SizedBox(height: 20),
           TextUtils(
               text: ffoodName,
@@ -185,9 +201,10 @@ class FoodDtlsWdgt extends StatelessWidget {
               text: "اضف للسلة",
               onPress: () {
                 fstoreCtrl.addFoodToCart(foodModel, cartid);
+                Get.back();
                 Get.snackbar("إضافه عنصر", "تمت الإضافة بنجاح",
                     snackPosition: SnackPosition.BOTTOM,
-                    duration: const Duration(seconds: 2));
+                    duration: const Duration(seconds: 1));
                 //Get.toNamed(Routes.myordersScreen, arguments: []);
                 // print(authctrl.displayUsername.toString());
               }),

@@ -1,5 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:image_network/image_network.dart';
 import 'package:orders/utils/theme.dart';
 
 class CartItemCard extends StatelessWidget {
@@ -50,15 +50,28 @@ class CartItemCard extends StatelessWidget {
               )
             ],
           ),
-          
-          ImageNetwork(
-            image: ffoodImg!,
-            // imgUrl!,
-            height: 70,
-            width: 70,
-            fitAndroidIos: BoxFit.cover,
-            fitWeb: BoxFitWeb.cover,
-          ),
+          CachedNetworkImage(
+              width: 70,
+              height: 70,
+              fit: BoxFit.cover,colorBlendMode: BlendMode.clear,
+              
+              imageUrl: ffoodImg!,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+              errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+                size: 75,
+                color: Colors.red,
+              ),
+            ),
+          // ImageNetwork(
+          //   image: ffoodImg!,
+          //   // imgUrl!,
+          //   height: 70,
+          //   width: 70,
+          //   fitAndroidIos: BoxFit.cover,
+          //   fitWeb: BoxFitWeb.cover,
+          // ),
           // IconButton(
           //           onPressed: () {
           //            ()=> removefrmCart!;

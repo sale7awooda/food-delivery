@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 // To parse this JSON data, do
 //
 //     final cartModel = cartModelFromMap(jsonString);
@@ -10,80 +9,69 @@ CartModel cartModelFromMap(String str) => CartModel.fromMap(json.decode(str));
 String cartModelToMap(CartModel data) => json.encode(data.toMap());
 
 class CartModel {
-  CartModel({
-    this.ostatus,
-     this.oPHone,
-     this.oAddress,
-     this.foodResturantId,
-     this.cartItems,
-    this.oTotalPrice,
-     this.foodResturantName
-  });
+  CartModel(
+      {this.ostatus,
+      this.oPHone,
+      this.oAddress,
+      this.foodResturantId,
+      this.cartItems,
+      this.oTotalPrice,
+      this.oName,
+      this.foodResturantName});
 
   String? ostatus;
   int? oPHone;
   String? oAddress;
+  String? oName;
   String? foodResturantId;
   List<dynamic>? cartItems;
   int? oTotalPrice;
   String? foodResturantName;
 
   factory CartModel.fromMap(Map<String, dynamic> json) => CartModel(
-        ostatus: json["ostatus"],
-        oPHone: json["oPHone"],
-        oAddress: json["oAddress"],
-        foodResturantId: json["foodResturantID"],
-        cartItems: List<dynamic>.from(json["cartItems"].map((x) => x)),
-        oTotalPrice: json["oTotalPrice"],
-        foodResturantName: json["foodResturantName"]
-      );
+      ostatus: json["ostatus"],
+      oPHone: json["oPHone"],
+      oAddress: json["oAddress"],
+      oName: json["oName"],
+      foodResturantId: json["foodResturantID"],
+      cartItems: List<dynamic>.from(json["cartItems"].map((x) => x)),
+      oTotalPrice: json["oTotalPrice"],
+      foodResturantName: json["foodResturantName"]);
 
   Map<String, dynamic> toMap() => {
         "ostatus": ostatus,
         "oPHone": oPHone,
         "oAddress": oAddress,
+        "oName":oName,
         "quantity": foodResturantId,
         "cartItems": List<dynamic>.from(cartItems!.map((x) => x)),
-        "oTotalPrice":oTotalPrice,
-        "foodResturantName":foodResturantName
+        "oTotalPrice": oTotalPrice,
+        "foodResturantName": foodResturantName
       };
 }
 
 class CartItemClass {
   CartItemClass({
     required this.ffoodName,
-    
     required this.foodId,
     required this.foodPrice,
-    
-    
   });
 
   String ffoodName;
 
   String foodId;
   int foodPrice;
-  
-  
 
   factory CartItemClass.fromMap(Map<String, dynamic> json) => CartItemClass(
         ffoodName: json["ffoodName"],
-        
-        
         foodId: json["foodID"],
         foodPrice: json["foodPrice"],
-       
-        
       );
 
   Map<String, dynamic> toMap() => {
         "ffoodName": ffoodName,
-        
-    
         "foodID": foodId,
         "foodPrice": foodPrice,
-       
-      
       };
 }
 

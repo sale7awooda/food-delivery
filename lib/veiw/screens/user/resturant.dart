@@ -113,6 +113,8 @@ class _ResturantState extends State<Resturant> {
                                       title: foodSnapshot[ffoodName],
                                       subtitle: foodSnapshot[ffoodDetails],
                                       imgUrl: foodSnapshot[ffoodImgURL],
+                                       price: streamSnapshot.data!.docs[index]
+                                            [ffoodPrice].toString(),
                                     ),
                                   ),
                                 );

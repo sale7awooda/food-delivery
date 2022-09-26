@@ -1,7 +1,7 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:image_network/image_network.dart';
 
 import 'package:orders/utils/theme.dart';
 
@@ -12,12 +12,14 @@ class ResurantWdgt2 extends StatelessWidget {
     required this.subtitle,
     this.imgUrl,
     this.rStatus,
+    this.price,
   }) : super(key: key);
 
   final String? title;
   final String? subtitle;
   final String? imgUrl;
   final bool? rStatus;
+  final String? price;
   final _random = Random();
 
   @override
@@ -35,14 +37,31 @@ class ResurantWdgt2 extends StatelessWidget {
         child: Stack(alignment: Alignment.center, //fit: StackFit.loose,
             children: [
               Positioned(
-                  left: 0,
-                  child: ImageNetwork(
-                    image: imgUrl!,
-                    height: 90,
-                    width: 90,
-                    fitAndroidIos: BoxFit.cover,
-                    fitWeb: BoxFitWeb.cover,
-                  )),
+                left: 0,
+                child: CachedNetworkImage(
+                  width: 90,
+                  height: 90,
+                  fit: BoxFit.contain,
+                  colorBlendMode: BlendMode.clear,
+                  imageUrl: imgUrl!,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress)),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                    size: 75,
+                    color: Colors.red,
+                  ),
+                ),
+                //  ImageNetwork(
+                //   image: imgUrl!,
+                //   height: 90,
+                //   width: 90,
+                //   fitAndroidIos: BoxFit.cover,
+                //   fitWeb: BoxFitWeb.cover,
+                // ),
+              ),
 
               // Image.asset(
               //   "images/groceries.png",
@@ -50,7 +69,7 @@ class ResurantWdgt2 extends StatelessWidget {
               //   height: 100,
               // )),
               ListTile(
-                contentPadding: const EdgeInsets.all(25),
+                contentPadding: const EdgeInsets.all(10),
                 // tileColor: mainColor,
                 // trailing: Image.asset(imgUrl!),
                 title: Text(title!,
@@ -60,6 +79,10 @@ class ResurantWdgt2 extends StatelessWidget {
                 subtitle: Text(subtitle!,
                     // textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.white)),
+                leading: CircleAvatar(
+                    child: Text(price!,
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold))),
                 //         leading: Container(
                 //   decoration: BoxDecoration(
                 //       color:rStatus == null ? Colors.yellow :(rStatus == "true" ? Colors.green : redClr),
@@ -71,7 +94,7 @@ class ResurantWdgt2 extends StatelessWidget {
               // Positioned(right: 10,top: 10,
               //   child: Container(
               //     decoration: BoxDecoration(
-              //         color: 
+              //         color:
               //         // rStatus == null
               //         //     ? Colors.yellow
               //         //     : (

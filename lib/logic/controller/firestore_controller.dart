@@ -38,6 +38,7 @@ class FirestoreController extends GetxController {
   static String ostatus = 'ostatus';
   static String ffoPhone = 'oPhone';
   static String ffoAddress = 'oAddress';
+  static String ffoName = 'oName';
   static String ffoItems = 'oItems';
   static String oTotalPrice = 'oTotalPrice';
   String? itemIMG;
@@ -47,6 +48,10 @@ class FirestoreController extends GetxController {
   // ignore: prefer_typing_uninitialized_variables
   var deleteDOC;
   RxInt ordersCount = 0.obs;
+
+  RxInt numorders =0.obs;
+  RxInt numOKorders =0.obs;
+  
 
   // int ordersCount = 0;
 
@@ -117,6 +122,7 @@ class FirestoreController extends GetxController {
       ostatus: cartModel.ostatus,
       ffoPhone: cartModel.oPHone,
       ffoAddress: cartModel.oAddress,
+      ffoName:cartModel.oName,
       ffoItems: FieldValue.arrayUnion(cartModel.cartItems!),
       oTotalPrice: cartModel.oTotalPrice,
       //cartModel.cartItems//{"key":"value"}

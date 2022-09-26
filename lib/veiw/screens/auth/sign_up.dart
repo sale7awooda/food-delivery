@@ -24,13 +24,11 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-          backgroundColor: lightGreyclr,
-          elevation: 0),
+        child: Scaffold(resizeToAvoidBottomInset: true,
+      appBar: AppBar(backgroundColor: lightGreyclr, elevation: 0),
       backgroundColor: lightGreyclr,
       body: SingleChildScrollView(
-        child: Column(
+        child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height / 1.3,
@@ -42,20 +40,19 @@ class SignUp extends StatelessWidget {
                   child: Column(
                     children: [
                       Row(
-                        children: const[
-                           TextUtils(
+                        children: const [
+                          TextUtils(
                               text: "تسجيل",
                               fontsize: 28,
                               fontweight: FontWeight.bold,
                               color: mainColor,
                               underLine: TextDecoration.none),
-                           SizedBox(width: 3),
+                          SizedBox(width: 3),
                           TextUtils(
                               text: "حساب",
                               fontsize: 28,
                               fontweight: FontWeight.bold,
-                              color:
-                                  redClr,
+                              color: redClr,
                               underLine: TextDecoration.none)
                         ],
                       ),
@@ -77,10 +74,10 @@ class SignUp extends StatelessWidget {
                         },
                         //hintText: "اسم المستخدم",
                         prefixIcon: const Icon(
-                                Icons.person,
-                                color: mainColor,
-                                size: 30,
-                              ),
+                          Icons.person,
+                          color: mainColor,
+                          size: 30,
+                        ),
                         suffixIcon: const Text(""),
                       ),
                       //email
@@ -95,12 +92,12 @@ class SignUp extends StatelessWidget {
                             return null;
                           }
                         },
-                       // hintText: "البريد الإلكتروني",
+                        // hintText: "البريد الإلكتروني",
                         prefixIcon: const Icon(
-                                Icons.email,
-                                color: mainColor,
-                                size: 30,
-                              ),
+                          Icons.email,
+                          color: mainColor,
+                          size: 30,
+                        ),
                         suffixIcon: const Text(""),
                       ),
                       //password
@@ -117,11 +114,11 @@ class SignUp extends StatelessWidget {
                             }
                           },
                           //hintText: "كلمه المرور",
-                          prefixIcon:const Icon(
-                                  Icons.lock,
-                                  color: mainColor,
-                                  size: 30,
-                                ),
+                          prefixIcon: const Icon(
+                            Icons.lock,
+                            color: mainColor,
+                            size: 30,
+                          ),
                           suffixIcon: IconButton(
                               onPressed: () {
                                 controller.visibility();
@@ -134,15 +131,16 @@ class SignUp extends StatelessWidget {
                         );
                       }),
                       const SizedBox(
-                        height: 30,
+                        height: 15,
                       ),
                       CheckBoxWidget(),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
                       GetBuilder<AuthController>(builder: (_) {
                         return AuthButton(
                           onPress: () {
                             if (controller.ischecked == false) {
-                              String message = "يجب الموافقه على الشروط والاتفاقيات";
+                              String message =
+                                  "يجب الموافقه على الشروط والاتفاقيات";
                               Get.snackbar(
                                 "خطأ !",
                                 message,

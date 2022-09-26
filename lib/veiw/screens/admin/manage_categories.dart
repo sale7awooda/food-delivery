@@ -1,12 +1,15 @@
+import 'dart:math';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_network/image_network.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/model/category_model.dart';
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/widgets/admin/text_form_wdgt.dart';
-import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt2.dart';
 
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 
@@ -33,8 +36,12 @@ class _ManageCategoriesState extends State<ManageCategories> {
   static String fCategoryImg = 'catImg';
   static String imgREF = 'category';
 
+  String fImagePreview = '';
+  final _random = Random();
+
   // ignore: unused_field
-  static String? fCategoryID ;
+  static String? fCategoryID;
+  bool picIsLoaded = false;
 
   final cnameCtrl = TextEditingController();
 
@@ -47,6 +54,7 @@ class _ManageCategoriesState extends State<ManageCategories> {
     cDetailsCtrl.clear();
     cIDCtrl.clear();
     cImageCtrl.clear();
+    picIsLoaded = false;
   }
 
   @override
@@ -106,6 +114,8 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                             cID = categorySnapshot;
                                             fCategoryID = streamSnapshot
                                                 .data!.docs[index].id;
+                                            fImagePreview =
+                                                categorySnapshot[fCategoryImg];
                                             //print(fCategoryID);
                                           });
 
@@ -114,17 +124,61 @@ class _ManageCategoriesState extends State<ManageCategories> {
 
                                           cDetailsCtrl.text = categorySnapshot[
                                               fCategoryDetails];
-                                          cImageCtrl.text = categorySnapshot[
-                                              fCategoryImg];
+                                          cImageCtrl.text =
+                                              categorySnapshot[fCategoryImg];
                                         },
-                                        child: ResurantWdgt2(
-                                          title:
-                                              categorySnapshot[fCategoryName],
-                                          subtitle: categorySnapshot[
-                                              fCategoryDetails],
-                                          imgUrl:
-                                              categorySnapshot[fCategoryImg],
-                                        ),
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              child: Container(
+                                                //height: 200,width: 250,
+                                                constraints:
+                                                    const BoxConstraints(
+                                                        //maxHeight: 150,
+                                                        ),
+                                                color: Colors.primaries[
+                                                        _random.nextInt(Colors
+                                                            .primaries.length)]
+                                                    [_random.nextInt(9) * 100],
+
+                                                child: Stack(
+                                                    alignment: Alignment
+                                                        .center, //fit: StackFit.loose,
+                                                    children: [
+                                                      ListTile(
+                                                        contentPadding:
+                                                            const EdgeInsets
+                                                                .all(20),
+                                                        title: Text(
+                                                            categorySnapshot[
+                                                                fCategoryName],
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    mainColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        subtitle: Text(
+                                                            categorySnapshot[
+                                                                fCategoryDetails],
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .white)),
+                                                      )
+                                                    ]),
+                                              ),
+                                            )),
+                                        // ResurantWdgt3(
+                                        //   title:
+                                        //       categorySnapshot[fCategoryName],
+                                        //   subtitle: categorySnapshot[
+                                        //       fCategoryDetails],
+                                        //   imgUrl:
+                                        //       categorySnapshot[fCategoryImg],
+                                        // ),
                                       ),
                                     );
                                   });
@@ -133,7 +187,36 @@ class _ManageCategoriesState extends State<ManageCategories> {
                           child: CircularProgressIndicator(),
                         );
                       }),
-                )
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(35),
+                  child: Card(
+                      color: lightGreyclr,
+                      child: AbsorbPointer(
+                        child: ImageNetwork(
+                          key: ValueKey(fImagePreview),
+                          image: fImagePreview,
+                          imageCache: CachedNetworkImageProvider(fImagePreview),
+                          height: 150,
+                          width: 120,
+                          duration: 1200,
+                          curve: Curves.easeIn,
+                          // onPointer: false,
+                          debugPrint: false,
+                          fullScreen: false,
+                          fitAndroidIos: BoxFit.cover,
+                          fitWeb: BoxFitWeb.contain,
+                          //borderRadius: BorderRadius.circular(70),
+                          onLoading: const CircularProgressIndicator(
+                            color: Colors.indigoAccent,
+                          ),
+                          onError: const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                          ),
+                        ),
+                      )),
+                ),
               ],
             ),
           ),
@@ -178,43 +261,63 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                           IconButton(
-                                              onPressed: () async {
-                                                final fpicker = await FilePicker
-                                                    .platform
-                                                    .pickFiles(
-                                                  allowMultiple: false,
-                                                  type: FileType.image,
-                                                  //     allowedExtensions: [
-                                                  //   'jpg, png'
-                                                  // ]
-                                                );
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: picIsLoaded
+                                                        ? Colors.green
+                                                        : Colors.red,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12)),
+                                                height: 15,
+                                                width: 15,
+                                              ),
+                                              const SizedBox(width: 10),
+                                              IconButton(
+                                                  onPressed: () async {
+                                                    final fpicker =
+                                                        await FilePicker
+                                                            .platform
+                                                            .pickFiles(
+                                                      allowMultiple: false,
+                                                      type: FileType.image,
+                                                      //     allowedExtensions: [
+                                                      //   'jpg, png'
+                                                      // ]
+                                                    );
 
-                                                if (fpicker == null) {
-                                                  Get.snackbar("Error",
-                                                      "No Image Was Selected !!!");
-                                                }
-                                                if (fpicker != null) {
-                                                  fstoreCtrl
+                                                    if (fpicker == null) {
+                                                      Get.snackbar("Error",
+                                                          "No Image Was Selected !!!");
+                                                    }
+                                                    if (fpicker != null) {
+                                                      fstoreCtrl
                                                           .uploadImage(
                                                               fpicker
                                                                   .files.first,
                                                               imgREF)
                                                           .then(
-                                                    (value) {
-                                                      //print(value);
-                                                      setState(() {
-                                                        cImageCtrl.text = value;
-                                                      });
-                                                    },
-                                                  )
-                                                      ;
-                                                }
-                                              },
-                                              icon: const Icon(
-                                                Icons.image_outlined,
-                                                size: 20,
-                                              )),
+                                                        (value) {
+                                                          //print(value);
+                                                          setState(() {
+                                                            cImageCtrl.text =
+                                                                value;
+                                                            picIsLoaded = true;
+                                                          });
+                                                        },
+                                                      );
+                                                    }
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.image_outlined,
+                                                    size: 20,
+                                                  )),
+                                            ],
+                                          ),
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 10),
@@ -236,11 +339,12 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                             cdetial:
                                                                 cDetailsCtrl
                                                                     .value.text,
-                                                            cimgURL: cImageCtrl
-                                                                .text
+                                                            cimgURL:
+                                                                cImageCtrl.text
                                                             // rimg:"images/groceries.png"
                                                             ),
-                                                      );clear();
+                                                      );
+                                                      clear();
                                                       Get.snackbar("تنبية",
                                                           "تم الحفظ بنجاااح",
                                                           maxWidth: 400,
@@ -315,10 +419,12 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                             cdetial:
                                                                 cDetailsCtrl
                                                                     .value.text,
-                                                            cimgURL: cImageCtrl.value.text
+                                                            cimgURL: cImageCtrl
+                                                                .value.text
                                                             // rimg:"images/groceries.png"
                                                             ),
-                                                      );clear();
+                                                      );
+                                                      clear();
                                                       Get.snackbar("تعديل",
                                                           "تم التعديل بنجاااح",
                                                           maxWidth: 400,
@@ -339,17 +445,15 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                                       color: mainColor,
                                                       underLine:
                                                           TextDecoration.none),
-                                                
                                                 ),
                                               ],
                                             ),
                                           ),
-                                           AbsorbPointer(
+                                          AbsorbPointer(
                                             child: TextFormWdgt(
                                               controller: cImageCtrl,
                                               lable: const Text(
-                                                  "Resturant Image "),
-                                            
+                                                  "صوره المطعم  "),
                                               validator: (value) {
                                                 if (value.toString().isEmpty) {
                                                   return "الحقل لايجب ان يكون فارغ";
@@ -370,7 +474,6 @@ class _ManageCategoriesState extends State<ManageCategories> {
                                               }
                                             },
                                           ),
-                                         
                                           TextFormWdgt(
                                               controller: cDetailsCtrl,
                                               lable:

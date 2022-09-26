@@ -10,7 +10,7 @@ class AppController extends GetxController {
   RxInt selectedIndex = 0.obs;
   final adminScreens =
       [const HomeScreen(), const MyOrdersScreen(), const SettingsScreen()].obs;
-  RxInt selectedIndexResturant = 0.obs;
+  int selectedIndexResturant = 0;
   final resturantScreens = [
     const RestHomeScreen(),
     const RestOrdersScreen(),

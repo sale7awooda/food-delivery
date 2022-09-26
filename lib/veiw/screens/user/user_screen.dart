@@ -28,7 +28,7 @@ class _UserScreenState extends State<UserScreen> {
     
     return Obx(
       () {
-        return Scaffold(
+        return Scaffold( resizeToAvoidBottomInset: false,
             appBar: AppBar(
               backgroundColor: mainColor,
               elevation: 0,
@@ -38,6 +38,7 @@ class _UserScreenState extends State<UserScreen> {
               
             ),
             body: IndexedStack(
+              //key: ValueKey(controller.selectedIndex.value),
                 index: controller.selectedIndex.value,
                 // ignore: invalid_use_of_protected_member
                 children: controller.adminScreens.value),
@@ -50,11 +51,11 @@ class _UserScreenState extends State<UserScreen> {
                 // onItemTapped,
                 type: BottomNavigationBarType.fixed,
                 items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+                  BottomNavigationBarItem(icon: Icon(Icons.home), label: "الرئيسية"),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.shopping_cart), label: "Orders"),
+                      icon: Icon(Icons.shopping_cart), label: "الطلبات"),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.person), label: "SignOut"),
+                      icon: Icon(Icons.person), label: "خروج"),
                   // BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Close"),
                 ]),
           );

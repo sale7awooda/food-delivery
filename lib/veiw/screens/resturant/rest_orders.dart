@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/model/cart_model.dart';
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/user/buttun_wdgt.dart';
 // import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/veiw/widgets/user/text_utils.dart';
 
@@ -24,7 +23,7 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
   // final authctrl = Get.find<AuthController>();
   final fstoreCtrl = Get.find<FirestoreController>();
 
-  final _formKey = GlobalKey<FormState>();
+  //final _formKey = GlobalKey<FormState>();
 
   final String ffoodName = 'foodName';
 
@@ -41,15 +40,24 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
 
   final orderAddressCtrl = TextEditingController();
 
-  String? item1 = "item";
+  // String? item1 = "item";
 
-  String? item2 = "item";
+  // String? item2 = "item";
 
-  String? item3 = "item";
+  // String? item3 = "item";
 
-  String? item4 = "item";
+  // String? item4 = "item";
 
-  String? item5 = "item";
+  // String? item5 = "item";
+  final item1 = TextEditingController();
+
+  final item2 = TextEditingController();
+
+  final item3 = TextEditingController();
+
+  final item4 = TextEditingController();
+
+  final item5 = TextEditingController();
 
   bool v1 = false;
 
@@ -86,6 +94,14 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
     nCtrl5.clear();
   }
 
+  clearTxtCtrl() {
+    item1.clear();
+    item2.clear();
+    item3.clear();
+    item4.clear();
+    item5.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     //var cartID = authctrl.cartid;
@@ -98,85 +114,87 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Form(
-          key: _formKey,
-          child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('orders')
-                  .where('foodResturantID', isEqualTo: fstoreCtrl.restID)
-                  .snapshots(),
-              //initialData: initialData,
-              builder: (BuildContext context, AsyncSnapshot streamSnapshot) {
-                if (streamSnapshot.hasData) {
-                  return !streamSnapshot.hasData
-                      ? const Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          //controller: scrollctrl,
-                          itemCount: streamSnapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            final DocumentSnapshot ordersSnapshot =
-                                streamSnapshot.data!.docs[index];
-                           // docID = ordersSnapshot;
-                            // int selector =
-                            //     streamSnapshot.data!.docs.length;
-                            items = List.from(ordersSnapshot['oItems']);
-                            fstoreCtrl.ordersCount.value=items.length ;
-                            switch (items.length) {
-                              case 1:
-                                item1 = items[0]["foodName"];
-                                v1 = true;
-                                break;
-                              case 2:
-                                item1 = items[0]["foodName"];
-                                item2 = items[1]["foodName"];
-                                v1 = true;
-                                v2 = true;
-                                break;
-                              case 3:
-                                v1 = true;
-                                v2 = true;
-                                v3 = true;
-                                item1 = items[0]["foodName"];
-                                item2 = items[1]["foodName"];
-                                item3 = items[2]["foodName"];
-                                break;
-                              case 4:
-                                v1 = true;
-                                v2 = true;
-                                v3 = true;
-                                v4 = true;
-                                item1 = items[0]["foodName"];
-                                item2 = items[1]["foodName"];
-                                item3 = items[2]["foodName"];
-                                item4 = items[3]["foodName"];
-                                break;
-                              case 5:
-                                v1 = true;
-                                v2 = true;
-                                v3 = true;
-                                v4 = true;
-                                v5 = true;
-                                item1 = items[0]["foodName"];
-                                item2 = items[1]["foodName"];
-                                item3 = items[2]["foodName"];
-                                item4 = items[3]["foodName"];
-                                item5 = items[4]["foodName"];
-                                break;
-                              default:
-                            }
+        body: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('orders')
+                .where('foodResturantID', isEqualTo: fstoreCtrl.restID)
+                .snapshots(),
+            //initialData: initialData,
+            builder: (BuildContext context, AsyncSnapshot streamSnapshot) {
+              if (streamSnapshot.hasData) {
+                return !streamSnapshot.hasData
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        //controller: scrollctrl,
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot ordersSnapshot =
+                              streamSnapshot.data!.docs[index];
+                          // docID = ordersSnapshot;
+                          // int selector =
+                          //     streamSnapshot.data!.docs.length;
+                          // items = List.from(ordersSnapshot['oItems']);
+                          // fstoreCtrl.ordersCount.value = items.length;
+                          // switch (items.length) {
+                          //   case 1:
+                          //     item1.text = items[0]["foodName"];
+                          //     v1 = true;
+                          //     break;
+                          //   case 2:
+                          //     item1.text = items[0]["foodName"];
+                          //     item2.text = items[1]["foodName"];
+                          //     v1 = true;
+                          //     v2 = true;
+                          //     break;
+                          //   case 3:
+                          //     v1 = true;
+                          //     v2 = true;
+                          //     v3 = true;
+                          //     item1.text = items[0]["foodName"];
+                          //     item2.text = items[1]["foodName"];
+                          //     item3.text = items[2]["foodName"];
+                          //     break;
+                          //   case 4:
+                          //     v1 = true;
+                          //     v2 = true;
+                          //     v3 = true;
+                          //     v4 = true;
+                          //     item1.text = items[0]["foodName"];
+                          //     item2.text = items[1]["foodName"];
+                          //     item3.text = items[2]["foodName"];
+                          //     item4.text = items[3]["foodName"];
+                          //     break;
+                          //   case 5:
+                          //     v1 = true;
+                          //     v2 = true;
+                          //     v3 = true;
+                          //     v4 = true;
+                          //     v5 = true;
+                          //     item1.text = items[0]["foodName"];
+                          //     item2.text = items[1]["foodName"];
+                          //     item3.text = items[2]["foodName"];
+                          //     item4.text = items[3]["foodName"];
+                          //     item5.text = items[4]["foodName"];
+                          //     break;
+                          //   default:
+                          // }
 
-                            return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 40),
-                                child: InkWell(
+                          return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 30),
+                              child: InkWell(
                                   hoverColor: Colors.lightBlue[200],
                                   onTap: () {
+                                    items = List.from(ordersSnapshot['oItems']);
+                                    fstoreCtrl.ordersCount.value = items.length;
                                     setState(() {
+                                      //clearTxtCtrl();
                                       //print(ordersSnapshot);
                                       switch (items.length) {
                                         case 1:
+                                          item1.text = items[0]["foodName"];
                                           v1 = true;
                                           v2 = false;
                                           v3 = false;
@@ -185,6 +203,8 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
 
                                           break;
                                         case 2:
+                                          item1.text = items[0]["foodName"];
+                                          item2.text = items[1]["foodName"];
                                           v1 = true;
                                           v2 = true;
                                           v3 = false;
@@ -193,6 +213,9 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
 
                                           break;
                                         case 3:
+                                          item1.text = items[0]["foodName"];
+                                          item2.text = items[1]["foodName"];
+                                          item3.text = items[2]["foodName"];
                                           v1 = true;
                                           v2 = true;
                                           v3 = true;
@@ -201,6 +224,10 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
 
                                           break;
                                         case 4:
+                                          item1.text = items[0]["foodName"];
+                                          item2.text = items[1]["foodName"];
+                                          item3.text = items[2]["foodName"];
+                                          item4.text = items[3]["foodName"];
                                           v1 = true;
                                           v2 = true;
                                           v3 = true;
@@ -208,6 +235,11 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
                                           v5 = false;
                                           break;
                                         case 5:
+                                          item1.text = items[0]["foodName"];
+                                          item2.text = items[1]["foodName"];
+                                          item3.text = items[2]["foodName"];
+                                          item4.text = items[3]["foodName"];
+                                          item5.text = items[4]["foodName"];
                                           v1 = true;
                                           v2 = true;
                                           v3 = true;
@@ -218,124 +250,222 @@ class _RestOrdersScreenState extends State<RestOrdersScreen> {
                                         default:
                                       }
                                     });
-                                    Get.defaultDialog(
-                                        title: "تفاصيل الطلب ",
-                                        content: Column(
-                                          // crossAxisAlignment:
-                                          //     CrossAxisAlignment.center,
-                                          children: [
-                                            Visibility(
-                                                visible: v1,
-                                                child: TextUtils(
-                                                    text: item1!,
-                                                    fontsize: 20,
-                                                    fontweight: FontWeight.bold,
-                                                    color: mainColor,
-                                                    underLine:
-                                                        TextDecoration.none)),
-                                            Visibility(
-                                              visible: v2,
+
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            backgroundColor: lightGreyclr,
+                                            contentPadding:
+                                                const EdgeInsets.all(5),
+                                            scrollable: true,
+                                            title: const Center(
                                               child: TextUtils(
-                                                  text: item2!,
-                                                  fontsize: 20,
+                                                  text: "تفاصيل الطلب ",
+                                                  fontsize: 30,
                                                   fontweight: FontWeight.bold,
-                                                  color: mainColor,
+                                                  color: Colors.black,
                                                   underLine:
                                                       TextDecoration.none),
-                                            ),
-                                            Visibility(
-                                                visible: v3,
-                                                child: TextUtils(
-                                                    text: item3!,
-                                                    fontsize: 20,
-                                                    fontweight: FontWeight.bold,
-                                                    color: mainColor,
-                                                    underLine:
-                                                        TextDecoration.none)),
-                                            Visibility(
-                                                visible: v4,
-                                                child: TextUtils(
-                                                    text: item4!,
-                                                    fontsize: 20,
-                                                    fontweight: FontWeight.bold,
-                                                    color: mainColor,
-                                                    underLine:
-                                                        TextDecoration.none)),
-                                            Visibility(
-                                                visible: v5,
-                                                child: TextUtils(
-                                                    text: item5!,
-                                                    fontsize: 20,
-                                                    fontweight: FontWeight.bold,
-                                                    color: mainColor,
-                                                    underLine:
-                                                        TextDecoration.none)),
-                                          ],
-                                        ),
-                                        confirm: ButtonWdgt(
-                                            text: "قبول",
-                                            onPress: () {
-                                              fstoreCtrl.updateOrder(ordersSnapshot,
-                                                  CartModel(ostatus: 'true'));
-                                              Get.back();
+                                            ), // To display the title it is optional
+                                            content: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 40),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Visibility(
+                                                      visible: v1,
+                                                      child: TextUtils(
+                                                          text: item1.text,
+                                                          fontsize: 20,
+                                                          fontweight:
+                                                              FontWeight.bold,
+                                                          color: mainColor,
+                                                          underLine:
+                                                              TextDecoration
+                                                                  .none)),
+                                                  Visibility(
+                                                    visible: v2,
+                                                    child: TextUtils(
+                                                        text: item2.text,
+                                                        fontsize: 20,
+                                                        fontweight:
+                                                            FontWeight.bold,
+                                                        color: mainColor,
+                                                        underLine:
+                                                            TextDecoration
+                                                                .none),
+                                                  ),
+                                                  Visibility(
+                                                      visible: v3,
+                                                      child: TextUtils(
+                                                          text: item3.text,
+                                                          fontsize: 20,
+                                                          fontweight:
+                                                              FontWeight.bold,
+                                                          color: mainColor,
+                                                          underLine:
+                                                              TextDecoration
+                                                                  .none)),
+                                                  Visibility(
+                                                      visible: v4,
+                                                      child: TextUtils(
+                                                          text: item4.text,
+                                                          fontsize: 20,
+                                                          fontweight:
+                                                              FontWeight.bold,
+                                                          color: mainColor,
+                                                          underLine:
+                                                              TextDecoration
+                                                                  .none)),
+                                                  Visibility(
+                                                      visible: v5,
+                                                      child: TextUtils(
+                                                          text: item5.text,
+                                                          fontsize: 20,
+                                                          fontweight:
+                                                              FontWeight.bold,
+                                                          color: mainColor,
+                                                          underLine:
+                                                              TextDecoration
+                                                                  .none)),
+                                                ],
+                                              ),
+                                            ), // Message which will be pop up on the screen
 
-                                              // print(items);
-                                              // print(items.length);
-                                            }),
-                                        cancel: ButtonWdgt(
-                                            text: "رفض",
-                                            onPress: () {
-                                              fstoreCtrl.updateOrder(
-                                                  ordersSnapshot,
-                                                  CartModel(ostatus: 'false'));
-                                              Get.back();
-                                            }));
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      fstoreCtrl.updateOrder(
+                                                          ordersSnapshot,
+                                                          CartModel(
+                                                              ostatus:
+                                                                  'false'));
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text('رفض'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      fstoreCtrl.updateOrder(
+                                                          ordersSnapshot,
+                                                          CartModel(
+                                                              ostatus: 'true'));
+                                                      clearTxtCtrl();
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text('قبول'),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          );
+                                        });
                                   },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                        color: lightGreyclr,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Center(
-                                      child: ListTile(
-                                        title: TextUtils(
-                                            text:
-                                                "0${ordersSnapshot['oPhone']}",
-                                            fontsize: 25,
-                                            fontweight: FontWeight.normal,
-                                            color: mainColor,
-                                            underLine: TextDecoration.none),
-                                        subtitle: TextUtils(
-                                            text: ordersSnapshot['oAddress'],
-                                            fontsize: 20,
-                                            fontweight: FontWeight.normal,
-                                            color: mainColor,
-                                            underLine: TextDecoration.none),
-                                        trailing: Container(
-                                          decoration: BoxDecoration(
-                                              color:
-                                                  ordersSnapshot[
-                                                                  'ostatus'] ==
-                                                              "true"
-                                                          ? Colors.green
-                                                          : redClr,
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          height: 20,
-                                          width: 20,
+                                  child: Stack(
+                                    children: [
+                                      Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        elevation: 10,
+                                        shadowColor: Colors.black38,
+                                        child: ListTile(
+                                          contentPadding:
+                                              const EdgeInsets.all(25),
+                                          title: TextUtils(
+                                              text:
+                                                  "0${ordersSnapshot['oPhone']}",
+                                              fontsize: 20,
+                                              fontweight: FontWeight.normal,
+                                              color: mainColor,
+                                              underLine: TextDecoration.none),
+                                          subtitle: TextUtils(
+                                              text: ordersSnapshot['oAddress'],
+                                              fontsize: 25,
+                                              fontweight: FontWeight.normal,
+                                              color: mainColor,
+                                              underLine: TextDecoration.none),
+                                          trailing: Container(
+                                            decoration: BoxDecoration(
+                                                color:
+                                                    ordersSnapshot['ostatus'] ==
+                                                            "true"
+                                                        ? Colors.green
+                                                        : redClr,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            height: 20,
+                                            width: 20,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ));
-                          });
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }),
-        ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 20),
+                                          child: TextUtils(
+                                              text: ordersSnapshot['oName'],
+                                              fontsize: 30,
+                                              fontweight: FontWeight.bold,
+                                              color: mainColor,
+                                              underLine: TextDecoration.none),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+
+                                  // Container(
+                                  //   padding: const EdgeInsets.all(20),
+                                  //   decoration: BoxDecoration(
+                                  //       color: lightGreyclr,
+                                  //       borderRadius: BorderRadius.circular(15)),
+                                  //   child: Center(
+                                  //     child: ListTile(
+                                  //       title: TextUtils(
+                                  //           text: "0${ordersSnapshot['oPhone']}",
+                                  //           fontsize: 25,
+                                  //           fontweight: FontWeight.normal,
+                                  //           color: mainColor,
+                                  //           underLine: TextDecoration.none),
+                                  //       subtitle: TextUtils(
+                                  //           text: ordersSnapshot['oAddress'],
+                                  //           fontsize: 20,
+                                  //           fontweight: FontWeight.normal,
+                                  //           color: mainColor,
+                                  //           underLine: TextDecoration.none),
+                                  //       trailing: Container(
+                                  //         decoration: BoxDecoration(
+                                  //             color: ordersSnapshot['ostatus'] ==
+                                  //                     "true"
+                                  //                 ? Colors.green
+                                  //                 : redClr,
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(15)),
+                                  //         height: 20,
+                                  //         width: 20,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  ));
+                        });
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }),
       ),
     );
   }

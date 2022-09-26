@@ -27,6 +27,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   static String ffoodDetails = 'foodDetails';
   static String ffoodImgURL = 'foodImgUrl';
   static String ffoodCategID = 'foodCategortID';
+  static String fResturantName ='restName';
 
   static String ffoodPrice1 = 'foodPrice';
   static String ffoodDetails1 = 'foodDetails';
@@ -47,9 +48,9 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: mainColor,
-          actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
-          ],
+          // actions: [
+          //   IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
+          // ],
           elevation: 0,
           title: const Text(" FOOD DELIVERY"),
           centerTitle: true,
@@ -57,12 +58,13 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         body: Column(
           children: [
             const SizedBox(height: 20),
-           // const SearchBox(),
+            // const SearchBox(),
             const SizedBox(height: 20),
             Expanded(
               child: StreamBuilder(
                   stream: fstoreCtrl.foodCol
                       .where(ffoodCategID, isEqualTo: fCategoryID)
+                      // .where('restStatus', isEqualTo: true)
                       .snapshots(),
                   //initialData: initialData,
                   builder:
@@ -86,8 +88,8 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                                         setState(() {
                                           ffoodID = streamSnapshot
                                               .data!.docs[index].id;
-                                          ffoodID1 = streamSnapshot
-                                              .data!.docs[index].id;
+                                          ffoodID1 = foodSnapshot.id;
+                                          //streamSnapshot.data!.docs[index].id;
                                           ffoodName1 = foodSnapshot[ffoodName];
                                           ffoodImgURL1 =
                                               foodSnapshot[ffoodImgURL];
@@ -97,24 +99,24 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                                               .toString();
                                           //print(ffoodID);
                                         });
-                                        Get.toNamed(
-                                  Routes.fooddetails,
-                                   arguments: [
-                                    ffoodID1,
-                                    ffoodName1,
-                                    ffoodDetails1,
-                                    ffoodImgURL1,
-                                    ffoodPrice1
-                                  ]
-                                );
+                                        Get.toNamed(Routes.fooddetails,
+                                            arguments: [
+                                              ffoodID1,
+                                              ffoodName1,
+                                              ffoodDetails1,
+                                              ffoodImgURL1,
+                                              ffoodPrice1
+                                            ]);
                                       },
                                       child: ResurantWdgt2(
                                         title: streamSnapshot.data!.docs[index]
                                             [ffoodName],
                                         subtitle: streamSnapshot
-                                            .data!.docs[index][ffoodDetails],
+                                            .data!.docs[index][fResturantName],
                                         imgUrl: streamSnapshot.data!.docs[index]
                                             [ffoodImgURL],
+                                        price: streamSnapshot.data!.docs[index]
+                                            [ffoodPrice].toString(),
                                       ),
                                     ));
                               });

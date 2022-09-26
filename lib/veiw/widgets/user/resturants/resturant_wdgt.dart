@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 
@@ -36,12 +37,45 @@ class ResurantWdgt extends StatelessWidget {
             children: [
               Positioned(
                   left: 0,
-                  child: ImageNetwork(
+                  child:
+                      //       CachedNetworkImage(
+                      //   width: 90,
+                      //   height: 90,
+                      //   fit: BoxFit.cover,colorBlendMode: BlendMode.clear,
+
+                      //   imageUrl: imgUrl!,
+                      //   progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      //       Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                      //   errorWidget: (context, url, error) => const Icon(
+                      //     Icons.error,
+                      //     size: 75,
+                      //     color: Colors.red,
+                      //   ),
+                      // ),
+
+                      ImageNetwork(
                     image: imgUrl!,
+                    imageCache: CachedNetworkImageProvider(imgUrl!),
                     height: 90,
                     width: 90,
-                    fitAndroidIos: BoxFit.cover,
+                    duration: 1200,
+                    curve: Curves.easeIn,
+                    onPointer: true,
+                    debugPrint: false,
+                    fullScreen: false,
+                    fitAndroidIos: BoxFit.contain,
                     fitWeb: BoxFitWeb.cover,
+                    //borderRadius: BorderRadius.circular(70),
+                    onLoading: const CircularProgressIndicator(
+                      color: Colors.indigoAccent,
+                    ),
+                    onError: const Icon(
+                      Icons.error,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      debugPrint("its working");
+                    },
                   )),
 
               // Image.asset(
@@ -68,18 +102,19 @@ class ResurantWdgt extends StatelessWidget {
                 //   width: 15,
                 // ),
               ),
-              Positioned(right: 10,top: 10,
+              Positioned(
+                right: 10,
+                top: 10,
                 child: Container(
                   decoration: BoxDecoration(
-                      color: 
-                      // rStatus == null
-                      //     ? Colors.yellow
-                      //     : (
-                            rStatus!  ? Colors.green : redClr
-                            // )
-                            ,
-                      borderRadius: BorderRadius.circular(15)
-                      ),
+                      color:
+                          // rStatus == null
+                          //     ? Colors.yellow
+                          //     : (
+                          rStatus! ? Colors.green : redClr
+                      // )
+                      ,
+                      borderRadius: BorderRadius.circular(15)),
                   height: 20,
                   width: 20,
                 ),

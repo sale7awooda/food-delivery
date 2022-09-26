@@ -33,17 +33,18 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
         centerTitle: true,
       ),
       body: IndexedStack(
-          index: selectedIndexResturant,
+        key:  ValueKey(controller.selectedIndexResturant),
+          index: controller.selectedIndexResturant,
           //controller.selectedIndexResturant.value,
           // ignore: invalid_use_of_protected_member
           children: controller.resturantScreens.value),
       //screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndexResturant,
+          currentIndex: controller.selectedIndexResturant,
           //controller.selectedIndexResturant.value,
           onTap: (index) {
             setState(() {
-              selectedIndexResturant = index;
+              controller. selectedIndexResturant = index;
             });
             //controller.selectedIndexResturant.value = index;
             fsctrl.restID = restID;
@@ -51,10 +52,10 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
           // onItemTapped,
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "الرئيسية"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart), label: "Orders"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "SignOut"),
+                icon: Icon(Icons.shopping_cart), label: "الطلبات"),
+            BottomNavigationBarItem(icon: Icon(Icons.receipt_long_sharp), label: "تقارير"),
             // BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Close"),
           ]),
     );

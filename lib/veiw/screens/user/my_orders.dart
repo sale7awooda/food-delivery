@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:orders/logic/controller/auth_controller.dart';
 import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/model/cart_model.dart';
 import 'package:orders/utils/theme.dart';
 import 'package:orders/veiw/widgets/admin/text_form_wdgt.dart';
-import 'package:orders/veiw/widgets/user/buttun_wdgt.dart';
 // import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/veiw/widgets/user/orders_cart/cart_item_card.dart';
 import 'package:orders/veiw/widgets/user/orders_cart/empty_cart.dart';
@@ -26,6 +27,7 @@ class MyOrdersScreen extends StatefulWidget {
 class _MyOrdersScreenState extends State<MyOrdersScreen> {
   //final fstoreCtrl = Get.find<FirestoreController>();
   final authctrl = Get.find<AuthController>();
+  static bool isDone = false;
 
   final fstoreCtrl = Get.find<FirestoreController>();
   final scrollCtrl = ScrollController();
@@ -48,6 +50,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
 
   // bool visaState2 = false;
   final orderPhoneCtrl = TextEditingController();
+  final orderNameCtrl = TextEditingController();
 
   final orderAddressCtrl = TextEditingController();
 
@@ -85,7 +88,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   Widget build(BuildContext context) {
     var cartID = authctrl.cartid;
     int oTotalPrice = 0;
-
+    int itemcount = 0;
+    double loadingH = MediaQuery.of(context).size.height;
+    double loadingW = MediaQuery.of(context).size.width;
     // int pcount=0;
     // DocumentSnapshot<Object?>? ordersList;
 
@@ -106,8 +111,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                       builder:
                           (BuildContext context, AsyncSnapshot streamSnapshot) {
                         if (streamSnapshot.hasData) {
-                          return !streamSnapshot.hasData
-                              ? const Center(child: CircularProgressIndicator())
+                          return (itemcount == 0)
+                              ? const Center(child: EmptyCart())
                               : ListView.builder(
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
@@ -117,6 +122,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                     final DocumentSnapshot foodSnapshot =
                                         streamSnapshot.data!.docs[index];
                                     fstoreCtrl.deleteDOC = foodSnapshot;
+                                    // itemscount=streamSnapshot.data!.docs.length;
                                     int selector =
                                         streamSnapshot.data!.docs.length;
                                     //List<dynamic> listlingth= List.from(foodSnapshot['ffoodName']);
@@ -324,6 +330,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Form(
+                      // autovalidateMode: AutovalidateMode.always,
                       key: _formKey,
                       child: SizedBox(
                         child: Column(children: [
@@ -335,9 +342,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                               builder: (BuildContext context,
                                   AsyncSnapshot streamSnapshot) {
                                 if (streamSnapshot.hasData) {
-                                  int itemCount = 0;
+                                  itemcount = 0;
                                   if (streamSnapshot.data!.docs.length >= 1) {
-                                    itemCount = 1;
+                                    itemcount = 1;
                                   }
                                   return !streamSnapshot.hasData
                                       ? const Center(
@@ -346,7 +353,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                           shrinkWrap: true,
                                           scrollDirection: Axis.vertical,
                                           //controller: scrollctrl,
-                                          itemCount: itemCount,
+                                          itemCount: itemcount,
                                           itemBuilder: (context, index) {
                                             // final DocumentSnapshot
                                             var itemsLenght = streamSnapshot
@@ -378,363 +385,425 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                         child:
                                                             const Text("طلب"),
                                                         onPressed: () {
-                                                          Get.defaultDialog(
-                                                            cancel: ButtonWdgt(
-                                                              text: "تراجع",
-                                                              onPress: () {
-                                                                Get.back();
-                                                              },
-                                                            ),
-                                                            contentPadding:
-                                                                const EdgeInsets
-                                                                    .all(5),
-                                                            titleStyle:
-                                                                const TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                            confirm: ButtonWdgt(
-                                                              text: "تاكيد",
-                                                              onPress:
-                                                                  () async {
-                                                                if (_formKey
-                                                                    .currentState!
-                                                                    .validate()) {
-                                                                  _formKey
-                                                                      .currentState!
-                                                                      .save();
-                                                                  switch (
-                                                                      itemsLenght) {
-                                                                    case 1:
-                                                                      await fstoreCtrl
-                                                                          .addOrder(
-                                                                              CartModel(
-                                                                        foodResturantId:
-                                                                            ridCtrl.text,
-                                                                        oTotalPrice:
-                                                                            oTotalPrice,
-                                                                        foodResturantName:
-                                                                            rNameCtrl.text,
-                                                                        oPHone:
-                                                                            int.tryParse(orderPhoneCtrl.text),
-                                                                        oAddress:
-                                                                            orderAddressCtrl.text,
-                                                                        cartItems: [
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl.text),
+                                                          showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return AlertDialog(
+                                                                  backgroundColor:
+                                                                      lightGreyclr,
+                                                                  contentPadding:
+                                                                      const EdgeInsets
+                                                                          .all(5),
+                                                                  scrollable:
+                                                                      true,
+                                                                  title:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                        "تاكيد الطلب"),
+                                                                  ),
+                                                                  content:
+                                                                      Column(
+                                                                    children: [
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceAround,
+                                                                        children: [
+                                                                          const TextUtils(
+                                                                              text: "المبلغ المطلوب :",
+                                                                              fontsize: 20,
+                                                                              fontweight: FontWeight.bold,
+                                                                              color: mainColor,
+                                                                              underLine: TextDecoration.none),
+                                                                          TextUtils(
+                                                                              text: oTotalPrice.toString(),
+                                                                              fontsize: 20,
+                                                                              fontweight: FontWeight.bold,
+                                                                              color: mainColor,
+                                                                              underLine: TextDecoration.none)
+                                                                        ],
+                                                                      ),
+                                                                      TextFormWdgt(
+                                                                        controller:
+                                                                            orderPhoneCtrl,
+                                                                        lable: const Text(
+                                                                            "رقم الجوال"),
+                                                                        validator:
+                                                                            (value) {
+                                                                          if (value
+                                                                              .toString()
+                                                                              .isEmpty) {
+                                                                            return "الحقل لايجب ان يكون فارغ";
+                                                                          } else {
+                                                                            return null;
                                                                           }
-                                                                        ],
-                                                                      ));
-                                                                      clearCtrl();
-                                                                      Get.back();
-                                                                      fstoreCtrl.deleteAllColl(
-                                                                          fstoreCtrl
-                                                                              .deleteDOC,
-                                                                          cartID);
-                                                                      Get.snackbar(
-                                                                          "تنبية",
-                                                                          "تم ارسال الطلب",
-                                                                          snackPosition:
-                                                                              SnackPosition.BOTTOM);
+                                                                        },
+                                                                      ),
+                                                                      TextFormWdgt(
+                                                                        controller:
+                                                                            orderNameCtrl,
+                                                                        lable: const Text(
+                                                                            "اسم صاحب الطلب"),
+                                                                        validator:
+                                                                            (value) {
+                                                                          if (value
+                                                                              .toString()
+                                                                              .isEmpty) {
+                                                                            return "الحقل لايجب ان يكون فارغ";
+                                                                          } else {
+                                                                            return null;
+                                                                          }
+                                                                        },
+                                                                      ),
+                                                                      TextFormWdgt(
+                                                                        controller:
+                                                                            orderAddressCtrl,
+                                                                        lable: const Text(
+                                                                            "عنوان التوصيل"),
+                                                                        validator:
+                                                                            (value) {
+                                                                          if (value
+                                                                              .toString()
+                                                                              .isEmpty) {
+                                                                            return "الحقل لايجب ان يكون فارغ";
+                                                                          } else {
+                                                                            return null;
+                                                                          }
+                                                                        },
+                                                                      ),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceAround,
+                                                                        children: [
+                                                                          ElevatedButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              orderAddressCtrl.clear();
+                                                                              orderPhoneCtrl.clear();
+                                                                              orderNameCtrl.clear();
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                            child:
+                                                                                const Text("تراجع"),
+                                                                          ),
+                                                                          ElevatedButton(
+                                                                            onPressed:
+                                                                                () async {
+                                                                              if (_formKey.currentState!.validate()) {
+                                                                                _formKey.currentState!.save();
+                                                                                // Future.delayed(const Duration(seconds: 5), () {
+                                                                                //   isDone = true;
+                                                                                // });
+                                                                             //   print("pefore if");
+                                                                                // if (isDone == false) {
+                                                                                //   showToastWidget(
+                                                                                //     Container(
+                                                                                //         color: Colors.black.withOpacity(0.8),
+                                                                                //         height: loadingH,
+                                                                                //         width: loadingW,
+                                                                                //         child: LoadingAnimationWidget.dotsTriangle(
+                                                                                //           color: Colors.white,
+                                                                                //           size: 70,
+                                                                                //         )),
+                                                                                //     position: ToastPosition.center,
+                                                                                //     duration: const Duration(seconds: 10),
+                                                                                //     // onDismiss: () {
+                                                                                //     //   //   print("if true ");
+                                                                                //     // },
+                                                                                //   );
+                                                                                // }
+                                                                               // print("before switch");
 
-                                                                      break;
-                                                                    case 2:
-                                                                      await fstoreCtrl
-                                                                          .addOrder(
-                                                                              CartModel(
-                                                                        foodResturantId:
-                                                                            ridCtrl.text,
-                                                                        foodResturantName:
-                                                                            rNameCtrl.text,
-                                                                        oTotalPrice:
-                                                                            oTotalPrice,
-                                                                        oPHone:
-                                                                            int.tryParse(orderPhoneCtrl.text),
-                                                                        oAddress:
-                                                                            orderAddressCtrl.text,
-                                                                        cartItems: [
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl1.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl1.text),
-                                                                          },
-                                                                          // {
-                                                                          //   ffoodName:
-                                                                          //       nCtrl1.text
-                                                                          // }
-                                                                        ],
-                                                                      ));
-                                                                      clearCtrl();
-                                                                      Get.back();
-                                                                      fstoreCtrl.deleteAllColl(
-                                                                          fstoreCtrl
-                                                                              .deleteDOC,
-                                                                          cartID);
-                                                                      Get.snackbar(
-                                                                          "تنبية",
-                                                                          "تم ارسال الطلب",
-                                                                          snackPosition:
-                                                                              SnackPosition.BOTTOM);
+                                                                                switch (itemsLenght) {
+                                                                                  case 1:
+                                                                                  Navigator.pop(context);
+                                                                                  showToastWidget(
+                                                                                    Container(
+                                                                                        color: Colors.black.withOpacity(0.8),
+                                                                                        height: loadingH,
+                                                                                        width: loadingW,
+                                                                                        child: LoadingAnimationWidget.dotsTriangle(
+                                                                                          color: Colors.white,
+                                                                                          size: 70,
+                                                                                        )),
+                                                                                    position: ToastPosition.center,
+                                                                                    duration: const Duration(seconds: 10),
+                                                                                    // onDismiss: () {
+                                                                                    //   //   print("if true ");
+                                                                                    // },
+                                                                                  );
+                                                                                    await fstoreCtrl
+                                                                                        .addOrder(CartModel(
+                                                                                      foodResturantId: ridCtrl.text,
+                                                                                      oTotalPrice: oTotalPrice,
+                                                                                      oName: orderNameCtrl.text,
+                                                                                      foodResturantName: rNameCtrl.text,
+                                                                                      oPHone: int.tryParse(orderPhoneCtrl.text),
+                                                                                      oAddress: orderAddressCtrl.text,
+                                                                                      cartItems: [
+                                                                                        {
+                                                                                          ffoodName: nCtrl.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl.text),
+                                                                                        }
+                                                                                      ],
+                                                                                    ))
+                                                                                        .whenComplete(() {
+                                                                                      isDone = true;
+                                                                                    });
+                                                                                    clearCtrl();
 
-                                                                      break;
-                                                                    case 3:
-                                                                      await fstoreCtrl
-                                                                          .addOrder(
-                                                                              CartModel(
-                                                                        foodResturantId:
-                                                                            ridCtrl.text,
-                                                                        foodResturantName:
-                                                                            rNameCtrl.text,
-                                                                        oTotalPrice:
-                                                                            oTotalPrice,
-                                                                        oPHone:
-                                                                            int.tryParse(orderPhoneCtrl.text),
-                                                                        oAddress:
-                                                                            orderAddressCtrl.text,
-                                                                        cartItems: [
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl1.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl1.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl2.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl2.text),
-                                                                          },
-                                                                          // {
-                                                                          //   ffoodName:
-                                                                          //       nCtrl2.text
-                                                                          // }
-                                                                        ],
-                                                                      ));
-                                                                      clearCtrl();
-                                                                      Get.back();
-                                                                      fstoreCtrl.deleteAllColl(
-                                                                          fstoreCtrl
-                                                                              .deleteDOC,
-                                                                          cartID);
-                                                                      Get.snackbar(
-                                                                          "تنبية",
-                                                                          "تم ارسال الطلب",
-                                                                          snackPosition:
-                                                                              SnackPosition.BOTTOM);
-                                                                      break;
-                                                                    case 4:
-                                                                      await fstoreCtrl
-                                                                          .addOrder(
-                                                                              CartModel(
-                                                                        foodResturantId:
-                                                                            ridCtrl.text,
-                                                                        foodResturantName:
-                                                                            rNameCtrl.text,
-                                                                        oTotalPrice:
-                                                                            oTotalPrice,
-                                                                        oPHone:
-                                                                            int.tryParse(orderPhoneCtrl.text),
-                                                                        oAddress:
-                                                                            orderAddressCtrl.text,
-                                                                        cartItems: [
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl1.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl1.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl2.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl2.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl3.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl3.text),
-                                                                          },
-                                                                          // {
-                                                                          //   ffoodName:
-                                                                          //       nCtrl4.text
-                                                                          //       ,ffoodPrice:int.tryParse(pCtrl4.text),
-                                                                          // }
-                                                                        ],
-                                                                      ));
-                                                                      clearCtrl();
-                                                                      Get.back();
-                                                                      fstoreCtrl.deleteAllColl(
-                                                                          fstoreCtrl
-                                                                              .deleteDOC,
-                                                                          cartID);
-                                                                      Get.snackbar(
-                                                                          "تنبية",
-                                                                          "تم ارسال الطلب",
-                                                                          snackPosition:
-                                                                              SnackPosition.BOTTOM);
+                                                                                    await fstoreCtrl.deleteAllColl(fstoreCtrl.deleteDOC, cartID);
 
-                                                                      break;
-                                                                    case 5:
-                                                                      await fstoreCtrl
-                                                                          .addOrder(
-                                                                              CartModel(
-                                                                        foodResturantId:
-                                                                            ridCtrl.text,
-                                                                        foodResturantName:
-                                                                            rNameCtrl.text,
-                                                                        oTotalPrice:
-                                                                            oTotalPrice,
-                                                                        oPHone:
-                                                                            int.tryParse(orderPhoneCtrl.text),
-                                                                        oAddress:
-                                                                            orderAddressCtrl.text,
-                                                                        cartItems: [
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl1.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl1.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl2.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl2.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl3.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl3.text),
-                                                                          },
-                                                                          {
-                                                                            ffoodName:
-                                                                                nCtrl4.text,
-                                                                            ffoodPrice:
-                                                                                int.tryParse(pCtrl4.text),
-                                                                          },
-                                                                          // {
-                                                                          //   ffoodName:
-                                                                          //       nCtrl4.text
-                                                                          // }
+                                                                                    break;
+                                                                                  case 2:Navigator.pop(context);
+                                                                                  showToastWidget(
+                                                                                    Container(
+                                                                                        color: Colors.black.withOpacity(0.8),
+                                                                                        height: loadingH,
+                                                                                        width: loadingW,
+                                                                                        child: LoadingAnimationWidget.dotsTriangle(
+                                                                                          color: Colors.white,
+                                                                                          size: 70,
+                                                                                        )),
+                                                                                    position: ToastPosition.center,
+                                                                                    duration: const Duration(seconds: 10),
+                                                                                    // onDismiss: () {
+                                                                                    //   //   print("if true ");
+                                                                                    // },
+                                                                                  );
+                                                                                    await fstoreCtrl
+                                                                                        .addOrder(CartModel(
+                                                                                      foodResturantId: ridCtrl.text,
+                                                                                      foodResturantName: rNameCtrl.text,
+                                                                                      oTotalPrice: oTotalPrice,
+                                                                                      oName: orderNameCtrl.text,
+                                                                                      oPHone: int.tryParse(orderPhoneCtrl.text),
+                                                                                      oAddress: orderAddressCtrl.text,
+                                                                                      cartItems: [
+                                                                                        {
+                                                                                          ffoodName: nCtrl.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl1.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl1.text),
+                                                                                        },
+                                                                                        // {
+                                                                                        //   ffoodName:
+                                                                                        //       nCtrl1.text
+                                                                                        // }
+                                                                                      ],
+                                                                                    ))
+                                                                                        .whenComplete(() {
+                                                                                      isDone = true;
+                                                                                    });
+                                                                                    clearCtrl();
+
+                                                                                    await fstoreCtrl.deleteAllColl(fstoreCtrl.deleteDOC, cartID);
+                                                                                    //Get.snackbar("تنبية", "تم ارسال الطلب", snackPosition: SnackPosition.BOTTOM);
+
+                                                                                    break;
+                                                                                  case 3:
+                                                                                  Navigator.pop(context);
+                                                                                  showToastWidget(
+                                                                                    Container(
+                                                                                        color: Colors.black.withOpacity(0.8),
+                                                                                        height: loadingH,
+                                                                                        width: loadingW,
+                                                                                        child: LoadingAnimationWidget.dotsTriangle(
+                                                                                          color: Colors.white,
+                                                                                          size: 70,
+                                                                                        )),
+                                                                                    position: ToastPosition.center,
+                                                                                    duration: const Duration(seconds: 10),
+                                                                                    // onDismiss: () {
+                                                                                    //   //   print("if true ");
+                                                                                    // },
+                                                                                  );
+                                                                                    await fstoreCtrl
+                                                                                        .addOrder(CartModel(
+                                                                                      foodResturantId: ridCtrl.text,
+                                                                                      foodResturantName: rNameCtrl.text,
+                                                                                      oTotalPrice: oTotalPrice,
+                                                                                      oName: orderNameCtrl.text,
+                                                                                      oPHone: int.tryParse(orderPhoneCtrl.text),
+                                                                                      oAddress: orderAddressCtrl.text,
+                                                                                      cartItems: [
+                                                                                        {
+                                                                                          ffoodName: nCtrl.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl1.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl1.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl2.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl2.text),
+                                                                                        },
+                                                                                        // {
+                                                                                        //   ffoodName:
+                                                                                        //       nCtrl2.text
+                                                                                        // }
+                                                                                      ],
+                                                                                    ))
+                                                                                        .whenComplete(() {
+                                                                                      isDone = true;
+                                                                                    });
+                                                                                    clearCtrl();
+
+                                                                                    await fstoreCtrl.deleteAllColl(fstoreCtrl.deleteDOC, cartID);
+                                                                                    // Get.snackbar("تنبية", "تم ارسال الطلب", snackPosition: SnackPosition.BOTTOM);
+                                                                                    break;
+                                                                                  case 4:
+                                                                                  Navigator.pop(context);
+                                                                                  showToastWidget(
+                                                                                    Container(
+                                                                                        color: Colors.black.withOpacity(0.8),
+                                                                                        height: loadingH,
+                                                                                        width: loadingW,
+                                                                                        child: LoadingAnimationWidget.dotsTriangle(
+                                                                                          color: Colors.white,
+                                                                                          size: 70,
+                                                                                        )),
+                                                                                    position: ToastPosition.center,
+                                                                                    duration: const Duration(seconds: 10),
+                                                                                    // onDismiss: () {
+                                                                                    //   //   print("if true ");
+                                                                                    // },
+                                                                                  );
+                                                                                    await fstoreCtrl
+                                                                                        .addOrder(CartModel(
+                                                                                      foodResturantId: ridCtrl.text,
+                                                                                      foodResturantName: rNameCtrl.text,
+                                                                                      oTotalPrice: oTotalPrice,
+                                                                                      oName: orderNameCtrl.text,
+                                                                                      oPHone: int.tryParse(orderPhoneCtrl.text),
+                                                                                      oAddress: orderAddressCtrl.text,
+                                                                                      cartItems: [
+                                                                                        {
+                                                                                          ffoodName: nCtrl.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl1.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl1.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl2.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl2.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl3.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl3.text),
+                                                                                        },
+                                                                                        // {
+                                                                                        //   ffoodName:
+                                                                                        //       nCtrl4.text
+                                                                                        //       ,ffoodPrice:int.tryParse(pCtrl4.text),
+                                                                                        // }
+                                                                                      ],
+                                                                                    ))
+                                                                                        .whenComplete(() {
+                                                                                      isDone = true;
+                                                                                    });
+                                                                                    clearCtrl();
+
+                                                                                    await fstoreCtrl.deleteAllColl(fstoreCtrl.deleteDOC, cartID);
+                                                                                    // Get.snackbar("تنبية", "تم ارسال الطلب", snackPosition: SnackPosition.BOTTOM);
+
+                                                                                    break;
+                                                                                  case 5:
+                                                                                  Navigator.pop(context);
+                                                                                  showToastWidget(
+                                                                                    Container(
+                                                                                        color: Colors.black.withOpacity(0.8),
+                                                                                        height: loadingH,
+                                                                                        width: loadingW,
+                                                                                        child: LoadingAnimationWidget.dotsTriangle(
+                                                                                          color: Colors.white,
+                                                                                          size: 70,
+                                                                                        )),
+                                                                                    position: ToastPosition.center,
+                                                                                    duration: const Duration(seconds: 10),
+                                                                                    // onDismiss: () {
+                                                                                    //   //   print("if true ");
+                                                                                    // },
+                                                                                  );
+                                                                                    await fstoreCtrl
+                                                                                        .addOrder(CartModel(
+                                                                                      foodResturantId: ridCtrl.text,
+                                                                                      foodResturantName: rNameCtrl.text,
+                                                                                      oTotalPrice: oTotalPrice,
+                                                                                      oName: orderNameCtrl.text,
+                                                                                      oPHone: int.tryParse(orderPhoneCtrl.text),
+                                                                                      oAddress: orderAddressCtrl.text,
+                                                                                      cartItems: [
+                                                                                        {
+                                                                                          ffoodName: nCtrl.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl1.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl1.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl2.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl2.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl3.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl3.text),
+                                                                                        },
+                                                                                        {
+                                                                                          ffoodName: nCtrl4.text,
+                                                                                          ffoodPrice: int.tryParse(pCtrl4.text),
+                                                                                        },
+                                                                                        // {
+                                                                                        //   ffoodName:
+                                                                                        //       nCtrl4.text
+                                                                                        // }
+                                                                                      ],
+                                                                                    ))
+                                                                                        .whenComplete(() {
+                                                                                      isDone = true;
+                                                                                    });
+                                                                                    clearCtrl();
+
+                                                                                    await fstoreCtrl.deleteAllColl(fstoreCtrl.deleteDOC, cartID);
+                                                                                    // Get.snackbar("تنبية", "تم ارسال الطلب", snackPosition: SnackPosition.BOTTOM);
+                                                                                    break;
+                                                                                  default:
+                                                                                }
+                                                                               // print("after switch");
+                                                                                // ignore: use_build_context_synchronously
+                                                                                
+
+                                                                                if (isDone == true) {
+                                                                                  dismissAllToast();
+                                                                                  Get.snackbar("تنبية", "تم ارسال الطلب", snackPosition: SnackPosition.BOTTOM);
+                                                                                 // print("dissmess");
+                                                                                }
+                                                                              }
+
+                                                                              orderAddressCtrl.clear();
+                                                                              orderPhoneCtrl.clear();
+                                                                              orderNameCtrl.clear();
+                                                                              // ignore: use_build_context_synchronously
+                                                                            },
+                                                                            child:
+                                                                                const Text("تاكيد"),
+                                                                          ),
                                                                         ],
-                                                                      ));
-                                                                      clearCtrl();
-                                                                      Get.back();
-                                                                      fstoreCtrl.deleteAllColl(
-                                                                          fstoreCtrl
-                                                                              .deleteDOC,
-                                                                          cartID);
-                                                                      Get.snackbar(
-                                                                          "تنبية",
-                                                                          "تم ارسال الطلب",
-                                                                          snackPosition:
-                                                                              SnackPosition.BOTTOM);
-                                                                      break;
-                                                                    default:
-                                                                  }
-                                                                }
-                                                              },
-                                                            ),
-                                                            title:
-                                                                "تاكيد الطلب",
-                                                            content: Column(
-                                                              children: [
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceAround,
-                                                                  children: [
-                                                                    const TextUtils(
-                                                                        text:
-                                                                            "المبلغ المطلوب :",
-                                                                        fontsize:
-                                                                            20,
-                                                                        fontweight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        color:
-                                                                            mainColor,
-                                                                        underLine:
-                                                                            TextDecoration.none),
-                                                                    TextUtils(
-                                                                        text: oTotalPrice
-                                                                            .toString(),
-                                                                        fontsize:
-                                                                            20,
-                                                                        fontweight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        color:
-                                                                            mainColor,
-                                                                        underLine:
-                                                                            TextDecoration.none)
-                                                                  ],
-                                                                ),
-                                                                TextFormWdgt(
-                                                                  controller:
-                                                                      orderPhoneCtrl,
-                                                                  lable: const Text(
-                                                                      "رقم الجوال"),
-                                                                  validator:
-                                                                      (value) {
-                                                                    if (value
-                                                                        .toString()
-                                                                        .isEmpty) {
-                                                                      return "الحقل لايجب ان يكون فارغ";
-                                                                    } else {
-                                                                      return null;
-                                                                    }
-                                                                  },
-                                                                ),
-                                                                TextFormWdgt(
-                                                                  controller:
-                                                                      orderAddressCtrl,
-                                                                  lable: const Text(
-                                                                      "عنوان التوصيل"),
-                                                                  validator:
-                                                                      (value) {
-                                                                    if (value
-                                                                        .toString()
-                                                                        .isEmpty) {
-                                                                      return "الحقل لايجب ان يكون فارغ";
-                                                                    } else {
-                                                                      return null;
-                                                                    }
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          );
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  // actions: [
+
+                                                                  // ],
+                                                                );
+                                                              });
                                                         }),
                                                   ),
                                                 ),
@@ -755,277 +824,3 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
             ])));
   }
 }
-
-//    Column(
-//           children: [
-//             Expanded(
-//               flex: 6,
-//               child: Column(
-
-//                 children: [
-//                   StreamBuilder(
-//                       stream:
-//                           FirebaseFirestore.instance.collection(cartID).snapshots(),
-//                       //initialData: initialData,
-//                       builder:
-//                           (BuildContext context, AsyncSnapshot streamSnapshot) {
-//                         if (streamSnapshot.hasData) {
-//                           return !streamSnapshot.hasData
-//                               ? const Center(child: CircularProgressIndicator())
-//                               : ListView.builder(
-//                                   shrinkWrap: true,
-//                                   scrollDirection: Axis.vertical,
-//                                   //controller: scrollctrl,
-//                                   itemCount: streamSnapshot.data!.docs.length,
-//                                   itemBuilder: (context, index) {
-//                                     final DocumentSnapshot foodSnapshot =
-//                                         streamSnapshot.data!.docs[index];
-//                                         // ordersList=foodSnapshot;
-//                                     // var cartitems =
-//                                     //     streamSnapshot.data!.docs.length.obs;
-
-//                                     // streamSnapshot.data.docs.forEach((result) {
-//                                     //   //fstoreCtrl.pTotal +=
-//                                     //     pcount = result.data()[ffoodPrice];
-//                                     // });
-
-//                                     return Padding(
-//                                         padding: const EdgeInsets.all(10.0),
-//                                         child: InkWell(
-//                                             hoverColor: Colors.lightBlue[200],
-//                                             onTap: () {},
-//                                             child: Stack(
-//                                               children: [
-//                                                 CartItemCard(
-//                                                     ffoodName: foodSnapshot[ffoodName],
-//                                                     ffoodImg: foodSnapshot[ffoodImg],
-//                                                     ffoodPrice: foodSnapshot[ffoodPrice]
-//                                                     // removefrmCart: () {SnackBar(content: Text("data"));
-//                                                     // fstoreCtrl.removeFoodFromCart(
-//                                                     //     foodSnapshot,
-//                                                     //     authctrl.cartid);
-
-//                                                     // }
-//                                                     ),
-//                                                 Positioned(
-//                                                     top: 15,
-//                                                     left: 15,
-//                                                     child: IconButton(
-//                                                         onPressed: () {
-//                                                           fstoreCtrl
-//                                                               .removeFoodFromCart(
-//                                                                   foodSnapshot,
-//                                                                   authctrl.cartid);
-//                                                         },
-//                                                         icon: const Icon(
-//                                                             Icons.close,
-//                                                             size: 30,
-//                                                             color: redClr)))
-//                                               ],
-//                                             )));
-//                                   });
-//                         }
-//                         return const Center(
-//                           child: CircularProgressIndicator(),
-//                         );
-//                       }),
-//                       // Row(
-//                       //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                       //       children: [
-//                       //         const Center(
-//                       //           child: TextUtils(
-//                       //               text: "Total",
-//                       //               fontsize: 20,
-//                       //               fontweight: FontWeight.normal,
-//                       //               color: mainColor,
-//                       //               underLine: TextDecoration.none),
-//                       //         ),
-//                       //        TextUtils(
-//                       //               text: pcount.toString(),
-//                       //               //fstoreCtrl.pTotal.toString(),
-//                       //               fontsize: 20,
-//                       //               fontweight: FontWeight.bold,
-//                       //               color: Colors.black,
-//                       //               underLine: TextDecoration.none)
-
-//                       //       ],
-//                       //     )
-//                 ],
-//               ),
-//             ),
-//             Expanded(
-//               flex: 4,
-//               child: SingleChildScrollView(
-//                 child: Column(
-//                   children: [
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 30),
-//                       child: Form(
-//                           key: _formKey,
-//                           child: SizedBox(
-//                             child: Column(
-//                               children: [
-//                                 // TextFormWdgt(
-//                                 //   controller: ordernameCtrl,
-//                                 //   lable: const Text("ضاحب الطلب"),
-//                                 //   validator: (value) {
-//                                 //     if (value.toString().isEmpty) {
-//                                 //       return "الحقل لايجب ان يكون فارغ";
-//                                 //     } else {
-//                                 //       return null;
-//                                 //     }
-//                                 //   },
-//                                 // ),
-//                                 TextFormWdgt(
-//                                   controller: orderPhoneCtrl,
-//                                   lable: const Text("رقم الجوال"),
-//                                   validator: (value) {
-//                                     if (value.toString().isEmpty) {
-//                                       return "الحقل لايجب ان يكون فارغ";
-//                                     } else {
-//                                       return null;
-//                                     }
-//                                   },
-//                                 ),
-//                                 TextFormWdgt(
-//                                   controller: orderAddressCtrl,
-//                                   lable: const Text("عنوان التوصيل"),
-//                                   validator: (value) {
-//                                     if (value.toString().isEmpty) {
-//                                       return "الحقل لايجب ان يكون فارغ";
-//                                     } else {
-//                                       return null;
-//                                     }
-//                                   },
-//                                 ),
-//                               ],
-//                             ),
-//                           )),
-//                     ),
-// StreamBuilder(
-//                       stream:
-//                           FirebaseFirestore.instance.collection(cartID).snapshots(),
-//                       //initialData: initialData,
-//                       builder:
-//                           (BuildContext context, AsyncSnapshot streamSnapshot) {
-//                         if (streamSnapshot.hasData) {
-
-//                           //List<DocumentSnapshot> orderitems = [];
-//                           List orderitems=[];
-//                           // orderitems = streamSnapshot.data.docs;
-//                           return !streamSnapshot.hasData
-//                               ? const Center(child: CircularProgressIndicator())
-//                               : ListView.builder(
-//                                   shrinkWrap: true,
-//                                   scrollDirection: Axis.vertical,
-//                                   //controller: scrollctrl,
-//                                   itemCount:1,//streamSnapshot.data!.docs.length,
-//                                   itemBuilder: (context, index) {
-//                                     final DocumentSnapshot foodSnapshot =
-//                                         streamSnapshot.data!.docs[index];
-//                                         streamSnapshot.data.docs.forEach((result) {
-
-//                                        // orderitems = result.data()[streamSnapshot.data!.docs[index]];
-//                                     });
-
-//                                     return SizedBox(
-//                       height: 100,
-//                       child: Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                         children: [
-//                           Expanded(
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(5.0),
-//                               child: ButtonWdgt(text: "شراء", onPress: () {
-//                                 fstoreCtrl.getfoods(foodSnapshot, cartID).then((value) => print(value)
-//                                 //  fstoreCtrl.addOrder(CartModel(oPHone: orderPhoneCtrl.text,
-//                                 //  oAddress: orderAddressCtrl.text, orderitems: value))
-//                                  );
-
-//                                 //  fstoreCtrl.addOrder(CartModel(oPHone: orderPhoneCtrl.text,
-//                                 //  oAddress: orderAddressCtrl.text, orderitems: orderitems));
-
-//                                 // fstoreCtrl.addOrder(
-//                                 // CartModel(foodName: foodName, foodDetails: foodDetails, foodImageURL: foodImageURL,
-//                                 // foodResturantID: foodResturantID, foodID: foodID,
-//                                 // foodPrice: foodPrice, oPHone: orderPhoneCtrl.value.text, oAddress: orderAddressCtrl.value.text))
-
-//                                 }),),
-//                           ),
-//                           // Column(
-//                           //   mainAxisAlignment: MainAxisAlignment.center,
-//                           //   children: [
-//                           //     const Center(
-//                           //       child: TextUtils(
-//                           //           text: "Total",
-//                           //           fontsize: 20,
-//                           //           fontweight: FontWeight.normal,
-//                           //           color: mainColor,
-//                           //           underLine: TextDecoration.none),
-//                           //     ),
-//                           //    TextUtils(
-//                           //           text: fstoreCtrl.pTotal.toString(),
-//                           //           fontsize: 20,
-//                           //           fontweight: FontWeight.bold,
-//                           //           color: Colors.black,
-//                           //           underLine: TextDecoration.none)
-
-//                           //   ],
-//                           // )
-//                         ],
-//                       ),
-//                     );
-//                                   });
-//                         }
-//                         return const Center(
-//                           child: CircularProgressIndicator(),
-//                         );
-//                       }),
-//                     //   SizedBox(
-//                     //   height: 100,
-//                     //   child: Row(
-//                     //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     //     children: [
-//                     //       Expanded(
-//                     //         child: Padding(
-//                     //           padding: const EdgeInsets.all(5.0),
-//                     //           child: ButtonWdgt(text: "شراء", onPress: () {
-//                     //             // print(ordersList.toString());
-
-//                     //             // fstoreCtrl.addOrder(
-//                     //             // CartModel(foodName: foodName, foodDetails: foodDetails, foodImageURL: foodImageURL,
-//                     //             // foodResturantID: foodResturantID, foodID: foodID,
-//                     //             // foodPrice: foodPrice, oPHone: orderPhoneCtrl.value.text, oAddress: orderAddressCtrl.value.text))
-
-//                     //             }),),
-//                     //       ),
-//                     //       // Column(
-//                     //       //   mainAxisAlignment: MainAxisAlignment.center,
-//                     //       //   children: [
-//                     //       //     const Center(
-//                     //       //       child: TextUtils(
-//                     //       //           text: "Total",
-//                     //       //           fontsize: 20,
-//                     //       //           fontweight: FontWeight.normal,
-//                     //       //           color: mainColor,
-//                     //       //           underLine: TextDecoration.none),
-//                     //       //     ),
-//                     //       //    TextUtils(
-//                     //       //           text: fstoreCtrl.pTotal.toString(),
-//                     //       //           fontsize: 20,
-//                     //       //           fontweight: FontWeight.bold,
-//                     //       //           color: Colors.black,
-//                     //       //           underLine: TextDecoration.none)
-
-//                     //       //   ],
-//                     //       // )
-//                     //     ],
-//                     //   ),
-//                     // ),
-
-//                   ],
-//                 ),
-//               ),
-//             )
-//           ],
-//         ),

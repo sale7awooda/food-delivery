@@ -18,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final fstoreCtrl = Get.find<AuthController>();
     return  Scaffold(
       body: Center(
-        child: AuthButton(text: "Sign Out", onPress: (){fstoreCtrl.signOut();} )
+        child: AuthButton(text: "تسجيل خروج", onPress: (){fstoreCtrl.signOut();} )
       ),
     );
   }

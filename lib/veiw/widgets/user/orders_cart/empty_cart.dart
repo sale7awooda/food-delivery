@@ -10,22 +10,29 @@ class EmptyCart extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: const [
           Icon(
             Icons.shopping_cart,
             size: 150,
           ),
           SizedBox(
-            height: 40,
+            height: 30,
           ),
           TextUtils(
-              text: "Your Cart Is Empty",
-              fontsize: 25,
+              text: "السلة فاااارغة",
+              fontsize: 40,
               fontweight: FontWeight.bold,
               color: mainColor,
               underLine: TextDecoration.none),
-          SizedBox(height: 10),
-          Text("Add Items First")
+          SizedBox(height: 20),
+          TextUtils(
+              text: "اضف عناصر اولا",
+              fontsize: 20,
+              fontweight: FontWeight.bold,
+              color: mainColor,
+              underLine: TextDecoration.none),
+          
         ],
       ),
     );

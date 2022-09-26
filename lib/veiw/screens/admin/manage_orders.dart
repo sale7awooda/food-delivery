@@ -1,3 +1,5 @@
+// import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +35,7 @@ class _ManageOrdersState extends State<ManageOrders> {
   final oRestNameCtrl = TextEditingController();
   final oTotalPriceCtrl = TextEditingController();
   final oAddressCtrl = TextEditingController();
+  final oNameCtrl = TextEditingController();
   final item1Ctrl = TextEditingController();
   final item2Ctrl = TextEditingController();
   final item3Ctrl = TextEditingController();
@@ -51,6 +54,9 @@ class _ManageOrdersState extends State<ManageOrders> {
   bool v5 = false;
   bool v6 = false;
   bool v7 = false;
+  bool v8 = false;
+
+  // final _random = Random();
 
   clearCtrls() {
     oPhoneCtrl.clear();
@@ -58,6 +64,7 @@ class _ManageOrdersState extends State<ManageOrders> {
     oRestNameCtrl.clear();
     item2Ctrl.clear();
     oAddressCtrl.clear();
+    oNameCtrl.clear();
     item1Ctrl.clear();
     item5Ctrl.clear();
     item3Ctrl.clear();
@@ -74,268 +81,287 @@ class _ManageOrdersState extends State<ManageOrders> {
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Flexible(
-          flex: 2,
-          fit: FlexFit.tight,
-          child: Column(
-            children: [
+            flex: 2,
+            fit: FlexFit.tight,
+            child: Column(children: [
               const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextUtils(
-                      text: "الطلبات",
-                      fontsize: 25,
-                      fontweight: FontWeight.bold,
-                      color: mainColor,
-                      underLine: TextDecoration.none),
-                ),
-              ),
-              const Divider(
-                indent: 8.0,
-                endIndent: 8.0,
-              ),
+                  child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: TextUtils(
+                          text: "الطلبات",
+                          fontsize: 25,
+                          fontweight: FontWeight.bold,
+                          color: mainColor,
+                          underLine: TextDecoration.none))),
+              const Divider(indent: 8.0, endIndent: 8.0),
               Expanded(
-                child: StreamBuilder(
-                    stream: fstoreCtrl.orderCol.snapshots(),
-                    //initialData: initialData,
-                    builder:
-                        (BuildContext context, AsyncSnapshot streamSnapshot) {
-                      if (streamSnapshot.hasData) {
-                        return !streamSnapshot.hasData
-                            ? const Center(child: CircularProgressIndicator())
-                            : ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                controller: scrollctrl,
-                                itemCount: streamSnapshot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  final DocumentSnapshot ordersSnapshot =
-                                      streamSnapshot.data!.docs[index];
-                                  List<dynamic> items =
-                                      List.from(ordersSnapshot['oItems']);
-                                  switch (items.length) {
-                                    case 1:
-                                      item1 = items[0]["foodName"];
-                                      v0 = true;
-                                      v1 = true;
-                                      v2 = true;
-                                      v3 = true;
-                                      break;
-                                    case 2:
-                                      item1 = items[0]["foodName"];
-                                      item2 = items[1]["foodName"];
-                                      v0 = true;
-                                      v1 = true;
-                                      v2 = true;
-                                      v3 = true;
-                                      v4 = true;
+                  child: StreamBuilder(
+                      stream: fstoreCtrl.orderCol.snapshots(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot streamSnapshot) {
+                        if (streamSnapshot.hasData) {
+                          return !streamSnapshot.hasData
+                              ? const Center(child: CircularProgressIndicator())
+                              : ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  controller: scrollctrl,
+                                  itemCount: streamSnapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    final DocumentSnapshot ordersSnapshot =
+                                        streamSnapshot.data!.docs[index];
+                                    List<dynamic> items =
+                                        List.from(ordersSnapshot['oItems']);
+                                    switch (items.length) {
+                                      case 1:
+                                        item1 = items[0]["foodName"];
+                                        v0 = true;
+                                        v1 = true;
+                                        v2 = true;
+                                        v3 = true;
+                                        break;
+                                      case 2:
+                                        item1 = items[0]["foodName"];
+                                        item2 = items[1]["foodName"];
+                                        v0 = true;
+                                        v1 = true;
+                                        v2 = true;
+                                        v3 = true;
+                                        v4 = true;
 
-                                      break;
-                                    case 3:
-                                      v0 = true;
-                                      v1 = true;
-                                      v2 = true;
-                                      v3 = true;
-                                      v4 = true;
-                                      v5 = true;
-                                      item1 = items[0]["foodName"];
-                                      item2 = items[1]["foodName"];
-                                      item3 = items[2]["foodName"];
-                                      break;
-                                    case 4:
-                                      v0 = true;
-                                      v1 = true;
-                                      v2 = true;
-                                      v3 = true;
-                                      v4 = true;
-                                      v5 = true;
-                                      v6 = true;
-                                      item1 = items[0]["foodName"];
-                                      item2 = items[1]["foodName"];
-                                      item3 = items[2]["foodName"];
-                                      item4 = items[3]["foodName"];
-                                      break;
-                                    case 5:
-                                      v0 = true;
-                                      v1 = true;
-                                      v2 = true;
-                                      v3 = true;
-                                      v4 = true;
-                                      v5 = true;
-                                      v6 = true;
-                                      v7 = true;
-                                      item1 = items[0]["foodName"];
-                                      item2 = items[1]["foodName"];
-                                      item3 = items[2]["foodName"];
-                                      item4 = items[3]["foodName"];
-                                      item5 = items[4]["foodName"];
-                                      break;
-                                    default:
-                                  }
-                                  return Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: InkWell(
-                                      // hoverColor: Colors.lightBlue[200],
-                                      onTap: () {
-                                       // print(items.length);
-                                        setState(() {
-                                          clearCtrls();
-                                          oPhoneCtrl.text =
-                                              ordersSnapshot['oPhone']
-                                                  .toString();
-                                          oAddressCtrl.text =
-                                              ordersSnapshot['oAddress'];
-                                          oRestNameCtrl.text=ordersSnapshot['restName'];
-                                          oTotalPriceCtrl.text=ordersSnapshot['oTotalPrice'].toString();
-                                          switch (items.length) {
-                                            case 1:
-                                              item1 = items[0]["foodName"];
-                                              v0 = true;
-                                              v1 = true;
-                                              v2 = true;
-                                              v3 = true;
-                                              v4 = false;
-                                              v5 = false;
-                                              v6 = false;
-                                              v7 = false;
-                                              item1Ctrl.text = item1.toString();
-                                              break;
-                                            case 2:
-                                              item1 = items[0]["foodName"];
-                                              item2 = items[1]["foodName"];
-                                              v0 = true;
-                                              v1 = true;
-                                              v2 = true;
-                                              v3 = true;
-                                              v4 = true;
-                                              v5 = false;
-                                              v6 = false;
-                                              v7 = false;
-                                              item1Ctrl.text = item1.toString();
-                                              item2Ctrl.text = item2.toString();
+                                        break;
+                                      case 3:
+                                        v0 = true;
+                                        v1 = true;
+                                        v2 = true;
+                                        v3 = true;
+                                        v4 = true;
+                                        v5 = true;
+                                        item1 = items[0]["foodName"];
+                                        item2 = items[1]["foodName"];
+                                        item3 = items[2]["foodName"];
+                                        break;
+                                      case 4:
+                                        v0 = true;
+                                        v1 = true;
+                                        v2 = true;
+                                        v3 = true;
+                                        v4 = true;
+                                        v5 = true;
+                                        v6 = true;
+                                        item1 = items[0]["foodName"];
+                                        item2 = items[1]["foodName"];
+                                        item3 = items[2]["foodName"];
+                                        item4 = items[3]["foodName"];
+                                        break;
+                                      case 5:
+                                        v0 = true;
+                                        v1 = true;
+                                        v2 = true;
+                                        v3 = true;
+                                        v4 = true;
+                                        v5 = true;
+                                        v6 = true;
+                                        v7 = true;
+                                        item1 = items[0]["foodName"];
+                                        item2 = items[1]["foodName"];
+                                        item3 = items[2]["foodName"];
+                                        item4 = items[3]["foodName"];
+                                        item5 = items[4]["foodName"];
+                                        break;
+                                      default:
+                                    }
+                                    return InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            clearCtrls();
+                                            oPhoneCtrl.text =
+                                                ordersSnapshot['oPhone']
+                                                    .toString();
+                                            oAddressCtrl.text =
+                                                ordersSnapshot['oAddress'];
+                                            oRestNameCtrl.text =
+                                                ordersSnapshot['restName'];
+                                            oTotalPriceCtrl.text =
+                                                ordersSnapshot['oTotalPrice']
+                                                    .toString();
+                                            oNameCtrl.text =
+                                                ordersSnapshot['oName'];
+                                            switch (items.length) {
+                                              case 1:
+                                                item1 = items[0]["foodName"];
+                                                v0 = true;
+                                                v1 = true;
+                                                v2 = true;
+                                                v3 = true;
+                                                v4 = false;
+                                                v5 = false;
+                                                v6 = false;
+                                                v7 = false;
+                                                v8 = true;
+                                                item1Ctrl.text =
+                                                    item1.toString();
+                                                break;
+                                              case 2:
+                                                item1 = items[0]["foodName"];
+                                                item2 = items[1]["foodName"];
+                                                v0 = true;
+                                                v1 = true;
+                                                v2 = true;
+                                                v3 = true;
+                                                v4 = true;
+                                                v5 = false;
+                                                v6 = false;
+                                                v7 = false;
+                                                v8 = true;
+                                                item1Ctrl.text =
+                                                    item1.toString();
+                                                item2Ctrl.text =
+                                                    item2.toString();
 
-                                              break;
-                                            case 3:
-                                              v0 = true;
-                                              v1 = true;
-                                              v2 = true;
-                                              v3 = true;
-                                              v4 = true;
-                                              v5 = true;
-                                              v6 = false;
-                                              v7 = false;
-                                              item1 = items[0]["foodName"];
-                                              item2 = items[1]["foodName"];
-                                              item3 = items[2]["foodName"];
-                                              item1Ctrl.text = item1.toString();
-                                              item2Ctrl.text = item2.toString();
-                                              item3Ctrl.text = item3.toString();
-                                              break;
-                                            case 4:
-                                              v0 = true;
-                                              v1 = true;
-                                              v2 = true;
-                                              v3 = true;
-                                              v4 = true;
-                                              v5 = true;
-                                              v6 = true;
-                                              v7 = false;
-                                              item1 = items[0]["foodName"];
-                                              item2 = items[1]["foodName"];
-                                              item3 = items[2]["foodName"];
-                                              item4 = items[3]["foodName"];
-                                              item1Ctrl.text = item1.toString();
-                                              item2Ctrl.text = item2.toString();
-                                              item3Ctrl.text = item3.toString();
-                                              item4Ctrl.text = item4.toString();
-                                              break;
-                                            case 5:
-                                              v0 = true;
-                                              v1 = true;
-                                              v2 = true;
-                                              v3 = true;
-                                              v4 = true;
-                                              v5 = true;
-                                              v6 = true;
-                                              v7 = true;
-                                              item1 = items[0]["foodName"];
-                                              item2 = items[1]["foodName"];
-                                              item3 = items[2]["foodName"];
-                                              item4 = items[3]["foodName"];
-                                              item5 = items[4]["foodName"];
-                                              item1Ctrl.text = item1.toString();
-                                              item2Ctrl.text = item2.toString();
-                                              item3Ctrl.text = item3.toString();
-                                              item4Ctrl.text = item4.toString();
-                                              item5Ctrl.text = item5.toString();
-                                              break;
-                                            default:
-                                          }
-                                        });
-                                      },
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: lightGreyclr,
+                                                break;
+                                              case 3:
+                                                v0 = true;
+                                                v1 = true;
+                                                v2 = true;
+                                                v3 = true;
+                                                v4 = true;
+                                                v5 = true;
+                                                v6 = false;
+                                                v7 = false;
+                                                v8 = true;
+                                                item1 = items[0]["foodName"];
+                                                item2 = items[1]["foodName"];
+                                                item3 = items[2]["foodName"];
+                                                item1Ctrl.text =
+                                                    item1.toString();
+                                                item2Ctrl.text =
+                                                    item2.toString();
+                                                item3Ctrl.text =
+                                                    item3.toString();
+                                                break;
+                                              case 4:
+                                                v0 = true;
+                                                v1 = true;
+                                                v2 = true;
+                                                v3 = true;
+                                                v4 = true;
+                                                v5 = true;
+                                                v6 = true;
+                                                v7 = false;
+                                                v8 = true;
+                                                item1 = items[0]["foodName"];
+                                                item2 = items[1]["foodName"];
+                                                item3 = items[2]["foodName"];
+                                                item4 = items[3]["foodName"];
+                                                item1Ctrl.text =
+                                                    item1.toString();
+                                                item2Ctrl.text =
+                                                    item2.toString();
+                                                item3Ctrl.text =
+                                                    item3.toString();
+                                                item4Ctrl.text =
+                                                    item4.toString();
+                                                break;
+                                              case 5:
+                                                v0 = true;
+                                                v1 = true;
+                                                v2 = true;
+                                                v3 = true;
+                                                v4 = true;
+                                                v5 = true;
+                                                v6 = true;
+                                                v7 = true;
+                                                v8 = true;
+                                                item1 = items[0]["foodName"];
+                                                item2 = items[1]["foodName"];
+                                                item3 = items[2]["foodName"];
+                                                item4 = items[3]["foodName"];
+                                                item5 = items[4]["foodName"];
+                                                item1Ctrl.text =
+                                                    item1.toString();
+                                                item2Ctrl.text =
+                                                    item2.toString();
+                                                item3Ctrl.text =
+                                                    item3.toString();
+                                                item4Ctrl.text =
+                                                    item4.toString();
+                                                item5Ctrl.text =
+                                                    item5.toString();
+                                                break;
+                                              default:
+                                            }
+                                          });
+                                        },
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Center(
-                                              child: ListTile(
-                                                  title: TextUtils(
-                                                      text: ordersSnapshot[
-                                                              'oPhone']
-                                                          .toString(),
-                                                      fontsize: 20,
-                                                      fontweight: FontWeight
-                                                          .normal,
-                                                      color: mainColor,
-                                                      underLine: TextDecoration
-                                                          .none),
-                                                  subtitle: TextUtils(
-                                                      text: ordersSnapshot[
-                                                          'oAddress'],
-                                                      fontsize: 17,
-                                                      fontweight:
-                                                          FontWeight.normal,
-                                                      color: mainColor,
-                                                      underLine:
-                                                          TextDecoration.none)),
-                                            ),
-                                          ),
-                                          Positioned(
-                                              top: 5,
-                                              left: 5,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    color: ordersSnapshot[
-                                                                'ostatus'] ==
-                                                            null
-                                                        ? Colors.yellow
-                                                        : (ordersSnapshot[
-                                                                'ostatus']=="true"
-                                                            ? Colors.green
-                                                            : redClr),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                height: 20,
-                                                width: 20,
-                                              )),
-                                          // Center(child: Text(
-                                          //   ordersSnapshot['oItems']))
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                });
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }),
-              )
-            ],
-          ),
-        ),
+                                                    BorderRadius.circular(20),
+                                                child: Stack(children: [
+                                                  Card(
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  30)),
+                                                      elevation: 10,
+                                                      shadowColor:
+                                                          Colors.black38,
+                                                      child: ListTile(
+                                                          contentPadding:
+                                                              const EdgeInsets.all(
+                                                                  25),
+                                                          title: TextUtils(
+                                                              text:
+                                                                  "0${ordersSnapshot['oPhone']}",
+                                                              fontsize: 20,
+                                                              fontweight: FontWeight
+                                                                  .normal,
+                                                              color: mainColor,
+                                                              underLine:
+                                                                  TextDecoration
+                                                                      .none),
+                                                          subtitle: TextUtils(
+                                                              text: ordersSnapshot[
+                                                                  'oAddress'],
+                                                              fontsize: 20,
+                                                              fontweight: FontWeight
+                                                                  .normal,
+                                                              color: mainColor,
+                                                              underLine:
+                                                                  TextDecoration
+                                                                      .none),
+                                                          trailing: Container(
+                                                              decoration: BoxDecoration(color: ordersSnapshot['ostatus'] == "true" ? Colors.green : redClr, borderRadius: BorderRadius.circular(15)),
+                                                              height: 20,
+                                                              width: 20))),
+                                                  Align(
+                                                      alignment: Alignment
+                                                          .topLeft,
+                                                      child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 5,
+                                                                  horizontal:
+                                                                      20),
+                                                          child: TextUtils(
+                                                              text:
+                                                                  ordersSnapshot[
+                                                                      'oName'],
+                                                              fontsize: 22,
+                                                              fontweight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: mainColor,
+                                                              underLine:
+                                                                  TextDecoration
+                                                                      .none)))
+                                                ]))));
+                                  });
+                        }
+                        return const Center(child: CircularProgressIndicator());
+                      }))
+            ])),
         Flexible(
           flex: 4,
           child: Padding(
@@ -364,7 +390,8 @@ class _ManageOrdersState extends State<ManageOrders> {
                             ),
                           ),
                         ),
-                        Expanded(flex: 1,
+                        Expanded(
+                          flex: 1,
                           child: AbsorbPointer(
                             child: TextFormWdgt(
                               controller: oTotalPriceCtrl,
@@ -382,21 +409,35 @@ class _ManageOrdersState extends State<ManageOrders> {
                       ],
                     )),
                 Visibility(
-                  visible: v1,
-                  child: AbsorbPointer(
-                    child: TextFormWdgt(
-                      controller: oPhoneCtrl,
-                      lable: const Text("رقم هاتف العميل "),
-                      validator: (value) {
-                        if (value.toString().isEmpty) {
-                          return "الحقل لايجب ان يكون فارغ";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                  ),
-                ),
+                    visible: v1,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Flexible(
+                              child: AbsorbPointer(
+                                  child: TextFormWdgt(
+                                      controller: oNameCtrl,
+                                      lable: const Text("اسم العميل "),
+                                      validator: (value) {
+                                        if (value.toString().isEmpty) {
+                                          return "الحقل لايجب ان يكون فارغ";
+                                        } else {
+                                          return null;
+                                        }
+                                      }))),
+                          Flexible(
+                              child: AbsorbPointer(
+                                  child: TextFormWdgt(
+                                      controller: oPhoneCtrl,
+                                      lable: const Text("رقم هاتف العميل "),
+                                      validator: (value) {
+                                        if (value.toString().isEmpty) {
+                                          return "الحقل لايجب ان يكون فارغ";
+                                        } else {
+                                          return null;
+                                        }
+                                      })))
+                        ])),
                 Visibility(
                   visible: v2,
                   child: AbsorbPointer(

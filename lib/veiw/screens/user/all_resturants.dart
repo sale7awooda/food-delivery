@@ -5,7 +5,7 @@ import 'package:orders/logic/controller/firestore_controller.dart';
 import 'package:orders/routes/routes.dart';
 
 import 'package:orders/utils/theme.dart';
-import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt2.dart';
+import 'package:orders/veiw/widgets/user/resturants/resturant_wdgt3.dart';
 
 
 class AllResturantsScreen extends StatefulWidget {
@@ -31,18 +31,22 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
   static String fResturantImg = 'restImg';
   static String? fResturantID;
 
+ 
+
   //final List<ResturantModel> _loaddedResturants = [];
   @override
   Widget build(BuildContext context) {
+    
+    
     return Scaffold(
         appBar: AppBar(
           backgroundColor: mainColor,
           elevation: 0,
           title: const Text(" FOOD DELIVERY"),
           centerTitle: true,
-          actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search))
-          ],
+          // actions: [
+          //   IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+          // ],
         ),
         body: Column(
           children: [
@@ -51,7 +55,7 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
             // const SizedBox(height: 20),
             Expanded(
                 child: StreamBuilder(
-                      stream: fstoreCtrl.restaurantCol.snapshots(),
+                      stream: fstoreCtrl.restaurantCol.where('restStatus',isEqualTo: true).snapshots(),
                       //initialData: initialData,
                       builder:
                           (BuildContext context, AsyncSnapshot streamSnapshot) {
@@ -81,7 +85,7 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
 
                                           
                                         },
-                                        child: ResurantWdgt2(
+                                        child: ResurantWdgt3(
                                           title:
                                               resturantSnapshot[fResturantName],
                                           subtitle: resturantSnapshot[
@@ -160,4 +164,5 @@ class _AllResturantsScreenState extends State<AllResturantsScreen> {
   void initState() {
     super.initState();
   }
-}
+    
+ }
