@@ -70,10 +70,10 @@ class OrderWdgt extends StatelessWidget {
                               price!,
                               style: const TextStyle(
                                   color: mainColor, fontSize: 20)),
-                          const Text(
-                            "\$ ",
-                            style: TextStyle(fontSize: 20),
-                          ),
+                          // const Text(
+                          //   "\$ ",
+                          //   style: TextStyle(fontSize: 20),
+                          // ),
                         ],
                       ),
                     ],
